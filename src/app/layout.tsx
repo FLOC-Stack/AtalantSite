@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { JetBrains_Mono } from "next/font/google";
+import { getServerURL } from "@/lib/server-url";
 import "./globals.css";
 
 const aeonik = localFont({
@@ -22,9 +23,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Atalant — Distribución de polímeros en Europa",
+  metadataBase: new URL(getServerURL()),
+  title: "Atalant",
   description:
-    "Distribuimos materias primas plásticas y polímeros reciclados de alta calidad. Respuesta ágil, stock permanente y excelencia operativa.",
+    "Industrial polymer sourcing, recycled materials, and operational support for European manufacturing buyers.",
 };
 
 export default function RootLayout({
@@ -34,7 +36,6 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="es"
       className={`${aeonik.variable} ${jetbrainsMono.variable} antialiased`}
     >
       <body>{children}</body>

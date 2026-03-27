@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Atalant Florence
 
-## Getting Started
+Corporate site and catalog for Atalant built with Next.js 16, React 19, Tailwind 4, and Payload CMS 3.
 
-First, run the development server:
+## What is in the repo
+
+- Multilingual public site with locale-prefixed routes:
+  - `/es`
+  - `/en`
+  - `/pt`
+  - `/fr`
+- Localized product catalog routes:
+  - `/es/productos`
+  - `/en/products`
+  - `/pt/produtos`
+  - `/fr/produits`
+- Payload admin and API inside the same Next app:
+  - `/admin`
+  - `/api/*`
+- Contact form that stores leads in Payload.
+- Local media storage under `public/media`.
+
+The public site can render from Payload data or fall back to local seed content if the CMS is not available yet.
+
+## Environment
+
+Copy `.env.example` to `.env` and set:
+
+```bash
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/atalant
+PAYLOAD_SECRET=replace-me
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+PAYLOAD_AUTO_PUSH=true
+SEED_SECRET=optional-local-seed-secret
+```
+
+Notes:
+
+- `DATABASE_URL` must point to Postgres.
+- `PAYLOAD_SECRET` is required in real environments.
+- `PAYLOAD_AUTO_PUSH=true` is the simplest local bootstrap path and lets Payload create or update the schema automatically.
+- For stricter environments, turn `PAYLOAD_AUTO_PUSH` off and manage schema changes deliberately.
+- Media storage is local. Production deploys need persistent disk or this should be swapped later to object storage.
+
+## Local development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Public site: `http://localhost:3000/es`
+- Payload admin: `http://localhost:3000/admin`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Payload workflow
 
-## Learn More
+Generate admin imports after changing admin-related config:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run generate:importmap
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Regenerate Payload types after changing collections or globals:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run generate:types
+```
 
-## Deploy on Vercel
+Seed the initial corporate content:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run seed
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For the first local bootstrap, keep `PAYLOAD_AUTO_PUSH=true` so the schema exists before seeding.
+
+The seed creates or updates:
+
+- `siteSettings`
+- localized `pages` entry for the home page
+- localized `productFamilies`
+
+## Quality checks
+
+Run lint:
+
+```bash
+npm run lint
+```
+
+Run production build:
+
+```bash
+npm run build
+```
+
+## Content model
+
+### Globals
+
+- `siteSettings`
+  - brand data
+  - contact data
+  - default SEO
+  - main navigation
+  - footer links
+
+### Collections
+
+- `users`
+- `media`
+- `pages`
+- `productFamilies`
+- `leadSubmissions`
+
+## Deployment notes
+
+- This app expects Postgres and a valid `DATABASE_URL`.
+- Payload uploads write to `public/media`, so production needs persistent storage.
+- The public routes are locale-prefixed by design and `/` redirects to `/es`.
+- SEO support includes localized metadata, `robots.txt`, and `sitemap.xml`.

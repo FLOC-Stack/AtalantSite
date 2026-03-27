@@ -8,13 +8,26 @@
   --color-muted: rgba(27, 28, 26, 0.4);
   --color-muted-strong: rgba(27, 28, 26, 0.8);
   --color-body: rgba(27, 28, 26, 0.7);
+  --color-green: #228b22;
   --font-sans: "Aeonik", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--color-background);
   color: var(--color-foreground);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
 }
 
 /* Frosted glass / translucent polymer effect */
@@ -27,4 +40,73 @@ body {
     0 2px 8px rgba(0, 0, 0, 0.04),
     inset 0 1px 0 rgba(255, 255, 255, 0.5),
     inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: white;
+  padding: 0.9rem 1.4rem;
+  font-size: 0.95rem;
+  transition: opacity 150ms ease;
+}
+
+.cta-primary:hover {
+  opacity: 0.9;
+}
+
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(27, 28, 26, 0.08);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--color-foreground);
+  padding: 0.9rem 1.4rem;
+  font-size: 0.95rem;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(27, 28, 26, 0.14);
+}
+
+.input-field {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(27, 28, 26, 0.1);
+  background: rgba(246, 247, 253, 0.8);
+  color: var(--color-foreground);
+  padding: 0.9rem 1rem;
+  outline: none;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.input-field:focus {
+  border-color: rgba(30, 75, 182, 0.45);
+  box-shadow: 0 0 0 4px rgba(30, 75, 182, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

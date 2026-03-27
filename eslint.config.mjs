@@ -12,6 +12,14 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    ".claude/**",
+    ".context/**",
+    ".gstack/**",
+    ".playwright-mcp/**",
+    "public/media/**",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
   ]),
 ]);
 
