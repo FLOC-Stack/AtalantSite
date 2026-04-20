@@ -1,4 +1,5 @@
 import configPromise from "@payload-config";
+import { cache } from "react";
 import type {
   HomeBlock,
   HomePageData,
@@ -23,6 +24,15 @@ type PageDoc = {
     title?: string | null;
   };
 };
+
+type ProductFamilySitemapEntry = {
+  slug: string;
+  updatedAt: Date;
+};
+
+function hasPayloadDatabase() {
+  return Boolean(process.env.DATABASE_URL);
+}
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : null;
@@ -145,11 +155,17 @@ function mapBlocks(blocks: unknown): HomeBlock[] {
     .filter(Boolean) as HomeBlock[];
 }
 
-async function getPayloadClient() {
+const getPayloadClient = cache(async function getPayloadClient() {
   return getPayload({ config: configPromise });
-}
+});
 
-export async function getSiteSettings(locale: AppLocale): Promise<SiteSettingsData> {
+export const getSiteSettings = cache(async function getSiteSettings(
+  locale: AppLocale,
+): Promise<SiteSettingsData> {
+  if (!hasPayloadDatabase()) {
+    return fallbackSiteSettings[locale];
+  }
+
   try {
     const payload = await getPayloadClient();
     const settings = await payload.findGlobal({
@@ -204,9 +220,15 @@ export async function getSiteSettings(locale: AppLocale): Promise<SiteSettingsDa
   } catch {
     return fallbackSiteSettings[locale];
   }
-}
+});
 
-export async function getHomePage(locale: AppLocale): Promise<HomePageData> {
+export const getHomePage = cache(async function getHomePage(
+  locale: AppLocale,
+): Promise<HomePageData> {
+  if (!hasPayloadDatabase()) {
+    return fallbackHomePages[locale];
+  }
+
   try {
     const payload = await getPayloadClient();
     const result = await payload.find({
@@ -260,7 +282,7 @@ export async function getHomePage(locale: AppLocale): Promise<HomePageData> {
   } catch {
     return fallbackHomePages[locale];
   }
-}
+});
 
 function mapFamily(locale: AppLocale, doc: Record<string, unknown>): ProductFamilyData | null {
   if (typeof doc.code !== "string" || typeof doc.slug !== "string") {
@@ -316,9 +338,13 @@ function mapFamily(locale: AppLocale, doc: Record<string, unknown>): ProductFami
   };
 }
 
-export async function getProductFamilies(
+export const getProductFamilies = cache(async function getProductFamilies(
   locale: AppLocale,
 ): Promise<ProductFamilyData[]> {
+  if (!hasPayloadDatabase()) {
+    return fallbackFamilies[locale];
+  }
+
   try {
     const payload = await getPayloadClient();
     const result = await payload.find({
@@ -338,12 +364,16 @@ export async function getProductFamilies(
   } catch {
     return fallbackFamilies[locale];
   }
-}
+});
 
-export async function getProductFamilyBySlug(
+export const getProductFamilyBySlug = cache(async function getProductFamilyBySlug(
   locale: AppLocale,
   slug: string,
 ): Promise<ProductFamilyData | null> {
+  if (!hasPayloadDatabase()) {
+    return fallbackFamilies[locale].find((family) => family.slug === slug) ?? null;
+  }
+
   try {
     const payload = await getPayloadClient();
     const result = await payload.find({
@@ -368,4 +398,43 @@ export async function getProductFamilyBySlug(
   } catch {
     return fallbackFamilies[locale].find((family) => family.slug === slug) ?? null;
   }
-}
+});
+
+export const getPublishedFamilySitemapEntries = cache(async function getPublishedFamilySitemapEntries(
+  locale: AppLocale,
+): Promise<ProductFamilySitemapEntry[]> {
+  if (!hasPayloadDatabase()) {
+    return [];
+  }
+
+  try {
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "productFamilies",
+      draft: false,
+      limit: 100,
+      locale,
+      pagination: false,
+      sort: "order",
+    });
+
+    return result.docs
+      .map((doc) => {
+        const record = doc as unknown as Record<string, unknown>;
+        if (typeof record.slug !== "string") {
+          return null;
+        }
+
+        const updatedAt =
+          typeof record.updatedAt === "string" ? new Date(record.updatedAt) : new Date();
+
+        return {
+          slug: record.slug,
+          updatedAt,
+        };
+      })
+      .filter(Boolean) as ProductFamilySitemapEntry[];
+  } catch {
+    return [];
+  }
+});

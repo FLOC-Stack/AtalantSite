@@ -1,0 +1,158 @@
+import Link from "next/link";
+import { ArrowDown } from "lucide-react";
+import { DitheredVideo } from "./dithered-video";
+
+export type HomeProductsIntroStat = {
+  label: string;
+  value: string;
+};
+
+type Props = {
+  indexLabel?: string;
+  counter?: string;
+  title?: string;
+  body?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  stats?: HomeProductsIntroStat[];
+  videoSrc?: string;
+  videoPoster?: string;
+  locale?: string;
+};
+
+const FALLBACK_TITLE = "Polímeros\nbásicos, técnicos\ny reciclados.";
+
+const FALLBACK_BODY =
+  "Nuestra gama abarca polímeros básicos (PE, PP, PS, PVC), plásticos técnicos y polímeros reciclados de alta calidad y rendimiento. Socios de referencia de los principales productores europeos.";
+
+const FALLBACK_STATS: HomeProductsIntroStat[] = [
+  { label: "Catálogo", value: "5 familias base + reciclados" },
+  { label: "Grados", value: "40+ referencias" },
+  { label: "Marca", value: "Greenlant" },
+  { label: "Certificación", value: "Fichas técnicas bajo petición" },
+];
+
+function renderMultiline(text: string) {
+  return text.split("\n").map((line, i) => (
+    <span key={i} className="block">
+      {line}
+    </span>
+  ));
+}
+
+function MediaLayer({
+  videoSrc,
+  videoPoster,
+}: {
+  videoSrc?: string;
+  videoPoster?: string;
+}) {
+  return (
+    <>
+      {videoSrc ? (
+        <DitheredVideo
+          src={videoSrc}
+          poster={videoPoster}
+          cellSize={3}
+          light={[255, 255, 255]}
+          dark={[30, 75, 182]}
+          className="absolute inset-0 h-full w-full"
+        />
+      ) : (
+        <div
+          className="absolute inset-0 flex items-center justify-center bg-[#d9d9d9] font-mono text-[11px] uppercase tracking-[2px] text-muted-strong"
+          aria-hidden="true"
+        >
+          video/imagen
+        </div>
+      )}
+    </>
+  );
+}
+
+export function HomeProductsIntro({
+  indexLabel = "N° 02 — SOLUCIONES / CATÁLOGO",
+  counter = "02 / 05",
+  title = FALLBACK_TITLE,
+  body = FALLBACK_BODY,
+  ctaLabel = "Descargar fichas técnicas",
+  ctaHref = "#",
+  stats = FALLBACK_STATS,
+  videoSrc,
+  videoPoster,
+  locale = "es",
+}: Props = {}) {
+  return (
+    <section
+      aria-labelledby="home-products-intro-title"
+      className="relative bg-background text-foreground lg:min-h-screen lg:overflow-hidden"
+    >
+      {/* Card editorial flotante — glass sobre el video */}
+      <div className="glass relative z-10 m-4 flex flex-col rounded-3xl px-6 pt-12 pb-10 sm:m-6 sm:px-8 sm:pt-14 sm:pb-12 lg:absolute lg:inset-y-8 lg:left-8 lg:m-0 lg:w-[640px] lg:rounded-[28px] lg:px-12 lg:pt-12 lg:pb-10">
+        {/* Header: index + counter */}
+        <div className="flex items-start justify-between gap-4">
+          <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary-dark">
+            {indexLabel}
+          </p>
+          <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
+            {counter}
+          </p>
+        </div>
+
+        {/* Divider top */}
+        <div className="mt-6 h-px w-full bg-foreground" aria-hidden="true" />
+
+        {/* Title */}
+        <h2
+          id="home-products-intro-title"
+          className="mt-8 font-sans text-[clamp(2.25rem,6vw,4.75rem)] font-light leading-[1] tracking-[-1.5px] text-foreground lg:tracking-[-2.5px]"
+        >
+          {renderMultiline(title)}
+        </h2>
+
+        {/* Body */}
+        <p className="mt-7 max-w-[680px] font-sans text-[17px] font-light leading-[1.55] tracking-[-0.15px] text-foreground sm:text-lg lg:text-[17px] lg:leading-[26px]">
+          {body}
+        </p>
+
+        {/* CTA */}
+        <div className="mt-7">
+          <Link
+            href={ctaHref}
+            className="group inline-flex items-center gap-2 border-b border-primary-dark pb-1 font-sans text-[15px] font-medium tracking-[0.2px] text-primary-dark transition-opacity hover:opacity-70"
+          >
+            {ctaLabel}
+            <ArrowDown className="h-4 w-4 transition-transform duration-200 group-hover:translate-y-0.5" />
+          </Link>
+        </div>
+
+        {/* Spacer empuja stats al fondo */}
+        <div className="grow" />
+
+        {/* Divider bottom */}
+        <div className="mt-10 h-px w-full bg-foreground" aria-hidden="true" />
+
+        {/* Stats row — 2x2 en desktop para dar aire a los valores largos */}
+        <dl className="mt-6 grid grid-cols-2 gap-x-8 gap-y-7">
+          {stats.map((stat) => (
+            <div key={stat.label} className="flex flex-col gap-[7px]">
+              <dt className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
+                {stat.label}
+              </dt>
+              <dd className="font-sans text-[14px] leading-snug tracking-[-0.1px] text-foreground">
+                {stat.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      {/* Video/imagen — full-bleed detrás en desktop, debajo del texto en mobile */}
+      <div className="relative z-0 h-[60vh] w-full sm:h-[70vh] lg:absolute lg:inset-0 lg:h-full">
+        <MediaLayer videoSrc={videoSrc} videoPoster={videoPoster} />
+      </div>
+
+      <span className="sr-only" data-locale={locale} />
+    </section>
+  );
+}

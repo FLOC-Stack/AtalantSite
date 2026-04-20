@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+import { Header } from "@/components/header";
 import { getSiteSettings } from "@/lib/payload-data";
 import { isLocale, type AppLocale } from "@/lib/locales";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 
 type Props = {
   children: ReactNode;
@@ -19,13 +18,22 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound();
   }
 
-  const settings = await getSiteSettings(locale as AppLocale);
+  const typedLocale = locale as AppLocale;
+  let brandName: string | undefined;
+  let nav: Awaited<ReturnType<typeof getSiteSettings>>["navigation"] | undefined;
+
+  try {
+    const settings = await getSiteSettings(typedLocale);
+    brandName = settings.brandName;
+    nav = settings.navigation;
+  } catch {
+    // Payload no disponible — el Header usa sus fallbacks
+  }
 
   return (
     <>
-      <SiteHeader locale={locale} settings={settings} />
-      <div className="pt-6">{children}</div>
-      <SiteFooter locale={locale} settings={settings} />
+      <Header locale={typedLocale} brandName={brandName} nav={nav} />
+      {children}
     </>
   );
 }

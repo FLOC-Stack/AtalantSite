@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { JetBrains_Mono } from "next/font/google";
+import { defaultLocale } from "@/lib/locales";
 import { getServerURL } from "@/lib/server-url";
 import "./globals.css";
 
@@ -24,7 +25,10 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(getServerURL()),
-  title: "Atalant",
+  title: {
+    default: "Atalant",
+    template: "%s",
+  },
   description:
     "Industrial polymer sourcing, recycled materials, and operational support for European manufacturing buyers.",
 };
@@ -36,6 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
+      lang={defaultLocale}
       className={`${aeonik.variable} ${jetbrainsMono.variable} antialiased`}
     >
       <body>{children}</body>

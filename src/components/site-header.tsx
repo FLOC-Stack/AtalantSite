@@ -13,7 +13,15 @@ type Props = {
   settings: SiteSettingsData;
 };
 
+const uiCopy: Record<AppLocale, { contact: string; menu: string }> = {
+  en: { contact: "Contact", menu: "Menu" },
+  es: { contact: "Contacto", menu: "Menú" },
+  fr: { contact: "Contact", menu: "Menu" },
+  pt: { contact: "Contacto", menu: "Menu" },
+};
+
 export function SiteHeader({ locale, settings }: Props) {
+  const copy = uiCopy[locale];
   const [collapsed, setCollapsed] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -71,7 +79,7 @@ export function SiteHeader({ locale, settings }: Props) {
           <div className="flex items-center gap-3">
             <LanguageSwitcher currentLocale={locale} />
             <Link className="cta-primary hidden md:inline-flex" href={buildSectionPath(locale, "contact")}>
-              {settings.navigation.at(-1)?.label ?? "Contact"}
+              {settings.navigation.at(-1)?.label ?? copy.contact}
             </Link>
             <button
               aria-expanded={open}
@@ -79,7 +87,7 @@ export function SiteHeader({ locale, settings }: Props) {
               onClick={() => setOpen((value) => !value)}
               type="button"
             >
-              Menu
+              {copy.menu}
             </button>
           </div>
         </div>

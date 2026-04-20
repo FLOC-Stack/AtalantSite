@@ -1,10 +1,8 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { HomeBlocks } from "@/components/home-blocks";
-import { HomeHero } from "@/components/home-hero";
-import { getHomePage, getProductFamilies, getSiteSettings } from "@/lib/payload-data";
-import { defaultLocale, isLocale, locales, type AppLocale } from "@/lib/locales";
-import { buildLocalePath } from "@/lib/routes";
+import { Hero } from "@/components/hero";
+import { HomeProductsIntro } from "@/components/home-products-intro";
+import { getHomePage } from "@/lib/payload-data";
+import { isLocale, type AppLocale } from "@/lib/locales";
 
 export const dynamic = "force-dynamic";
 
@@ -14,21 +12,6 @@ type Props = {
   }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params;
-  const validLocale = isLocale(locale) ? (locale as AppLocale) : defaultLocale;
-  const page = await getHomePage(validLocale);
-
-  return {
-    alternates: {
-      canonical: buildLocalePath(validLocale),
-      languages: Object.fromEntries(locales.map((entry) => [entry, buildLocalePath(entry)])),
-    },
-    description: page.seo.description,
-    title: page.seo.title,
-  };
-}
-
 export default async function LocaleHomePage({ params }: Props) {
   const { locale } = await params;
 
@@ -36,16 +19,28 @@ export default async function LocaleHomePage({ params }: Props) {
     notFound();
   }
 
-  const [page, settings, families] = await Promise.all([
-    getHomePage(locale),
-    getSiteSettings(locale),
-    getProductFamilies(locale),
-  ]);
+  const typedLocale = locale as AppLocale;
+  const productsHref = `/${typedLocale}/productos`;
+
+  let heroProps;
+  let statsProps;
+  try {
+    const page = await getHomePage(typedLocale);
+    const statsBlock = page.blocks.find((block) => block.type === "stats");
+    heroProps = page.hero;
+    statsProps = statsBlock?.stats;
+  } catch {
+    // Fallbacks del componente
+  }
 
   return (
-    <main>
-      <HomeHero locale={locale} page={page} settings={settings} />
-      <HomeBlocks families={families} locale={locale} page={page} />
-    </main>
+    <>
+      <Hero hero={heroProps} stats={statsProps} primaryHref={productsHref} />
+      <HomeProductsIntro
+        locale={typedLocale}
+        ctaHref={productsHref}
+        videoSrc="/Morphing%20Figures%20Animation.mp4"
+      />
+    </>
   );
 }

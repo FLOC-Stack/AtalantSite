@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FamilyCard } from "@/components/family-card";
+import { catalogCopy } from "@/lib/catalog-copy";
 import { getProductFamilies } from "@/lib/payload-data";
 import { defaultLocale, getProductSegment, isLocale, locales, type AppLocale } from "@/lib/locales";
 import { buildProductsPath } from "@/lib/routes";
@@ -24,32 +25,34 @@ async function resolveLocaleAndSegment(params: Props["params"]) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = isLocale(locale) ? (locale as AppLocale) : defaultLocale;
+  const copy = catalogCopy[validLocale].index;
 
   return {
     alternates: {
       canonical: buildProductsPath(validLocale),
       languages: Object.fromEntries(locales.map((entry) => [entry, buildProductsPath(entry)])),
     },
-    description: "Catalog of published polymer families managed in Payload CMS.",
-    title: "Product families | Atalant",
+    description: copy.seoDescription,
+    title: copy.seoTitle,
   };
 }
 
 export default async function ProductsIndexPage({ params }: Props) {
   const { locale } = await resolveLocaleAndSegment(params);
   const families = await getProductFamilies(locale);
+  const copy = catalogCopy[locale].index;
 
   return (
     <main className="mx-auto max-w-7xl px-6 pb-24 pt-36 md:px-10 lg:px-16">
       <div className="max-w-3xl">
         <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary-dark">
-          Catalog
+          {copy.eyebrow}
         </p>
         <h1 className="mt-5 text-5xl leading-none tracking-tight text-foreground md:text-7xl">
-          Published product families.
+          {copy.title}
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-body">
-          This structure is intentionally built at family level first, with room to expand later into subtypes or grades without redesigning the routing model.
+          {copy.body}
         </p>
       </div>
 
