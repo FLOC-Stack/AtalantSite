@@ -19,13 +19,64 @@ type Props = {
   ctaHref?: string;
 };
 
-const FALLBACK_NAV: HeaderLink[] = [
-  { label: "Productos", href: "/es/productos" },
-  { label: "Logística", href: "#logistica" },
-  { label: "Financiación", href: "#financiacion" },
-  { label: "Sostenibilidad", href: "#sostenibilidad" },
-  { label: "Equipo", href: "#equipo" },
-];
+// Copia de fallback por locale. Los IDs de sección (logistica, financiacion,
+// sostenibilidad, equipo, contacto) son identificadores técnicos estables
+// que viven en español para casar con los anchors reales del DOM; los labels
+// sí se traducen.
+type FallbackStrings = {
+  products: string;
+  logistics: string;
+  financing: string;
+  sustainability: string;
+  team: string;
+  contact: string;
+};
+
+const fallbackStrings: Record<AppLocale, FallbackStrings> = {
+  es: {
+    products: "Productos",
+    logistics: "Logística",
+    financing: "Financiación",
+    sustainability: "Sostenibilidad",
+    team: "Equipo",
+    contact: "Contacto",
+  },
+  en: {
+    products: "Products",
+    logistics: "Logistics",
+    financing: "Financing",
+    sustainability: "Sustainability",
+    team: "Team",
+    contact: "Contact",
+  },
+  fr: {
+    products: "Produits",
+    logistics: "Logistique",
+    financing: "Financement",
+    sustainability: "Durabilité",
+    team: "Équipe",
+    contact: "Contact",
+  },
+  pt: {
+    products: "Produtos",
+    logistics: "Logística",
+    financing: "Financiamento",
+    sustainability: "Sustentabilidade",
+    team: "Equipa",
+    contact: "Contato",
+  },
+};
+
+function buildFallbackNav(locale: AppLocale): HeaderLink[] {
+  const t = fallbackStrings[locale];
+  return [
+    { label: t.products, href: buildProductsPath(locale) },
+    { label: t.logistics, href: buildSectionPath(locale, "logistica") },
+    { label: t.financing, href: buildSectionPath(locale, "financiacion") },
+    { label: t.sustainability, href: buildSectionPath(locale, "sostenibilidad") },
+    { label: t.team, href: buildSectionPath(locale, "equipo") },
+  ];
+}
 
 function resolveHref(item: NavItem, locale: AppLocale): string {
   if (item.kind === "products") return buildProductsPath(locale);
@@ -37,15 +88,17 @@ export function Header({
   locale = "es",
   brandName = "Atalant",
   nav,
-  ctaLabel = "Contacto",
-  ctaHref = "#contacto",
+  ctaLabel,
+  ctaHref,
 }: Props = {}) {
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
   const links: HeaderLink[] = nav?.length
     ? nav.map((item) => ({ label: item.label, href: resolveHref(item, locale) }))
-    : FALLBACK_NAV;
+    : buildFallbackNav(locale);
+  const resolvedCtaLabel = ctaLabel ?? fallbackStrings[locale].contact;
+  const resolvedCtaHref = ctaHref ?? buildSectionPath(locale, "contacto");
 
   useEffect(() => {
     const onScroll = () => {
@@ -110,11 +163,11 @@ export function Header({
             </div>
 
             <Link
-              href={ctaHref}
+              href={resolvedCtaHref}
               className="hidden h-9 items-center overflow-hidden rounded bg-primary text-white sm:flex"
             >
               <span className="border-r border-white/10 px-5 font-mono text-[10px] uppercase tracking-[2px]">
-                {ctaLabel}
+                {resolvedCtaLabel}
               </span>
               <span className="flex items-center justify-center px-3">
                 <ChevronDown className="h-2 w-2 -rotate-90" />
@@ -159,12 +212,12 @@ export function Header({
             </div>
             <div className="mt-4 sm:hidden">
               <Link
-                href={ctaHref}
+                href={resolvedCtaHref}
                 onClick={() => setOpen(false)}
                 className="flex h-9 items-center overflow-hidden rounded bg-primary text-white"
               >
                 <span className="border-r border-white/10 px-5 font-mono text-[10px] uppercase tracking-[2px]">
-                  {ctaLabel}
+                  {resolvedCtaLabel}
                 </span>
                 <span className="flex items-center justify-center px-3">
                   <ChevronDown className="h-2 w-2 -rotate-90" />
