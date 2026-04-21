@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { MeshBasicMaterial } from "three";
 import {
   DESTINATIONS,
   HUBS,
@@ -127,6 +128,13 @@ export function AtalantGlobe({
 
   const routes = useMemo(() => buildRoutes(hubs, destinations), [hubs, destinations]);
 
+  // Material blanco sólido para la esfera del globo — oculta la cara trasera
+  // de los dots sin depender de luces (MeshBasic es flat-shaded).
+  const solidWhiteMaterial = useMemo(
+    () => new MeshBasicMaterial({ color: 0xffffff }),
+    [],
+  );
+
   const handleHover = (raw: object | null) => {
     const p = raw as PointDatum | null;
     if (!p) {
@@ -154,6 +162,10 @@ export function AtalantGlobe({
           hexPolygonMargin: 0.55,
           hexPolygonUseDots: true,
           hexPolygonColor: () => "#1e4bb6",
+          // Dots flotando 4% por encima del radio de la esfera blanca →
+          // en la silueta los puntos sobresalen del borde creando un halo
+          // que insinúa volumen (la esfera sólida queda "dentro" del cascarón).
+          hexPolygonAltitude: 0.04,
         }
       : {};
 
@@ -164,16 +176,26 @@ export function AtalantGlobe({
       onMouseMove={handleMouseMove}
     >
       {dims.w > 0 && dims.h > 0 ? (
+        <div
+          className="absolute"
+          style={{
+            top: -50,
+            left: -50,
+            width: dims.w + 100,
+            height: dims.h + 100,
+          }}
+        >
         <Globe
           ref={globeRef}
-          width={dims.w}
-          height={dims.h}
+          width={dims.w + 100}
+          height={dims.h + 100}
           backgroundColor="rgba(0,0,0,0)"
-          showGlobe={style === "blueMarble"}
+          showGlobe
           showAtmosphere
           atmosphereColor="#1e4bb6"
           atmosphereAltitude={0.14}
           globeImageUrl={style === "blueMarble" ? BLUE_MARBLE_URL : undefined}
+          globeMaterial={style === "dotted" ? solidWhiteMaterial : undefined}
           onGlobeReady={applyCamera}
           {...dottedProps}
           pointsData={points}
@@ -181,20 +203,22 @@ export function AtalantGlobe({
           pointLng="lng"
           pointAltitude={0.01}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          pointRadius={(p: any) => (p.kind === "hub" ? 0.9 : 0.55)}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          pointColor={(p: any) => (p.kind === "hub" ? "#003493" : "#1e4bb6")}
+          pointRadius={(p: any) => (p.kind === "hub" ? 0.45 : 0.3)}
+          // Dots sutiles del color del background — se leen como huecos/marcas
+          // tenues sobre la esfera blanca en vez de competir con los arcos.
+          pointColor={() => "#f6f7fd"}
           pointsMerge={false}
           onPointHover={handleHover}
           arcsData={routes}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           arcColor={(a: any) => a.color}
-          arcStroke={0.35}
-          arcDashLength={0.45}
-          arcDashGap={2}
-          arcDashAnimateTime={2200}
-          arcAltitudeAutoScale={0.45}
+          arcStroke={0.18}
+          arcDashLength={0.4}
+          arcDashGap={2.5}
+          arcDashAnimateTime={1400}
+          arcAltitudeAutoScale={0.5}
         />
+        </div>
       ) : null}
 
       <GlobeTooltip node={hovered} x={cursor.x} y={cursor.y} />
