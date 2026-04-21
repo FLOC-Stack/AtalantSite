@@ -85,7 +85,7 @@ export function HomeProductsIntro({
   return (
     <section
       aria-labelledby="home-products-intro-title"
-      className="relative bg-background text-foreground lg:min-h-screen lg:overflow-hidden"
+      className="relative min-h-screen overflow-hidden bg-background text-foreground"
     >
       {/* Card editorial flotante — glass sobre el video */}
       <div className="glass relative z-10 m-4 flex flex-col rounded-3xl px-6 pt-12 pb-10 sm:m-6 sm:px-8 sm:pt-14 sm:pb-12 lg:absolute lg:inset-y-8 lg:left-8 lg:m-0 lg:w-[640px] lg:rounded-[28px] lg:px-12 lg:pt-12 lg:pb-10">

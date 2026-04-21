@@ -4,6 +4,23 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+<!-- BEGIN:home-design-rules -->
+# Home — Design rules
+
+- **All home sections are fullpage (`min-h-screen`) on every viewport.**
+  No exceptions: Hero, HomeProductsIntro, HomeLogistics, and any new block
+  must fill at least 100vh both on mobile and desktop. Floating cards,
+  background videos and timelines fit inside that envelope.
+
+- **All home sections use the full viewport width — never `max-width`.**
+  The outer `<section>` and its content wrapper must stretch to 100% of the
+  viewport. Side padding is the only thing that constrains the content
+  (`px-10 sm:px-14 lg:px-20` for editorial sections, matching the effective
+  air of the HomeProductsIntro card). Do NOT add `max-w-[…]` to the content
+  wrapper. Individual child elements (body copy, timeline labels) can have
+  their own `max-w` for readability, but the section container stays fluid.
+<!-- END:home-design-rules -->
+
 
 <claude-mem-context>
 # Memory Context
