@@ -117,6 +117,10 @@ export function Header({
   const ulRef = useRef<HTMLUListElement>(null);
   const langWrapperRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLAnchorElement>(null);
+  // Refs para el focus trap del drawer y para devolver foco al hamburger
+  // al cerrarlo.
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
 
   const links: HeaderLink[] = nav?.length
     ? nav.map((item) => ({ label: item.label, href: resolveHref(item, locale) }))
@@ -124,15 +128,25 @@ export function Header({
   const resolvedCtaLabel = ctaLabel ?? fallbackStrings[locale].contact;
   const resolvedCtaHref = ctaHref ?? buildSectionPath(locale, "contacto");
 
+  // Scroll listener con requestAnimationFrame: el handler solo corre una
+  // vez por frame aunque el evento dispare 100+ veces por segundo.
   useEffect(() => {
+    let frame: number | null = null;
     const onScroll = () => {
-      const next = window.scrollY > 120;
-      setCollapsed(next);
-      if (next) setOpen(false);
+      if (frame !== null) return;
+      frame = requestAnimationFrame(() => {
+        frame = null;
+        const next = window.scrollY > 120;
+        setCollapsed(next);
+        if (next) setOpen(false);
+      });
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
   }, []);
 
   // Body scroll-lock mientras el drawer está abierto, para que la página
@@ -145,6 +159,45 @@ export function Header({
     return () => {
       document.body.style.overflow = previous;
     };
+  }, [open]);
+
+  // Focus trap + Escape dentro del drawer. Al abrir enfocamos el primer
+  // link; Tab y Shift+Tab ciclan entre los focusables sin salir; Escape
+  // cierra y devuelve el foco al hamburger que lo abrió.
+  useEffect(() => {
+    if (!open) return;
+    const drawer = drawerRef.current;
+    if (!drawer) return;
+
+    const focusables = drawer.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    );
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    first?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        hamburgerRef.current?.focus();
+        return;
+      }
+      if (event.key !== "Tab" || focusables.length === 0) return;
+      const active = document.activeElement as HTMLElement | null;
+      if (event.shiftKey) {
+        if (active === first || !drawer.contains(active)) {
+          event.preventDefault();
+          last?.focus();
+        }
+      } else if (active === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
   // Al pasar de compact → expanded, los elementos del nav aparecen con
@@ -254,6 +307,7 @@ export function Header({
             {/* Menu button — visible bajo lg por defecto, y también en lg+
                 cuando el header está en estado compact (sustituye al CTA). */}
             <button
+              ref={hamburgerRef}
               onClick={() => setOpen(!open)}
               className={`items-center justify-center ${
                 isCompact ? "flex" : "flex lg:hidden"
@@ -269,7 +323,11 @@ export function Header({
 
         {/* Dropdown — accesible desde cualquier breakpoint cuando open. */}
         <div
+          ref={drawerRef}
           id="header-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label={brandName}
           className={`glass absolute right-0 top-full mt-2 w-1/3 min-w-[220px] rounded-2xl transition-all duration-500 ease-out origin-top ${
             open
               ? "opacity-100 scale-y-100 pointer-events-auto"
