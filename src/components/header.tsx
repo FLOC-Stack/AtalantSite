@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ChevronDown, Menu, X } from "lucide-react";
 import type { NavItem } from "@/lib/content-types";
 import type { AppLocale } from "@/lib/locales";
+import { buildProductsPath, buildSectionPath } from "@/lib/routes";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
 type HeaderLink = { label: string; href: string };
@@ -27,9 +28,9 @@ const FALLBACK_NAV: HeaderLink[] = [
 ];
 
 function resolveHref(item: NavItem, locale: AppLocale): string {
-  if (item.kind === "products") return `/${locale}/productos`;
+  if (item.kind === "products") return buildProductsPath(locale);
   if (item.kind === "external") return item.href ?? "#";
-  return `#${item.sectionId ?? item.label.toLowerCase()}`;
+  return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
 }
 
 export function Header({
