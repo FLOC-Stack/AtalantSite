@@ -13,7 +13,7 @@ export function LanguageSwitcher({ currentLocale }: Props) {
   const pathname = usePathname();
 
   return (
-    <div className="hidden items-center gap-2 md:flex">
+    <div className="flex items-center gap-2">
       {locales.map((locale) => {
         const href = switchLocalePath(pathname, locale);
         const active = locale === currentLocale;

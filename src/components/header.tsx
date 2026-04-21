@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ChevronDown, Menu, X } from "lucide-react";
 import type { NavItem } from "@/lib/content-types";
 import type { AppLocale } from "@/lib/locales";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 type HeaderLink = { label: string; href: string };
 
@@ -103,11 +104,8 @@ export function Header({
               collapsed ? "hidden" : "flex"
             }`}
           >
-            <div className="hidden items-center gap-6 sm:flex">
-              <span className="font-mono text-[11px] font-medium uppercase text-foreground">
-                {locale}
-              </span>
-              <div className="h-4 w-px bg-foreground/10" />
+            <div className="hidden sm:flex">
+              <LanguageSwitcher currentLocale={locale} />
             </div>
 
             <Link
@@ -155,11 +153,10 @@ export function Header({
                 </li>
               ))}
             </ul>
-            <div className="mt-4 flex items-center gap-4 border-t border-foreground/5 pt-4 sm:hidden">
-              <span className="font-mono text-[11px] font-medium uppercase text-foreground">
-                {locale}
-              </span>
-              <div className="h-4 w-px bg-foreground/10" />
+            <div className="mt-4 border-t border-foreground/5 pt-4">
+              <LanguageSwitcher currentLocale={locale} />
+            </div>
+            <div className="mt-4 sm:hidden">
               <Link
                 href={ctaHref}
                 onClick={() => setOpen(false)}
