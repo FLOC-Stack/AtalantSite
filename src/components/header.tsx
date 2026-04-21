@@ -126,14 +126,14 @@ export function Header({
       onBlur={() => setHovered(false)}
     >
       <div
-        className={`relative w-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] max-w-[240px] ${
+        className={`relative w-full transition-all duration-500 ease-out max-w-[240px] ${
           isCompact ? "" : "sm:max-w-[1440px]"
         }`}
       >
         {/* Nav bar — en mobile siempre compacto (logo + hamburger centrados);
             a partir de sm respeta el estado expandido cuando corresponde. */}
         <nav
-          className={`glass relative z-20 flex items-center rounded-full h-12 sm:h-14 lg:h-16 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] justify-center gap-4 px-4 ${
+          className={`glass relative z-20 flex items-center rounded-full h-12 sm:h-14 lg:h-16 transition-all duration-500 ease-out justify-center gap-4 px-4 ${
             isCompact
               ? "sm:px-5 lg:px-6"
               : "sm:justify-between sm:gap-0 sm:px-8 lg:px-10"
@@ -154,7 +154,7 @@ export function Header({
               orgánico en lugar del parpadeo del render condicional. */}
           <ul
             aria-hidden={isCompact}
-            className={`hidden items-center gap-10 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex ${
+            className={`hidden items-center gap-10 transition-all duration-500 ease-out lg:flex ${
               isCompact
                 ? "pointer-events-none -translate-y-1 opacity-0"
                 : "translate-y-0 opacity-100"
@@ -208,7 +208,7 @@ export function Header({
 
         {/* Dropdown — accesible desde cualquier breakpoint cuando open. */}
         <div
-          className={`glass absolute right-0 top-full mt-2 w-1/3 min-w-[220px] rounded-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] origin-top ${
+          className={`glass absolute right-0 top-full mt-2 w-1/3 min-w-[220px] rounded-2xl transition-all duration-500 ease-out origin-top ${
             open
               ? "opacity-100 scale-y-100 pointer-events-auto"
               : "opacity-0 scale-y-90 pointer-events-none"
