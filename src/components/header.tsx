@@ -150,28 +150,24 @@ export function Header({
             />
           </Link>
 
-          {/* Desktop nav — render siempre; opacity+translate para fade
-              orgánico en lugar del parpadeo del render condicional. */}
-          <ul
-            aria-hidden={isCompact}
-            className={`hidden items-center gap-10 transition-all duration-500 ease-out lg:flex ${
-              isCompact
-                ? "pointer-events-none -translate-y-1 opacity-0"
-                : "translate-y-0 opacity-100"
-            }`}
-          >
-            {links.map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className="font-sans text-[13px] text-foreground transition-opacity hover:opacity-70"
-                  tabIndex={isCompact ? -1 : undefined}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* Desktop nav — render condicional: cuando el pill está compact
+              el UL no debe existir en el DOM. Si lo dejáramos con lg:flex +
+              opacity-0, los 6 links seguirían ocupando su min-content dentro
+              del flex y harían desbordar el pill de 240px. */}
+          {!isCompact && (
+            <ul className="hidden items-center gap-10 lg:flex">
+              {links.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="font-sans text-[13px] text-foreground transition-opacity hover:opacity-70"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
 
           <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
             <div className={isCompact ? "hidden" : "hidden sm:flex"}>
