@@ -93,6 +93,10 @@ export function Header({
 }: Props = {}) {
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  // Expandido "temporal" por hover o focus teclado sobre el header.
+  // Al salir o desenfocar, vuelve al estado compacto si sigue colapsado.
+  const [hovered, setHovered] = useState(false);
+  const isCompact = collapsed && !hovered;
 
   const links: HeaderLink[] = nav?.length
     ? nav.map((item) => ({ label: item.label, href: resolveHref(item, locale) }))
@@ -112,17 +116,23 @@ export function Header({
   }, []);
 
   return (
-    <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 sm:top-6 sm:px-8 lg:top-8 lg:px-12">
+    <header
+      className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 sm:top-6 sm:px-8 lg:top-8 lg:px-12"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+    >
       <div
         className={`relative transition-all duration-300 ease-out ${
-          collapsed ? "w-auto" : "w-full max-w-[1440px]"
+          isCompact ? "w-auto" : "w-full max-w-[1440px]"
         }`}
       >
         {/* Nav bar — always pill */}
         <nav
           className={`glass relative z-20 flex items-center rounded-full h-12 sm:h-14 lg:h-16 transition-all duration-300 ease-out ${
-            collapsed
-              ? "justify-center px-4 sm:px-5 lg:px-6"
+            isCompact
+              ? "justify-center gap-4 px-4 sm:px-5 lg:px-6"
               : "justify-between px-5 sm:px-8 lg:px-10"
           }`}
         >
@@ -138,7 +148,7 @@ export function Header({
           </Link>
 
           {/* Desktop nav */}
-          {!collapsed && (
+          {!isCompact && (
             <ul className="hidden items-center gap-10 lg:flex">
               {links.map((link) => (
                 <li key={link.label}>
@@ -153,12 +163,8 @@ export function Header({
             </ul>
           )}
 
-          <div
-            className={`items-center gap-4 sm:gap-6 lg:gap-10 ${
-              collapsed ? "hidden" : "flex"
-            }`}
-          >
-            <div className="hidden sm:flex">
+          <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
+            <div className={isCompact ? "hidden" : "hidden sm:flex"}>
               <LanguageSwitcher currentLocale={locale} />
             </div>
 
