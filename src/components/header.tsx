@@ -231,6 +231,8 @@ export function Header({
                 isCompact ? "flex" : "flex lg:hidden"
               }`}
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={open}
+              aria-controls="header-drawer"
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -239,6 +241,7 @@ export function Header({
 
         {/* Dropdown — accesible desde cualquier breakpoint cuando open. */}
         <div
+          id="header-drawer"
           className={`glass absolute right-0 top-full mt-2 w-1/3 min-w-[220px] rounded-2xl transition-all duration-500 ease-out origin-top ${
             open
               ? "opacity-100 scale-y-100 pointer-events-auto"
