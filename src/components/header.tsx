@@ -95,8 +95,10 @@ export function Header({
   const [collapsed, setCollapsed] = useState(false);
   // Expandido "temporal" por hover o focus teclado sobre el header.
   // Al salir o desenfocar, vuelve al estado compacto si sigue colapsado.
+  // Si el drawer está abierto el header se queda desplegado aunque se
+  // pierda el hover, para no dejarlo flotando sobre un pill minúsculo.
   const [hovered, setHovered] = useState(false);
-  const isCompact = collapsed && !hovered;
+  const isCompact = collapsed && !hovered && !open;
 
   const links: HeaderLink[] = nav?.length
     ? nav.map((item) => ({ label: item.label, href: resolveHref(item, locale) }))
@@ -170,7 +172,9 @@ export function Header({
 
             <Link
               href={resolvedCtaHref}
-              className="hidden h-9 items-center overflow-hidden rounded bg-primary text-white sm:flex"
+              className={`h-9 items-center overflow-hidden rounded bg-primary text-white ${
+                isCompact ? "hidden" : "hidden sm:flex"
+              }`}
             >
               <span className="border-r border-white/10 px-5 font-mono text-[10px] uppercase tracking-[2px]">
                 {resolvedCtaLabel}
@@ -180,10 +184,13 @@ export function Header({
               </span>
             </Link>
 
-            {/* Mobile/tablet menu button */}
+            {/* Menu button — visible bajo lg por defecto, y también en lg+
+                cuando el header está en estado compact (sustituye al CTA). */}
             <button
               onClick={() => setOpen(!open)}
-              className="flex items-center justify-center lg:hidden"
+              className={`items-center justify-center ${
+                isCompact ? "flex" : "flex lg:hidden"
+              }`}
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -191,9 +198,9 @@ export function Header({
           </div>
         </nav>
 
-        {/* Dropdown — 1/3 width, right-aligned */}
+        {/* Dropdown — accesible desde cualquier breakpoint cuando open. */}
         <div
-          className={`glass absolute right-0 top-full mt-2 w-1/3 min-w-[200px] rounded-2xl lg:hidden transition-all duration-300 ease-in-out origin-top ${
+          className={`glass absolute right-0 top-full mt-2 w-1/3 min-w-[220px] rounded-2xl transition-all duration-300 ease-in-out origin-top ${
             open
               ? "opacity-100 scale-y-100 pointer-events-auto"
               : "opacity-0 scale-y-90 pointer-events-none"
