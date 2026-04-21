@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, Menu, X } from "lucide-react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import type { NavItem } from "@/lib/content-types";
 import type { AppLocale } from "@/lib/locales";
 import { buildProductsPath, buildSectionPath } from "@/lib/routes";
@@ -100,6 +102,12 @@ export function Header({
   const [hovered, setHovered] = useState(false);
   const isCompact = collapsed && !hovered && !open;
 
+  // Refs para la coreografía de entrada de los elementos del nav cuando
+  // el pill se expande (fade + slide con stagger orgánico).
+  const ulRef = useRef<HTMLUListElement>(null);
+  const langWrapperRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
+
   const links: HeaderLink[] = nav?.length
     ? nav.map((item) => ({ label: item.label, href: resolveHref(item, locale) }))
     : buildFallbackNav(locale);
@@ -116,6 +124,29 @@ export function Header({
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Al pasar de compact → expanded, los elementos del nav aparecen con
+  // fade + slide-up y un pequeño stagger. Se espera ~180ms para darle
+  // tiempo al pill a crecer con su transición CSS de max-width.
+  useGSAP(
+    () => {
+      if (isCompact) return;
+      const targets: Element[] = [];
+      if (ulRef.current) targets.push(...Array.from(ulRef.current.children));
+      if (langWrapperRef.current) targets.push(langWrapperRef.current);
+      if (ctaRef.current) targets.push(ctaRef.current);
+      if (!targets.length) return;
+      gsap.from(targets, {
+        opacity: 0,
+        y: 6,
+        duration: 0.4,
+        stagger: 0.05,
+        delay: 0.18,
+        ease: "power3.out",
+      });
+    },
+    { dependencies: [isCompact] },
+  );
 
   return (
     <header
@@ -155,7 +186,7 @@ export function Header({
               opacity-0, los 6 links seguirían ocupando su min-content dentro
               del flex y harían desbordar el pill de 240px. */}
           {!isCompact && (
-            <ul className="hidden items-center gap-10 lg:flex">
+            <ul ref={ulRef} className="hidden items-center gap-10 lg:flex">
               {links.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -170,11 +201,15 @@ export function Header({
           )}
 
           <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
-            <div className={isCompact ? "hidden" : "hidden sm:flex"}>
+            <div
+              ref={langWrapperRef}
+              className={isCompact ? "hidden" : "hidden sm:flex"}
+            >
               <LanguageSwitcher currentLocale={locale} />
             </div>
 
             <Link
+              ref={ctaRef}
               href={resolvedCtaHref}
               className={`h-9 items-center overflow-hidden rounded bg-primary text-white ${
                 isCompact ? "hidden" : "hidden sm:flex"
