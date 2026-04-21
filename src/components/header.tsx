@@ -126,16 +126,17 @@ export function Header({
       onBlur={() => setHovered(false)}
     >
       <div
-        className={`relative w-full transition-[max-width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isCompact ? "max-w-[240px]" : "max-w-[1440px]"
+        className={`relative w-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] max-w-[240px] ${
+          isCompact ? "" : "sm:max-w-[1440px]"
         }`}
       >
-        {/* Nav bar — always pill */}
+        {/* Nav bar — en mobile siempre compacto (logo + hamburger centrados);
+            a partir de sm respeta el estado expandido cuando corresponde. */}
         <nav
-          className={`glass relative z-20 flex items-center rounded-full h-12 sm:h-14 lg:h-16 transition-[padding,justify-content] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          className={`glass relative z-20 flex items-center rounded-full h-12 sm:h-14 lg:h-16 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] justify-center gap-4 px-4 ${
             isCompact
-              ? "justify-center gap-4 px-4 sm:px-5 lg:px-6"
-              : "justify-between px-5 sm:px-8 lg:px-10"
+              ? "sm:px-5 lg:px-6"
+              : "sm:justify-between sm:gap-0 sm:px-8 lg:px-10"
           }`}
         >
           <Link href={`/${locale}`} className="shrink-0" aria-label={`${brandName} home`}>
