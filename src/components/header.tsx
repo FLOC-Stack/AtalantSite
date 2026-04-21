@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -86,6 +87,14 @@ function resolveHref(item: NavItem, locale: AppLocale): string {
   return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
 }
 
+// Un link se considera "activo" solo si apunta a una página entera
+// (sin hash) y su href coincide exactamente con el pathname actual.
+// Los links a secciones con hash se omiten hasta que haya scroll-spy.
+function isActiveLink(href: string, pathname: string): boolean {
+  if (href.includes("#")) return false;
+  return href === pathname;
+}
+
 export function Header({
   locale = "es",
   brandName = "Atalant",
@@ -93,6 +102,7 @@ export function Header({
   ctaLabel,
   ctaHref,
 }: Props = {}) {
+  const pathname = usePathname() ?? "";
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   // Expandido "temporal" por hover o focus teclado sobre el header.
@@ -187,16 +197,22 @@ export function Header({
               del flex y harían desbordar el pill de 240px. */}
           {!isCompact && (
             <ul ref={ulRef} className="hidden items-center gap-10 lg:flex">
-              {links.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="font-sans text-[13px] text-foreground transition-opacity hover:opacity-70"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              {links.map((link) => {
+                const active = isActiveLink(link.href, pathname);
+                return (
+                  <li key={link.label}>
+                    <Link
+                      aria-current={active ? "page" : undefined}
+                      href={link.href}
+                      className={`font-sans text-[13px] transition-opacity hover:opacity-70 ${
+                        active ? "text-primary-dark" : "text-foreground"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           )}
 
@@ -250,17 +266,23 @@ export function Header({
         >
           <div className="px-5 pt-4 pb-5">
             <ul className="flex flex-col gap-3">
-              {links.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="block font-sans text-[15px] text-foreground transition-opacity hover:opacity-70"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              {links.map((link) => {
+                const active = isActiveLink(link.href, pathname);
+                return (
+                  <li key={link.label}>
+                    <Link
+                      aria-current={active ? "page" : undefined}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`block font-sans text-[15px] transition-opacity hover:opacity-70 ${
+                        active ? "text-primary-dark" : "text-foreground"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
             <div className="mt-4 border-t border-foreground/5 pt-4">
               <LanguageSwitcher currentLocale={locale} />
