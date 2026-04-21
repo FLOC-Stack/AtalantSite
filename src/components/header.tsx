@@ -135,6 +135,18 @@ export function Header({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Body scroll-lock mientras el drawer está abierto, para que la página
+  // detrás no se desplace. Restaura el valor anterior de overflow al cerrar
+  // para no pisar estilos globales que pudieran existir.
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
   // Al pasar de compact → expanded, los elementos del nav aparecen con
   // fade + slide-up y un pequeño stagger. Se espera ~180ms para darle
   // tiempo al pill a crecer con su transición CSS de max-width.
