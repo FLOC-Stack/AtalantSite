@@ -31,7 +31,7 @@ type FallbackStrings = {
   logistics: string;
   financing: string;
   sustainability: string;
-  team: string;
+  about: string;
   contact: string;
 };
 
@@ -41,7 +41,7 @@ const fallbackStrings: Record<AppLocale, FallbackStrings> = {
     logistics: "Logística",
     financing: "Financiación",
     sustainability: "Sostenibilidad",
-    team: "Equipo",
+    about: "Sobre nosotros",
     contact: "Contacto",
   },
   en: {
@@ -49,7 +49,7 @@ const fallbackStrings: Record<AppLocale, FallbackStrings> = {
     logistics: "Logistics",
     financing: "Financing",
     sustainability: "Sustainability",
-    team: "Team",
+    about: "About",
     contact: "Contact",
   },
   fr: {
@@ -57,7 +57,7 @@ const fallbackStrings: Record<AppLocale, FallbackStrings> = {
     logistics: "Logistique",
     financing: "Financement",
     sustainability: "Durabilité",
-    team: "Équipe",
+    about: "À propos",
     contact: "Contact",
   },
   pt: {
@@ -65,7 +65,7 @@ const fallbackStrings: Record<AppLocale, FallbackStrings> = {
     logistics: "Logística",
     financing: "Financiamento",
     sustainability: "Sustentabilidade",
-    team: "Equipa",
+    about: "Sobre nós",
     contact: "Contato",
   },
 };
@@ -77,8 +77,22 @@ function buildFallbackNav(locale: AppLocale): HeaderLink[] {
     { label: t.logistics, href: buildSectionPath(locale, "logistica") },
     { label: t.financing, href: buildSectionPath(locale, "financiacion") },
     { label: t.sustainability, href: buildSectionPath(locale, "sostenibilidad") },
-    { label: t.team, href: buildSectionPath(locale, "equipo") },
+    { label: t.about, href: buildSectionPath(locale, "equipo") },
   ];
+}
+
+// Filtro defensivo: si Payload devuelve un item "Contacto" en el nav, lo
+// eliminamos — el CTA ya cubre esa acción y duplicarlo ensucia la barra.
+function isContactNavItem(item: NavItem): boolean {
+  const sectionId = item.kind === "section" ? (item.sectionId ?? "").toLowerCase() : "";
+  const label = item.label.toLowerCase();
+  return (
+    sectionId === "contact" ||
+    sectionId === "contacto" ||
+    label === "contact" ||
+    label === "contacto" ||
+    label === "contato"
+  );
 }
 
 function resolveHref(item: NavItem, locale: AppLocale): string {
@@ -123,7 +137,9 @@ export function Header({
   const hamburgerRef = useRef<HTMLButtonElement>(null);
 
   const links: HeaderLink[] = nav?.length
-    ? nav.map((item) => ({ label: item.label, href: resolveHref(item, locale) }))
+    ? nav
+        .filter((item) => !isContactNavItem(item))
+        .map((item) => ({ label: item.label, href: resolveHref(item, locale) }))
     : buildFallbackNav(locale);
   const resolvedCtaLabel = ctaLabel ?? fallbackStrings[locale].contact;
   const resolvedCtaHref = ctaHref ?? buildSectionPath(locale, "contacto");
