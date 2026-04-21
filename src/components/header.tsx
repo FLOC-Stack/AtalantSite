@@ -126,13 +126,13 @@ export function Header({
       onBlur={() => setHovered(false)}
     >
       <div
-        className={`relative transition-all duration-300 ease-out ${
-          isCompact ? "w-auto" : "w-full max-w-[1440px]"
+        className={`relative w-full transition-[max-width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isCompact ? "max-w-[240px]" : "max-w-[1440px]"
         }`}
       >
         {/* Nav bar — always pill */}
         <nav
-          className={`glass relative z-20 flex items-center rounded-full h-12 sm:h-14 lg:h-16 transition-all duration-300 ease-out ${
+          className={`glass relative z-20 flex items-center rounded-full h-12 sm:h-14 lg:h-16 transition-[padding,justify-content] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isCompact
               ? "justify-center gap-4 px-4 sm:px-5 lg:px-6"
               : "justify-between px-5 sm:px-8 lg:px-10"
@@ -149,21 +149,28 @@ export function Header({
             />
           </Link>
 
-          {/* Desktop nav */}
-          {!isCompact && (
-            <ul className="hidden items-center gap-10 lg:flex">
-              {links.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="font-sans text-[13px] text-foreground transition-opacity hover:opacity-70"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+          {/* Desktop nav — render siempre; opacity+translate para fade
+              orgánico en lugar del parpadeo del render condicional. */}
+          <ul
+            aria-hidden={isCompact}
+            className={`hidden items-center gap-10 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex ${
+              isCompact
+                ? "pointer-events-none -translate-y-1 opacity-0"
+                : "translate-y-0 opacity-100"
+            }`}
+          >
+            {links.map((link) => (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  className="font-sans text-[13px] text-foreground transition-opacity hover:opacity-70"
+                  tabIndex={isCompact ? -1 : undefined}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
           <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
             <div className={isCompact ? "hidden" : "hidden sm:flex"}>
@@ -200,7 +207,7 @@ export function Header({
 
         {/* Dropdown — accesible desde cualquier breakpoint cuando open. */}
         <div
-          className={`glass absolute right-0 top-full mt-2 w-1/3 min-w-[220px] rounded-2xl transition-all duration-300 ease-in-out origin-top ${
+          className={`glass absolute right-0 top-full mt-2 w-1/3 min-w-[220px] rounded-2xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] origin-top ${
             open
               ? "opacity-100 scale-y-100 pointer-events-auto"
               : "opacity-0 scale-y-90 pointer-events-none"
