@@ -102,6 +102,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
   const items = products?.length ? products.slice(0, 6) : FALLBACK_PRODUCTS;
   const morphRef = useRef<ParticleMorphHandle>(null);
   const sectionRefs = useRef<Array<HTMLElement | null>>([]);
+  const rootRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const handle = morphRef.current;
@@ -133,8 +134,26 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const handle = morphRef.current;
+    const root = rootRef.current;
+    if (!handle || !root) return;
+
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        handle.setPaused(!entry.isIntersecting);
+      },
+      { threshold: 0 },
+    );
+    visibilityObserver.observe(root);
+    return () => visibilityObserver.disconnect();
+  }, []);
+
   return (
-    <section className="relative bg-background text-foreground">
+    <section
+      ref={rootRef}
+      className="relative bg-background text-foreground"
+    >
       {/* Canvas sticky: la bola se queda fija en viewport desde el hero */}
       <div className="pointer-events-none sticky top-0 h-screen w-full">
         <ParticleMorph
