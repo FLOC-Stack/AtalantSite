@@ -216,7 +216,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                 {product.recycled ? (
                   <Recycle className="h-4 w-4 text-primary-dark" aria-label="Reciclado" />
                 ) : (
-                  <ArrowUpRight className="h-4 w-4 text-foreground/40 transition-colors group-hover:text-primary-dark" />
+                  <ArrowUpRight className="h-4 w-4 text-foreground/60 transition-colors group-hover:text-primary-dark" />
                 )}
               </div>
 
