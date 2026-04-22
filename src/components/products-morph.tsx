@@ -184,10 +184,11 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
 
         {/* Slides 1..6: tarjeta tabla periódica, alternando izq/der */}
         {items.map((product, index) => {
-          const isLeft = index % 2 === 0; // PE(0), PVC(2), PET(4) → izquierda
+          const isLeft = index % 2 === 0;
           const href = product.href ?? `#${product.code.toLowerCase()}`;
           const number = String(index + 1).padStart(2, "0");
           const total = String(items.length).padStart(2, "0");
+          const variants = product.variants ?? [];
 
           const symbol = displayCode(product.code);
           const symbolLen = symbol.length;
@@ -231,12 +232,12 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
               </p>
 
               {/* Variants line */}
-              {product.variants && product.variants.length > 0 ? (
+              {variants.length > 0 ? (
                 <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[10px] uppercase tracking-[1.5px] text-muted-strong">
-                  {product.variants.map((variant, i) => (
+                  {variants.map((variant, i) => (
                     <span key={variant} className="whitespace-nowrap">
                       {variant}
-                      {i < product.variants!.length - 1 ? (
+                      {i < variants.length - 1 ? (
                         <span aria-hidden="true"> ·</span>
                       ) : null}
                     </span>
