@@ -92,10 +92,17 @@ function renderMultiline(text: string) {
   ));
 }
 
+const CODE_DISPLAY_OVERRIDES: Record<string, string> = { recycled: "REC" };
+
+function displayCode(code: string): string {
+  return CODE_DISPLAY_OVERRIDES[code.toLowerCase()] ?? code.toUpperCase();
+}
+
 export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
   const items = products?.length ? products.slice(0, 6) : FALLBACK_PRODUCTS;
   const morphRef = useRef<ParticleMorphHandle>(null);
   const sectionRefs = useRef<Array<HTMLElement | null>>([]);
+  const rootRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const handle = morphRef.current;
@@ -127,8 +134,26 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const handle = morphRef.current;
+    const root = rootRef.current;
+    if (!handle || !root) return;
+
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        handle.setPaused(!entry.isIntersecting);
+      },
+      { threshold: 0 },
+    );
+    visibilityObserver.observe(root);
+    return () => visibilityObserver.disconnect();
+  }, []);
+
   return (
-    <section className="relative bg-background text-foreground">
+    <section
+      ref={rootRef}
+      className="relative bg-background text-foreground"
+    >
       {/* Canvas sticky: la bola se queda fija en viewport desde el hero */}
       <div className="pointer-events-none sticky top-0 h-screen w-full">
         <ParticleMorph
@@ -140,12 +165,8 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
 
       {/* Stack de slides sobre el canvas */}
       <div className="relative" style={{ marginTop: "-100vh" }}>
-        {/* Slide 0: Hero centrado, shape 0 ya visible */}
+        {/* Hero: shape 0 lo deja fijado el setShape(0) inicial */}
         <article
-          ref={(el) => {
-            sectionRefs.current[0] = el;
-          }}
-          data-shape-index={0}
           className="relative flex min-h-screen flex-col items-center justify-center px-5 pt-32 text-center sm:px-8 md:px-12 lg:px-20"
         >
           <div className="mx-auto w-full max-w-[1100px]">
@@ -163,24 +184,26 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
 
         {/* Slides 1..6: tarjeta tabla periódica, alternando izq/der */}
         {items.map((product, index) => {
-          const isLeft = index % 2 === 0; // PE(0), PVC(2), PET(4) → izquierda
+          const isLeft = index % 2 === 0;
           const href = product.href ?? `#${product.code.toLowerCase()}`;
           const number = String(index + 1).padStart(2, "0");
           const total = String(items.length).padStart(2, "0");
+          const variants = product.variants ?? [];
 
-          const codeLen = product.code.length;
+          const symbol = displayCode(product.code);
+          const symbolLen = symbol.length;
           const symbolSize =
-            codeLen >= 4
+            symbolLen >= 4
               ? "text-5xl sm:text-6xl"
-              : codeLen === 3
+              : symbolLen === 3
                 ? "text-6xl sm:text-7xl"
                 : "text-7xl sm:text-8xl";
 
           const card = (
             <Link
               href={href}
-              className="glass group relative flex w-[320px] flex-col rounded-3xl p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(15,23,42,0.12)] sm:w-[360px] sm:p-7"
-              aria-label={`${product.code} — ${product.name}`}
+              className="glass group relative flex w-[320px] flex-col rounded-3xl p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(30,75,182,0.15)] sm:w-[360px] sm:p-7"
+              aria-label={`${symbol} — ${product.name}`}
             >
               {/* Top row: number/total + indicator */}
               <div className="flex items-start justify-between">
@@ -190,7 +213,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                 {product.recycled ? (
                   <Recycle className="h-4 w-4 text-primary-dark" aria-label="Reciclado" />
                 ) : (
-                  <ArrowUpRight className="h-4 w-4 text-foreground/40 transition-colors group-hover:text-primary-dark" />
+                  <ArrowUpRight className="h-4 w-4 text-foreground/60 transition-colors group-hover:text-primary-dark" />
                 )}
               </div>
 
@@ -199,7 +222,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                 <span
                   className={`font-sans font-normal leading-none tracking-tight text-primary ${symbolSize}`}
                 >
-                  {product.code}
+                  {symbol}
                 </span>
               </div>
 
@@ -209,12 +232,12 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
               </p>
 
               {/* Variants line */}
-              {product.variants && product.variants.length > 0 ? (
+              {variants.length > 0 ? (
                 <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[10px] uppercase tracking-[1.5px] text-muted-strong">
-                  {product.variants.map((variant, i) => (
+                  {variants.map((variant, i) => (
                     <span key={variant} className="whitespace-nowrap">
                       {variant}
-                      {i < product.variants!.length - 1 ? (
+                      {i < variants.length - 1 ? (
                         <span aria-hidden="true"> ·</span>
                       ) : null}
                     </span>
