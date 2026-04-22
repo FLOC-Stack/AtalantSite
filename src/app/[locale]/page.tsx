@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { Hero } from "@/components/hero";
 import { HomeProductsIntro } from "@/components/home-products-intro";
 import { HomeLogistics } from "@/components/home-logistics";
+import { HomeFinancing } from "@/components/home-financing";
 import { AtalantGlobe } from "@/components/atalant-globe";
 import { FullpageScroll } from "@/components/fullpage-scroll";
 import { getHomePage } from "@/lib/payload-data";
@@ -46,6 +47,7 @@ export default async function LocaleHomePage({ params }: Props) {
         videoSrc="/Morphing%20Figures%20Animation.mp4"
       />
       <HomeLogistics background={<AtalantGlobe style="dotted" />} />
+      <HomeFinancing />
     </>
   );
 }
