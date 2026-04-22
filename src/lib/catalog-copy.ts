@@ -18,9 +18,15 @@ type CatalogFamilyCopy = {
   variants: string;
 };
 
+type CatalogMorphCopy = {
+  seoDescription: string;
+  seoTitle: string;
+};
+
 type CatalogCopy = {
   family: CatalogFamilyCopy;
   index: CatalogIndexCopy;
+  morph: CatalogMorphCopy;
 };
 
 export const catalogCopy: Record<AppLocale, CatalogCopy> = {
@@ -42,6 +48,11 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
       seoTitle: "Product families | Atalant",
       title: "Published product families.",
     },
+    morph: {
+      seoDescription:
+        "Six families of technical and recycled polymers with European stock, batch traceability and technical advice on every specification.",
+      seoTitle: "Polymer catalog — Atalant",
+    },
   },
   es: {
     family: {
@@ -60,6 +71,11 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
       seoDescription: "Familias de polímeros publicadas y gestionadas en Payload CMS.",
       seoTitle: "Familias de producto | Atalant",
       title: "Familias de producto publicadas.",
+    },
+    morph: {
+      seoDescription:
+        "Seis familias de polímeros técnicos y reciclados con stock europeo, trazabilidad por lote y asesoría técnica en cada especificación.",
+      seoTitle: "Catálogo de polímeros — Atalant",
     },
   },
   fr: {
@@ -80,6 +96,11 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
       seoTitle: "Familles de produit | Atalant",
       title: "Familles de produit publiées.",
     },
+    morph: {
+      seoDescription:
+        "Six familles de polymères techniques et recyclés avec stock européen, traçabilité par lot et conseil technique pour chaque spécification.",
+      seoTitle: "Catalogue de polymères — Atalant",
+    },
   },
   pt: {
     family: {
@@ -98,6 +119,11 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
       seoDescription: "Famílias de polímeros publicadas e geridas no Payload CMS.",
       seoTitle: "Famílias de produto | Atalant",
       title: "Famílias de produto publicadas.",
+    },
+    morph: {
+      seoDescription:
+        "Seis famílias de polímeros técnicos e reciclados com stock europeu, rastreabilidade por lote e assessoria técnica em cada especificação.",
+      seoTitle: "Catálogo de polímeros — Atalant",
     },
   },
 };

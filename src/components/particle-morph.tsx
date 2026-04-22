@@ -7,6 +7,7 @@ const FOV = 800;
 
 export interface ParticleMorphHandle {
   setShape: (index: number) => void;
+  setPaused: (paused: boolean) => void;
 }
 
 interface ParticleMorphProps {
@@ -18,9 +19,11 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
   function ParticleMorph({ className = "", autoPlay = true }, ref) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const setShapeRef = useRef<(index: number) => void>(() => {});
+    const setPausedRef = useRef<(paused: boolean) => void>(() => {});
 
     useImperativeHandle(ref, () => ({
       setShape: (index: number) => setShapeRef.current(index),
+      setPaused: (paused: boolean) => setPausedRef.current(paused),
     }));
 
     useEffect(() => {
@@ -222,15 +225,37 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
         if (shapeIndex === currentShapeIndex) return;
         currentShapeIndex = shapeIndex;
         const target = shapes[shapeIndex];
+        const snap = isReducedMotion();
         for (let i = 0; i < PARTICLE_COUNT; i++) {
           tx[i] = target[i].x;
           ty[i] = target[i].y;
           tz[i] = target[i].z;
+          if (snap) {
+            px[i] = tx[i];
+            py[i] = ty[i];
+            pz[i] = tz[i];
+          }
         }
       };
 
       // Expose setShape to parent
       setShapeRef.current = updateTargets;
+
+      // Reduced motion: skip in-flight tweens by snapping current to target.
+      const reducedMotionQuery =
+        typeof window !== "undefined"
+          ? window.matchMedia("(prefers-reduced-motion: reduce)")
+          : null;
+      const isReducedMotion = () => Boolean(reducedMotionQuery?.matches);
+
+      let isPaused = false;
+      setPausedRef.current = (paused: boolean) => {
+        if (paused === isPaused) return;
+        isPaused = paused;
+        if (!paused) {
+          animate();
+        }
+      };
 
       const resize = () => {
         const dpr = Math.min(window.devicePixelRatio, 2);
@@ -285,11 +310,14 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
       const CYCLE_INTERVAL = 5;
 
       const animate = () => {
-        ctx.clearRect(0, 0, cssWidth, cssHeight);
-        time += 0.01;
+        if (isPaused) return;
 
-        // Auto-cycle only when autoPlay is enabled
-        if (autoPlay) {
+        ctx.clearRect(0, 0, cssWidth, cssHeight);
+        const reduced = isReducedMotion();
+        if (!reduced) time += 0.01;
+
+        // Auto-cycle only when autoPlay is enabled (and motion is allowed)
+        if (autoPlay && !reduced) {
           const targetIndex = Math.floor((time / CYCLE_INTERVAL) % shapes.length);
           if (targetIndex !== currentShapeIndex) {
             updateTargets(targetIndex);
@@ -303,13 +331,21 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
         const globalAngleX = time * 0.15 + currentRotX * Math.PI * 0.3;
         const globalAngleY = time * 0.2 + currentRotY * Math.PI * 0.3;
 
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-          const noiseX = Math.cos(time * 2 + offsets[i]) * 2;
-          const noiseY = Math.sin(time * 2 + offsets[i]) * 2;
-          const noiseZ = Math.cos(time * 2 + offsets[i] + Math.PI) * 2;
-          px[i] += (tx[i] + noiseX - px[i]) * 0.04;
-          py[i] += (ty[i] + noiseY - py[i]) * 0.04;
-          pz[i] += (tz[i] + noiseZ - pz[i]) * 0.04;
+        if (reduced) {
+          for (let i = 0; i < PARTICLE_COUNT; i++) {
+            px[i] = tx[i];
+            py[i] = ty[i];
+            pz[i] = tz[i];
+          }
+        } else {
+          for (let i = 0; i < PARTICLE_COUNT; i++) {
+            const noiseX = Math.cos(time * 2 + offsets[i]) * 2;
+            const noiseY = Math.sin(time * 2 + offsets[i]) * 2;
+            const noiseZ = Math.cos(time * 2 + offsets[i] + Math.PI) * 2;
+            px[i] += (tx[i] + noiseX - px[i]) * 0.04;
+            py[i] += (ty[i] + noiseY - py[i]) * 0.04;
+            pz[i] += (tz[i] + noiseZ - pz[i]) * 0.04;
+          }
         }
 
         const projected: { x: number; y: number; z: number; scale: number; color: number; size: number }[] = [];

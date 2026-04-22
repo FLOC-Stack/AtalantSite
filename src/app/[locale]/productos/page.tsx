@@ -1,11 +1,13 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   ProductsMorph,
   type ProductsMorphItem,
   type ProductsMorphHero,
 } from "@/components/products-morph";
+import { catalogCopy } from "@/lib/catalog-copy";
 import { getProductFamilies } from "@/lib/payload-data";
-import { isLocale, type AppLocale } from "@/lib/locales";
+import { defaultLocale, isLocale, locales, type AppLocale } from "@/lib/locales";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,23 @@ type Props = {
     locale: string;
   }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const validLocale = isLocale(locale) ? (locale as AppLocale) : defaultLocale;
+  const copy = catalogCopy[validLocale].morph;
+
+  return {
+    alternates: {
+      canonical: `/${validLocale}/productos`,
+      languages: Object.fromEntries(
+        locales.map((entry) => [entry, `/${entry}/productos`]),
+      ),
+    },
+    description: copy.seoDescription,
+    title: copy.seoTitle,
+  };
+}
 
 export default async function ProductosPage({ params }: Props) {
   const { locale } = await params;
