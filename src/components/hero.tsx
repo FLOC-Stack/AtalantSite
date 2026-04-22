@@ -114,26 +114,29 @@ export function Hero({
       </div>
 
       {/* Bottom stats */}
-      <div className="absolute bottom-0 left-5 right-5 z-10 flex flex-col gap-4 pb-6 sm:left-8 sm:right-8 sm:pb-8 lg:left-20 lg:right-20 lg:flex-row lg:items-end lg:justify-between">
-        <div className="grid w-full grid-cols-2 gap-x-8 gap-y-4 border-t border-foreground/5 pt-4 sm:grid-cols-4 sm:gap-12 sm:pt-5 lg:w-[800px]">
-          {statsList.map((stat) => (
-            <div key={stat.label} className="flex flex-col gap-1 sm:gap-2">
-              <span className="font-mono text-[8px] uppercase tracking-[0.9px] text-muted sm:text-[9px]">
-                {stat.label}
-              </span>
-              <span className="font-mono text-[10px] text-muted-strong sm:text-xs">
-                {stat.value}
-              </span>
-            </div>
-          ))}
-        </div>
+      <div className="absolute bottom-0 left-5 right-5 z-10 pb-6 sm:left-8 sm:right-8 sm:pb-8 lg:left-20 lg:right-20">
+        <div className="h-px w-full bg-foreground" aria-hidden="true" />
+        <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="grid w-full grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4 sm:gap-x-12 lg:w-[800px]">
+            {statsList.map((stat) => (
+              <div key={stat.label} className="flex flex-col gap-2">
+                <span className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
+                  {stat.label}
+                </span>
+                <span className="font-sans text-[14px] leading-[20px] tracking-[-0.1px] text-foreground">
+                  {stat.value}
+                </span>
+              </div>
+            ))}
+          </div>
 
-        <div className="hidden items-center gap-4 rounded bg-primary-dark/50 px-6 py-3 sm:flex">
-          <span className="font-mono text-[10px] uppercase tracking-[2.5px] text-white">
-            Grade: PE-HD High Density
-          </span>
-          <div className="h-3 w-px bg-white/20" />
-          <span className="font-mono text-[10px] text-white">BATCH #92-A</span>
+          <div className="hidden items-center gap-4 rounded bg-primary-dark/50 px-6 py-3 sm:flex">
+            <span className="font-mono text-[10px] uppercase tracking-[2px] text-white">
+              Grade: PE-HD High Density
+            </span>
+            <div className="h-3 w-px bg-white/20" />
+            <span className="font-mono text-[10px] text-white">BATCH #92-A</span>
+          </div>
         </div>
       </div>
     </section>
