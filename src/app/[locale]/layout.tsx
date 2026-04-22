@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { Header } from "@/components/header";
+import { SiteFooter } from "@/components/site-footer";
 import { getSiteSettings } from "@/lib/payload-data";
 import { isLocale, type AppLocale } from "@/lib/locales";
 
@@ -34,6 +35,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <>
       <Header locale={typedLocale} brandName={brandName} nav={nav} />
       {children}
+      <SiteFooter locale={typedLocale} />
     </>
   );
 }

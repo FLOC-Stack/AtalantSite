@@ -197,7 +197,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
               {/* Atomic symbol */}
               <div className="my-6 flex items-center justify-center">
                 <span
-                  className={`font-sans font-normal leading-none tracking-tight text-foreground ${symbolSize}`}
+                  className={`font-sans font-normal leading-none tracking-tight text-primary ${symbolSize}`}
                 >
                   {product.code}
                 </span>
