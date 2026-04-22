@@ -92,6 +92,12 @@ function renderMultiline(text: string) {
   ));
 }
 
+const CODE_DISPLAY_OVERRIDES: Record<string, string> = { recycled: "REC" };
+
+function displayCode(code: string): string {
+  return CODE_DISPLAY_OVERRIDES[code.toLowerCase()] ?? code.toUpperCase();
+}
+
 export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
   const items = products?.length ? products.slice(0, 6) : FALLBACK_PRODUCTS;
   const morphRef = useRef<ParticleMorphHandle>(null);
@@ -168,11 +174,12 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
           const number = String(index + 1).padStart(2, "0");
           const total = String(items.length).padStart(2, "0");
 
-          const codeLen = product.code.length;
+          const symbol = displayCode(product.code);
+          const symbolLen = symbol.length;
           const symbolSize =
-            codeLen >= 4
+            symbolLen >= 4
               ? "text-5xl sm:text-6xl"
-              : codeLen === 3
+              : symbolLen === 3
                 ? "text-6xl sm:text-7xl"
                 : "text-7xl sm:text-8xl";
 
@@ -180,7 +187,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
             <Link
               href={href}
               className="glass group relative flex w-[320px] flex-col rounded-3xl p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(15,23,42,0.12)] sm:w-[360px] sm:p-7"
-              aria-label={`${product.code} — ${product.name}`}
+              aria-label={`${symbol} — ${product.name}`}
             >
               {/* Top row: number/total + indicator */}
               <div className="flex items-start justify-between">
@@ -199,7 +206,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                 <span
                   className={`font-sans font-normal leading-none tracking-tight text-primary ${symbolSize}`}
                 >
-                  {product.code}
+                  {symbol}
                 </span>
               </div>
 
