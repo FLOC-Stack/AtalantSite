@@ -129,7 +129,7 @@ export function HomeLogistics({
       <div className="relative z-10 flex w-full flex-1 flex-col px-10 pt-16 pb-12 sm:px-14 sm:pt-20 sm:pb-14 lg:px-20 lg:pt-[100px] lg:pb-[80px]">
         {/* Bloque editorial: en mobile full-width; en desktop empujado a la
             derecha para no solaparse con el globo que ahora vive a la izquierda. */}
-        <div className="md:ml-auto md:w-1/2 lg:w-[55%]">
+        <div className="md:ml-auto md:w-1/2">
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary-dark">
