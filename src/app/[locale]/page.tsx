@@ -38,8 +38,7 @@ export default async function LocaleHomePage({ params }: Props) {
   }
 
   return (
-    <>
-      <FullpageScroll />
+    <FullpageScroll>
       <Hero hero={heroProps} stats={statsProps} primaryHref={productsHref} />
       <HomeProductsIntro
         locale={typedLocale}
@@ -48,6 +47,6 @@ export default async function LocaleHomePage({ params }: Props) {
       />
       <HomeLogistics background={<AtalantGlobe style="dotted" />} />
       <HomeFinancing />
-    </>
+    </FullpageScroll>
   );
 }
