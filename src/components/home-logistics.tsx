@@ -112,7 +112,7 @@ export function HomeLogistics({
           Composición invertida: en desktop el globo vive en la mitad izquierda
           y deja respirar la columna editorial a la derecha. En mobile ocupa
           todo el ancho. */}
-      <div className="absolute inset-0 z-0 md:right-[35%]">
+      <div className="absolute inset-0 z-0 md:right-1/2">
         {bgNode}
       </div>
       {/* Fade muy suave en el borde derecho del globo para que no se corte en seco */}
