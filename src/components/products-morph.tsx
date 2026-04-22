@@ -205,7 +205,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
           const card = (
             <Link
               href={href}
-              className="glass group relative flex w-[320px] flex-col rounded-3xl p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(15,23,42,0.12)] sm:w-[360px] sm:p-7"
+              className="glass group relative flex w-[320px] flex-col rounded-3xl p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(30,75,182,0.15)] sm:w-[360px] sm:p-7"
               aria-label={`${symbol} — ${product.name}`}
             >
               {/* Top row: number/total + indicator */}
