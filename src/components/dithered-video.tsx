@@ -77,8 +77,29 @@ export function DitheredVideo({
       lastDraw = ts;
 
       try {
-        // 1) Downscale del frame actual al tamaño del canvas interno
-        ctx.drawImage(video, 0, 0, offW, offH);
+        // 1) Downscale del frame actual al tamaño del canvas interno,
+        //    emulando object-fit: cover — crop proporcional del frame del
+        //    video para que mantenga su aspect ratio nativo aunque el
+        //    contenedor cambie de proporción (p. ej. al abrir un panel
+        //    lateral del navegador que estrecha el viewport).
+        const vw = video.videoWidth || 1;
+        const vh = video.videoHeight || 1;
+        const videoRatio = vw / vh;
+        const canvasRatio = offW / offH;
+        let sx = 0;
+        let sy = 0;
+        let sw = vw;
+        let sh = vh;
+        if (videoRatio > canvasRatio) {
+          // Video más ancho que el canvas → crop horizontal centrado.
+          sw = vh * canvasRatio;
+          sx = (vw - sw) / 2;
+        } else if (videoRatio < canvasRatio) {
+          // Video más alto que el canvas → crop vertical centrado.
+          sh = vw / canvasRatio;
+          sy = (vh - sh) / 2;
+        }
+        ctx.drawImage(video, sx, sy, sw, sh, 0, 0, offW, offH);
         const frame = ctx.getImageData(0, 0, offW, offH);
         const data = frame.data;
         const [lr, lg, lb] = light;
