@@ -1,45 +1,205 @@
 import Link from "next/link";
-import type { SiteSettingsData } from "@/lib/content-types";
-import type { AppLocale } from "@/lib/locales";
-import { buildProductsPath, buildSectionPath } from "@/lib/routes";
+import { ArrowRight } from "lucide-react";
+import { locales, type AppLocale } from "@/lib/locales";
+import { buildLocalePath, buildProductsPath } from "@/lib/routes";
+
+type FooterLink = {
+  label: string;
+  href: string;
+};
+
+type FooterColumn = {
+  heading: string;
+  links: FooterLink[];
+};
 
 type Props = {
   locale: AppLocale;
-  settings: SiteSettingsData;
 };
 
-export function SiteFooter({ locale, settings }: Props) {
-  return (
-    <footer className="mx-auto max-w-7xl px-6 pb-12 md:px-10 lg:px-16">
-      <div className="rounded-[2.5rem] border border-foreground/8 bg-white px-8 py-10">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-primary-dark">
-              {settings.brandName}
-            </p>
-            <p className="mt-4 max-w-2xl text-2xl leading-tight text-foreground">
-              {settings.footerText}
-            </p>
-          </div>
-          <div className="grid gap-3">
-            {settings.footerLinks.map((item) => {
-              const href =
-                item.kind === "products"
-                  ? buildProductsPath(locale)
-                  : item.kind === "section" && item.sectionId
-                    ? buildSectionPath(locale, item.sectionId)
-                    : item.href || `/${locale}`;
+const localeShort: Record<AppLocale, string> = {
+  es: "ES",
+  en: "EN",
+  pt: "PT",
+  fr: "FR",
+};
 
-              return (
-                <Link
-                  key={`${item.kind}-${item.label}-footer`}
-                  className="text-sm text-body transition-colors hover:text-foreground"
-                  href={href}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
+function getColumns(locale: AppLocale): FooterColumn[] {
+  const home = buildLocalePath(locale);
+  const products = buildProductsPath(locale);
+
+  return [
+    {
+      heading: "Soluciones",
+      links: [
+        { label: "Productos", href: products },
+        { label: "Logística", href: `${home}#logistica` },
+        { label: "Financiación", href: `${home}#financiacion` },
+        { label: "Sostenibilidad", href: `${home}#sostenibilidad` },
+      ],
+    },
+    {
+      heading: "Empresa",
+      links: [
+        { label: "Equipo", href: `${home}#equipo` },
+        { label: "Principios de trabajo", href: `${home}#principios` },
+        { label: "Evolución", href: `${home}#evolucion` },
+        { label: "Área de cliente", href: `${home}#cliente` },
+      ],
+    },
+    {
+      heading: "Contacto",
+      links: [
+        { label: "info@atalant.com", href: "mailto:info@atalant.com" },
+        { label: "logistics@atalant.com", href: "mailto:logistics@atalant.com" },
+        { label: "marketing@atalant.com", href: "mailto:marketing@atalant.com" },
+        { label: "job@atalant.com", href: "mailto:job@atalant.com" },
+      ],
+    },
+  ];
+}
+
+export function SiteFooter({ locale }: Props) {
+  const columns = getColumns(locale);
+
+  return (
+    <footer className="relative mt-16 w-full bg-primary text-white md:mt-24 lg:mt-32">
+      <div className="px-5 py-12 sm:px-8 sm:py-14 md:px-12 md:py-16 lg:px-20 lg:py-20">
+        {/* Display title */}
+        <h2 className="font-sans font-light leading-[0.95] tracking-tight text-white text-[clamp(2.5rem,11vw,10rem)] sm:leading-[0.95] lg:tracking-[-5.5px]">
+          Made for responding.
+        </h2>
+
+        <div className="mt-12 h-px w-full bg-white/20 sm:mt-16 lg:mt-20" aria-hidden="true" />
+
+        {/* Columns grid */}
+        <div className="mt-8 grid grid-cols-1 gap-10 sm:mt-10 sm:grid-cols-2 sm:gap-12 lg:mt-10 lg:grid-cols-[2fr_1fr_1fr_1.2fr] lg:gap-14">
+          {/* Atalant — info block */}
+          <div className="flex flex-col">
+            <p className="font-mono text-[10px] uppercase tracking-[2px] text-white/55">
+              Atalant
+            </p>
+            <p className="mt-7 font-sans text-lg font-light leading-[1.4] tracking-[-0.3px] text-white/90 sm:text-xl sm:leading-[1.4]">
+              Distribución europea
+              <br />
+              de polímeros desde 1997.
+            </p>
+            <address className="mt-6 flex flex-col gap-1 font-mono text-[12px] not-italic leading-[1.5] tracking-[0.2px] text-white/55">
+              <span>+34 965 661 828</span>
+              <span>Avda. de la Industria, 13–15</span>
+              <span>Pol. Ind. Canastell · Alicante</span>
+              <span>España</span>
+            </address>
+          </div>
+
+          {/* Link columns */}
+          {columns.map((column) => (
+            <div key={column.heading} className="flex flex-col">
+              <p className="font-mono text-[10px] uppercase tracking-[2px] text-white/55">
+                {column.heading}
+              </p>
+              <ul className="mt-7 flex flex-col gap-2.5">
+                {column.links.map((link) => {
+                  const isExternal = link.href.startsWith("mailto:");
+                  const isClientArea = link.label === "Área de cliente";
+
+                  if (isExternal) {
+                    return (
+                      <li key={link.label}>
+                        <a
+                          href={link.href}
+                          className="font-sans text-[15px] tracking-[-0.1px] text-white/90 transition-opacity hover:opacity-70"
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="group inline-flex items-center gap-1.5 font-sans text-[15px] tracking-[-0.1px] text-white/90 transition-opacity hover:opacity-70"
+                      >
+                        {link.label}
+                        {isClientArea ? (
+                          <ArrowRight
+                            className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
+                            aria-hidden="true"
+                          />
+                        ) : null}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 h-px w-full bg-white/20 sm:mt-16 lg:mt-20" aria-hidden="true" />
+
+        {/* Bottom bar */}
+        <div className="mt-6 flex flex-col gap-4 font-mono text-[10px] uppercase tracking-[2px] sm:mt-7 md:flex-row md:items-center md:justify-between md:gap-6">
+          <p className="text-white/50">
+            © MMXXVI · Atalant · MCMXCVII–MMXXVI · Todos los derechos reservados
+          </p>
+
+          <nav
+            aria-label="Legal"
+            className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/55"
+          >
+            <Link href={`${buildLocalePath(locale)}/privacidad`} className="transition-opacity hover:opacity-70">
+              Privacidad
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link href={`${buildLocalePath(locale)}/cookies`} className="transition-opacity hover:opacity-70">
+              Cookies
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link href={`${buildLocalePath(locale)}/aviso-legal`} className="transition-opacity hover:opacity-70">
+              Aviso legal
+            </Link>
+          </nav>
+
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/70">
+            <a
+              href="https://www.linkedin.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-opacity hover:opacity-70"
+            >
+              LinkedIn
+            </a>
+            <span aria-hidden="true">·</span>
+            <a
+              href="https://twitter.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-opacity hover:opacity-70"
+            >
+              Twitter
+            </a>
+            <span aria-hidden="true" className="mx-1 text-white/30">/</span>
+            <ul className="flex items-center gap-x-2.5">
+              {locales.map((code) => {
+                const active = code === locale;
+                return (
+                  <li key={code}>
+                    <Link
+                      href={buildLocalePath(code)}
+                      aria-current={active ? "page" : undefined}
+                      className={`transition-opacity hover:opacity-70 ${
+                        active ? "text-white" : "text-white/55"
+                      }`}
+                    >
+                      {localeShort[code]}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       </div>
