@@ -109,48 +109,53 @@ export function HomeLogistics({
       className="relative flex min-h-screen flex-col overflow-hidden bg-background text-foreground"
     >
       {/* Background: video / animación / globo.
-          En desktop lo posicionamos en la mitad derecha para dejar respirar la columna editorial;
-          en mobile ocupa todo el ancho. */}
-      <div className="absolute inset-0 z-0 md:left-[35%]">
+          Composición invertida: en desktop el globo vive en la mitad izquierda
+          y deja respirar la columna editorial a la derecha. En mobile ocupa
+          todo el ancho. */}
+      <div className="absolute inset-0 z-0 md:right-[35%]">
         {bgNode}
       </div>
-      {/* Fade muy suave en el borde izquierdo del globo para que no se corte en seco */}
+      {/* Fade muy suave en el borde derecho del globo para que no se corte en seco */}
       <div
         className="pointer-events-none absolute inset-y-0 left-0 right-0 z-0 hidden md:block"
         style={{
           background:
-            "linear-gradient(to right, rgba(246,247,253,1) 30%, rgba(246,247,253,0) 50%)",
+            "linear-gradient(to left, rgba(246,247,253,1) 30%, rgba(246,247,253,0) 50%)",
         }}
         aria-hidden="true"
       />
 
       {/* Contenido */}
       <div className="relative z-10 flex w-full flex-1 flex-col px-10 pt-16 pb-12 sm:px-14 sm:pt-20 sm:pb-14 lg:px-20 lg:pt-[100px] lg:pb-[80px]">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary-dark">
-            {indexLabel}
-          </p>
-          <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-            {counter}
+        {/* Bloque editorial: en mobile full-width; en desktop empujado a la
+            derecha para no solaparse con el globo que ahora vive a la izquierda. */}
+        <div className="md:ml-auto md:w-1/2 lg:w-[55%]">
+          {/* Header */}
+          <div className="flex items-start justify-between gap-4">
+            <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary-dark">
+              {indexLabel}
+            </p>
+            <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
+              {counter}
+            </p>
+          </div>
+
+          {/* Divider superior */}
+          <div className="mt-6 h-px w-full bg-foreground" aria-hidden="true" />
+
+          {/* Título */}
+          <h2
+            id="home-logistics-title"
+            className="mt-10 font-sans text-[clamp(2.5rem,7vw,5.5rem)] font-light leading-[1] tracking-[-2px] text-foreground lg:tracking-[-3px]"
+          >
+            {renderMultiline(title)}
+          </h2>
+
+          {/* Body */}
+          <p className="mt-8 max-w-[680px] font-sans text-[17px] font-light leading-[1.55] tracking-[-0.15px] text-foreground sm:text-lg lg:text-[18px] lg:leading-[28px]">
+            {body}
           </p>
         </div>
-
-        {/* Divider superior */}
-        <div className="mt-6 h-px w-full bg-foreground" aria-hidden="true" />
-
-        {/* Título */}
-        <h2
-          id="home-logistics-title"
-          className="mt-10 font-sans text-[clamp(2.5rem,7vw,5.5rem)] font-light leading-[1] tracking-[-2px] text-foreground lg:tracking-[-3px]"
-        >
-          {renderMultiline(title)}
-        </h2>
-
-        {/* Body */}
-        <p className="mt-8 max-w-[680px] font-sans text-[17px] font-light leading-[1.55] tracking-[-0.15px] text-foreground sm:text-lg lg:text-[18px] lg:leading-[28px]">
-          {body}
-        </p>
 
         {/* Spacer: empuja el timeline hacia el fondo del viewport en desktop */}
         <div className="grow" />
