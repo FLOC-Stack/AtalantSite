@@ -174,22 +174,22 @@ export function HomeLogistics({
                 className="relative flex flex-col lg:border-l lg:border-foreground/15 lg:pl-6 lg:first:border-l-0 lg:first:pl-0"
               >
                 <span
-                  className={`font-sans text-[clamp(2rem,3.5vw,2.875rem)] font-light leading-none tracking-[-1.5px] ${
+                  className={`font-sans text-[54px] font-light leading-none tracking-[-1.5px] ${
                     m.highlighted ? "text-primary-dark" : "text-foreground"
                   }`}
                 >
                   {m.year}
                 </span>
-                <span className="mt-3 font-mono text-[9px] uppercase tracking-[1.5px] text-muted-strong">
+                <span className="mt-3 font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
                   {m.label}
                 </span>
-                <p className="mt-2 font-sans text-[16px] tracking-[-0.2px] text-foreground">
+                <p className="mt-3 font-sans text-[22px] tracking-[-0.4px] text-foreground">
                   {m.title}
                 </p>
-                <p className="mt-1 font-mono text-[10px] tracking-[1px] text-primary-dark">
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-[2px] text-primary-dark">
                   {m.location}
                 </p>
-                <p className="mt-3 max-w-[380px] font-sans text-[13px] font-light leading-[18px] tracking-[-0.1px] text-muted-strong">
+                <p className="mt-3 max-w-[380px] font-sans text-[14px] font-light leading-[20px] tracking-[-0.1px] text-muted-strong">
                   {m.body}
                 </p>
               </li>

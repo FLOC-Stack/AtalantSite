@@ -135,11 +135,11 @@ export function HomeProductsIntro({
         {/* Stats row — 2x2 en desktop para dar aire a los valores largos */}
         <dl className="mt-6 grid grid-cols-2 gap-x-8 gap-y-7">
           {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col gap-[7px]">
+            <div key={stat.label} className="flex flex-col gap-2">
               <dt className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
                 {stat.label}
               </dt>
-              <dd className="font-sans text-[14px] leading-snug tracking-[-0.1px] text-foreground">
+              <dd className="font-sans text-[14px] leading-[20px] tracking-[-0.1px] text-foreground">
                 {stat.value}
               </dd>
             </div>
