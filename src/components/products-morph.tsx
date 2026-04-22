@@ -165,12 +165,8 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
 
       {/* Stack de slides sobre el canvas */}
       <div className="relative" style={{ marginTop: "-100vh" }}>
-        {/* Slide 0: Hero centrado, shape 0 ya visible */}
+        {/* Hero: shape 0 lo deja fijado el setShape(0) inicial */}
         <article
-          ref={(el) => {
-            sectionRefs.current[0] = el;
-          }}
-          data-shape-index={0}
           className="relative flex min-h-screen flex-col items-center justify-center px-5 pt-32 text-center sm:px-8 md:px-12 lg:px-20"
         >
           <div className="mx-auto w-full max-w-[1100px]">
