@@ -3,6 +3,7 @@ import { Hero } from "@/components/hero";
 import { HomeProductsIntro } from "@/components/home-products-intro";
 import { HomeLogistics } from "@/components/home-logistics";
 import { AtalantGlobe } from "@/components/atalant-globe";
+import { FullpageScroll } from "@/components/fullpage-scroll";
 import { getHomePage } from "@/lib/payload-data";
 import { isLocale, type AppLocale } from "@/lib/locales";
 
@@ -37,6 +38,7 @@ export default async function LocaleHomePage({ params }: Props) {
 
   return (
     <>
+      <FullpageScroll />
       <Hero hero={heroProps} stats={statsProps} primaryHref={productsHref} />
       <HomeProductsIntro
         locale={typedLocale}
