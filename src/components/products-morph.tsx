@@ -3,7 +3,14 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Recycle } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { ParticleMorph, type ParticleMorphHandle } from "./particle-morph";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export type ProductsMorphItem = {
   code: string;
@@ -12,6 +19,7 @@ export type ProductsMorphItem = {
   variants?: string[];
   href?: string;
   recycled?: boolean;
+  image?: string;
 };
 
 export type ProductsMorphHero = {
@@ -96,6 +104,67 @@ const CODE_DISPLAY_OVERRIDES: Record<string, string> = { recycled: "REC" };
 
 function displayCode(code: string): string {
   return CODE_DISPLAY_OVERRIDES[code.toLowerCase()] ?? code.toUpperCase();
+}
+
+const PLACEHOLDER_IMAGE = "/imgsrc/plastic-bottle.jpg";
+
+type ProductImageRevealProps = {
+  src?: string;
+  alt: string;
+  side: "left" | "right";
+};
+
+function ProductImageReveal({ src, alt, side }: ProductImageRevealProps) {
+  const imageSrc = src ?? PLACEHOLDER_IMAGE;
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const root = rootRef.current;
+      if (!root) return;
+      const overlay = root.querySelector<HTMLElement>("[data-reveal-overlay]");
+      const inner = root.querySelector<HTMLElement>("[data-reveal-inner]");
+      if (!overlay || !inner) return;
+
+      // Overlay retracts toward the outer edge (away from the card/center).
+      const origin = side === "right" ? "right center" : "left center";
+
+      gsap.set(inner, { scale: 1.55 });
+      gsap.set(overlay, { scaleX: 1, transformOrigin: origin });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: root,
+          start: "top 75%",
+          end: "top 30%",
+          toggleActions: "play none none reverse",
+        },
+      });
+      tl.to(overlay, { scaleX: 0, duration: 1.2, ease: "expo.inOut" }, 0);
+      tl.to(inner, { scale: 1, duration: 1.8, ease: "power3.out" }, 0);
+    },
+    { scope: rootRef },
+  );
+
+  return (
+    <div
+      ref={rootRef}
+      className="relative aspect-[4/5] w-[300px] overflow-hidden rounded-3xl xl:w-[340px]"
+    >
+      <div data-reveal-inner className="absolute inset-0 will-change-transform">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageSrc}
+          alt={alt}
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <div
+        data-reveal-overlay
+        className="absolute inset-0 bg-background will-change-transform"
+      />
+    </div>
+  );
 }
 
 export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
@@ -263,6 +332,14 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
             </Link>
           );
 
+          const image = (
+            <ProductImageReveal
+              src={product.image}
+              alt={product.name}
+              side={isLeft ? "right" : "left"}
+            />
+          );
+
           return (
             <article
               key={product.code}
@@ -270,11 +347,21 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                 sectionRefs.current[index + 1] = el;
               }}
               data-shape-index={index}
-              className={`pointer-events-none relative flex min-h-screen items-center px-5 py-24 sm:px-8 md:px-16 lg:px-[10%] xl:px-[14%] 2xl:px-[18%] ${
+              className={`pointer-events-none relative flex min-h-screen items-center px-5 py-24 sm:px-8 md:px-16 lg:justify-between lg:px-[10%] xl:px-[14%] 2xl:px-[18%] ${
                 isLeft ? "justify-start" : "justify-end"
               }`}
             >
-              <div className="pointer-events-auto">{card}</div>
+              {isLeft ? (
+                <>
+                  <div className="pointer-events-auto">{card}</div>
+                  <div className="pointer-events-auto hidden lg:block">{image}</div>
+                </>
+              ) : (
+                <>
+                  <div className="pointer-events-auto hidden lg:block">{image}</div>
+                  <div className="pointer-events-auto">{card}</div>
+                </>
+              )}
             </article>
           );
         })}
