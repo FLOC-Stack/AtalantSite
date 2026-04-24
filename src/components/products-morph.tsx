@@ -149,7 +149,7 @@ function ProductImageReveal({ src, alt, side }: ProductImageRevealProps) {
   return (
     <div
       ref={rootRef}
-      className="relative aspect-[4/5] w-[300px] overflow-hidden rounded-3xl xl:w-[340px]"
+      className="relative h-full w-[320px] overflow-hidden rounded-3xl sm:w-[360px]"
     >
       <div data-reveal-inner className="absolute inset-0 will-change-transform">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -347,21 +347,25 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                 sectionRefs.current[index + 1] = el;
               }}
               data-shape-index={index}
-              className={`pointer-events-none relative flex min-h-screen items-center px-5 py-24 sm:px-8 md:px-16 lg:justify-between lg:px-[10%] xl:px-[14%] 2xl:px-[18%] ${
-                isLeft ? "justify-start" : "justify-end"
-              }`}
+              className="pointer-events-none relative flex min-h-screen items-center px-5 py-24 sm:px-8 md:px-16 lg:px-[10%] xl:px-[14%] 2xl:px-[18%]"
             >
-              {isLeft ? (
-                <>
-                  <div className="pointer-events-auto">{card}</div>
-                  <div className="pointer-events-auto hidden lg:block">{image}</div>
-                </>
-              ) : (
-                <>
-                  <div className="pointer-events-auto hidden lg:block">{image}</div>
-                  <div className="pointer-events-auto">{card}</div>
-                </>
-              )}
+              <div
+                className={`flex w-full items-stretch lg:justify-between ${
+                  isLeft ? "justify-start" : "justify-end"
+                }`}
+              >
+                {isLeft ? (
+                  <>
+                    <div className="pointer-events-auto">{card}</div>
+                    <div className="pointer-events-auto hidden lg:flex">{image}</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="pointer-events-auto hidden lg:flex">{image}</div>
+                    <div className="pointer-events-auto">{card}</div>
+                  </>
+                )}
+              </div>
             </article>
           );
         })}
