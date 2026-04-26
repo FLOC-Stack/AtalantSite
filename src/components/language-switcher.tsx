@@ -47,7 +47,7 @@ export function LanguageSwitcher({ currentLocale }: Props) {
         aria-haspopup="menu"
         aria-label={`Idioma: ${localeLabels[currentLocale]}`}
         onClick={() => setOpen((value) => !value)}
-        className="flex items-center gap-1.5 rounded-full border border-foreground/10 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-foreground transition-colors hover:bg-foreground/5"
+        className="flex cursor-pointer items-center gap-1.5 rounded-full border border-foreground/10 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-foreground transition-colors hover:bg-foreground/5"
       >
         {currentShort}
         <ChevronDown
@@ -60,7 +60,7 @@ export function LanguageSwitcher({ currentLocale }: Props) {
         <div
           role="menu"
           aria-label="Seleccionar idioma"
-          className="glass absolute right-0 top-full z-50 mt-2 min-w-[160px] rounded-2xl p-1"
+          className="absolute right-0 top-full z-50 mt-2 min-w-[160px] rounded-2xl border border-white/60 bg-white/80 p-1 shadow-[0_4px_16px_rgba(0,0,0,0.08)] backdrop-blur-md backdrop-saturate-150"
         >
           {locales.map((locale) => {
             const active = locale === currentLocale;
