@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import type { NavItem } from "@/lib/content-types";
-import type { AppLocale } from "@/lib/locales";
-import { buildProductsPath, buildSectionPath } from "@/lib/routes";
+import { localeLabels, locales, type AppLocale } from "@/lib/locales";
+import { buildProductsPath, buildSectionPath, switchLocalePath } from "@/lib/routes";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
 type HeaderLink = { label: string; href: string };
@@ -119,12 +119,10 @@ export function Header({
   const pathname = usePathname() ?? "";
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  // Expandido "temporal" por hover o focus teclado sobre el header.
-  // Al salir o desenfocar, vuelve al estado compacto si sigue colapsado.
-  // Si el drawer está abierto el header se queda desplegado aunque se
-  // pierda el hover, para no dejarlo flotando sobre un pill minúsculo.
-  const [hovered, setHovered] = useState(false);
-  const isCompact = collapsed && !hovered && !open;
+  // Pill compacto sii la página está scrolleada. El hover ya no re-expande
+  // (patrón new.studio): solo el click en hamburger abre el drawer dentro
+  // del propio pill.
+  const isCompact = collapsed;
 
   // Refs para la coreografía de entrada de los elementos del nav cuando
   // el pill se expande (fade + slide con stagger orgánico).
@@ -134,6 +132,7 @@ export function Header({
   // Refs para el focus trap del drawer y para devolver foco al hamburger
   // al cerrarlo.
   const drawerRef = useRef<HTMLDivElement>(null);
+  const drawerItemsRef = useRef<HTMLUListElement>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
 
   const links: HeaderLink[] = nav?.length
@@ -152,7 +151,7 @@ export function Header({
       if (frame !== null) return;
       frame = requestAnimationFrame(() => {
         frame = null;
-        const next = window.scrollY > 120;
+        const next = window.scrollY > 80;
         setCollapsed(next);
         if (next) setOpen(false);
       });
@@ -227,166 +226,237 @@ export function Header({
       if (langWrapperRef.current) targets.push(langWrapperRef.current);
       if (ctaRef.current) targets.push(ctaRef.current);
       if (!targets.length) return;
-      gsap.from(targets, {
-        opacity: 0,
-        y: 6,
-        duration: 0.4,
-        stagger: 0.05,
-        delay: 0.18,
-        ease: "power3.out",
-      });
+      gsap.fromTo(
+        targets,
+        { opacity: 0, y: 6 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.05,
+          delay: 0.25,
+          ease: "power3.out",
+          clearProps: "all",
+        },
+      );
     },
     { dependencies: [isCompact] },
+  );
+
+  // Cuando el drawer abre, los items entran con stagger fade + blur,
+  // imitando el patrón de new.studio (opacity 0 + blur 8 → 1 + blur 0).
+  useGSAP(
+    () => {
+      if (!open) return;
+      const ul = drawerItemsRef.current;
+      if (!ul) return;
+      const items = Array.from(ul.children);
+      if (!items.length) return;
+      gsap.fromTo(
+        items,
+        { opacity: 0, filter: "blur(8px)", y: 4 },
+        {
+          opacity: 1,
+          filter: "blur(0px)",
+          y: 0,
+          duration: 0.5,
+          stagger: 0.04,
+          delay: 0.1,
+          ease: "power3.out",
+        },
+      );
+    },
+    { dependencies: [open] },
   );
 
   return (
     <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 sm:top-6 sm:px-8 lg:top-8 lg:px-12">
       <div
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onFocus={() => setHovered(true)}
-        onBlur={() => setHovered(false)}
-        className={`relative w-full transition-all duration-500 ease-out max-w-[240px] ${
-          isCompact ? "" : "sm:max-w-[1440px]"
+        className={`relative w-full transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isCompact && open
+            ? "max-w-[320px]"
+            : isCompact
+              ? "max-w-[240px]"
+              : "max-w-[240px] sm:max-w-[1440px]"
         }`}
       >
-        {/* Nav bar — en mobile siempre compacto (logo + hamburger centrados);
-            a partir de sm respeta el estado expandido cuando corresponde. */}
+        {/* Pill — flex-col para que el drawer crezca dentro de él (patrón
+            new.studio). overflow-hidden recorta el drawer al border-radius. */}
         <nav
-          className={`glass relative z-20 flex items-center rounded-full h-12 sm:h-14 lg:h-16 transition-all duration-500 ease-out justify-center gap-4 px-4 ${
-            isCompact
-              ? "sm:px-5 lg:px-6"
-              : "sm:justify-between sm:gap-0 sm:px-8 lg:px-10"
+          className={`glass relative z-20 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            open ? "rounded-3xl" : "rounded-[32px]"
           }`}
         >
-          <Link href={`/${locale}`} className="shrink-0" aria-label={`${brandName} home`}>
-            <Image
-              src="/logo.svg"
-              alt={brandName}
-              width={136}
-              height={40}
-              className="h-6 w-auto sm:h-7 lg:h-8"
-              priority
-            />
-          </Link>
-
-          {/* Desktop nav — render condicional: cuando el pill está compact
-              el UL no debe existir en el DOM. Si lo dejáramos con lg:flex +
-              opacity-0, los 6 links seguirían ocupando su min-content dentro
-              del flex y harían desbordar el pill de 240px. */}
-          {!isCompact && (
-            <ul ref={ulRef} className="hidden items-center gap-10 lg:flex">
-              {links.map((link) => {
-                const active = isActiveLink(link.href, pathname);
-                return (
-                  <li key={link.label}>
-                    <Link
-                      aria-current={active ? "page" : undefined}
-                      href={link.href}
-                      className={`font-sans text-[13px] transition-opacity hover:opacity-70 ${
-                        active ? "text-primary-dark" : "text-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-
-          <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
-            <div
-              ref={langWrapperRef}
-              className={isCompact ? "hidden" : "hidden sm:flex"}
-            >
-              <LanguageSwitcher currentLocale={locale} />
-            </div>
-
+          {/* Top row — siempre visible, altura fija. */}
+          <div
+            className={`flex items-center h-12 sm:h-14 lg:h-16 justify-between px-[20px] transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              isCompact ? "" : "sm:px-8 lg:px-10"
+            }`}
+          >
             <Link
-              ref={ctaRef}
-              href={resolvedCtaHref}
-              className={`h-9 items-center overflow-hidden rounded bg-primary text-white ${
-                isCompact ? "hidden" : "hidden sm:flex"
-              }`}
+              href={`/${locale}`}
+              onClick={() => setOpen(false)}
+              className="shrink-0 cursor-pointer"
+              aria-label={`${brandName} home`}
             >
-              <span className="border-r border-white/10 px-5 font-mono text-[10px] uppercase tracking-[2px]">
-                {resolvedCtaLabel}
-              </span>
-              <span className="flex items-center justify-center px-3">
-                <ChevronDown className="h-2 w-2 -rotate-90" />
-              </span>
+              <Image
+                src="/logo.svg"
+                alt={brandName}
+                width={136}
+                height={40}
+                className="h-6 w-auto sm:h-7 lg:h-8"
+                priority
+              />
             </Link>
 
-            {/* Menu button — visible bajo lg por defecto, y también en lg+
-                cuando el header está en estado compact (sustituye al CTA). */}
-            <button
-              ref={hamburgerRef}
-              onClick={() => setOpen(!open)}
-              className={`items-center justify-center ${
-                isCompact ? "flex" : "flex lg:hidden"
-              }`}
-              aria-label={open ? "Cerrar menú" : "Abrir menú"}
-              aria-expanded={open}
-              aria-controls="header-drawer"
-            >
-              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
-        </nav>
+            {/* Desktop nav — render condicional: cuando el pill está compact
+                el UL no debe existir en el DOM. Si lo dejáramos con lg:flex +
+                opacity-0, los 6 links seguirían ocupando su min-content dentro
+                del flex y harían desbordar el pill de 240px. */}
+            {!isCompact && (
+              <ul ref={ulRef} className="hidden items-center gap-10 lg:flex">
+                {links.map((link) => {
+                  const active = isActiveLink(link.href, pathname);
+                  return (
+                    <li key={link.label}>
+                      <Link
+                        aria-current={active ? "page" : undefined}
+                        href={link.href}
+                        className={`font-sans text-[14px] transition-colors hover:text-primary ${
+                          active ? "text-primary-dark" : "text-foreground"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
 
-        {/* Dropdown — accesible desde cualquier breakpoint cuando open. */}
-        <div
-          ref={drawerRef}
-          id="header-drawer"
-          role="dialog"
-          aria-modal="true"
-          aria-label={brandName}
-          className={`glass absolute right-0 top-full mt-2 w-1/3 min-w-[220px] rounded-2xl transition-all duration-500 ease-out origin-top ${
-            open
-              ? "opacity-100 scale-y-100 pointer-events-auto"
-              : "opacity-0 scale-y-90 pointer-events-none"
-          }`}
-        >
-          <div className="px-5 pt-4 pb-5">
-            <ul className="flex flex-col gap-3">
-              {links.map((link) => {
-                const active = isActiveLink(link.href, pathname);
-                return (
-                  <li key={link.label}>
-                    <Link
-                      aria-current={active ? "page" : undefined}
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className={`block font-sans text-[15px] transition-opacity hover:opacity-70 ${
-                        active ? "text-primary-dark" : "text-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="mt-4 border-t border-foreground/5 pt-4">
-              <LanguageSwitcher currentLocale={locale} />
-            </div>
-            <div className="mt-4 sm:hidden">
-              <Link
-                href={resolvedCtaHref}
-                onClick={() => setOpen(false)}
-                className="flex h-9 items-center overflow-hidden rounded bg-primary text-white"
+            <div className="flex items-center gap-4 sm:gap-6 lg:gap-10">
+              <div
+                ref={langWrapperRef}
+                className={isCompact ? "hidden" : "hidden sm:flex"}
               >
-                <span className="border-r border-white/10 px-5 font-mono text-[10px] uppercase tracking-[2px]">
+                <LanguageSwitcher currentLocale={locale} />
+              </div>
+
+              <Link
+                ref={ctaRef}
+                href={resolvedCtaHref}
+                className={`h-9 items-center overflow-hidden rounded bg-primary text-white ${
+                  isCompact ? "hidden" : "hidden sm:flex"
+                }`}
+              >
+                <span className="border-r border-white/10 px-5 font-mono text-[12px] uppercase tracking-[2px]">
                   {resolvedCtaLabel}
                 </span>
                 <span className="flex items-center justify-center px-3">
-                  <ChevronDown className="h-2 w-2 -rotate-90" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </span>
               </Link>
+
+              {/* Hamburger CSS — dos líneas que rotan a X (estilo new.studio). */}
+              <button
+                ref={hamburgerRef}
+                onClick={() => setOpen(!open)}
+                className={`cursor-pointer items-center justify-center ${
+                  isCompact ? "flex" : "flex lg:hidden"
+                }`}
+                aria-label={open ? "Cerrar menú" : "Abrir menú"}
+                aria-expanded={open}
+                aria-controls="header-drawer"
+              >
+                <span className="relative block h-5 w-5">
+                  <span
+                    className={`absolute left-0 top-1/2 h-[1.5px] w-full bg-current transition-transform duration-300 ease-out ${
+                      open ? "rotate-45" : "-translate-y-[3px]"
+                    }`}
+                  />
+                  <span
+                    className={`absolute left-0 top-1/2 h-[1.5px] w-full bg-current transition-transform duration-300 ease-out ${
+                      open ? "-rotate-45" : "translate-y-[3px]"
+                    }`}
+                  />
+                </span>
+              </button>
             </div>
           </div>
-        </div>
+
+          {/* Drawer dentro del pill — truco grid-rows [0fr]/[1fr] anima
+              height auto sin conocer el alto target. inert evita foco cuando
+              está colapsado. */}
+          <div
+            ref={drawerRef}
+            id="header-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label={brandName}
+            aria-hidden={!open}
+            inert={!open}
+            className={`grid transition-[grid-template-rows] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            }`}
+          >
+            <div className="overflow-hidden">
+              <div className="px-6 pb-5 pt-2">
+                <ul ref={drawerItemsRef} className="flex flex-col gap-3">
+                  {links.map((link) => {
+                    const active = isActiveLink(link.href, pathname);
+                    return (
+                      <li key={link.label}>
+                        <Link
+                          aria-current={active ? "page" : undefined}
+                          href={link.href}
+                          onClick={() => setOpen(false)}
+                          className={`block font-sans text-[15px] transition-opacity hover:opacity-70 ${
+                            active ? "text-primary-dark" : "text-foreground"
+                          }`}
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="mt-4 flex items-center gap-4 border-t border-foreground/5 pt-4">
+                  {locales.map((loc) => {
+                    const active = loc === locale;
+                    const href = switchLocalePath(pathname, loc);
+                    return (
+                      <Link
+                        key={loc}
+                        aria-current={active ? "page" : undefined}
+                        href={href}
+                        onClick={() => setOpen(false)}
+                        className={`font-mono text-[11px] uppercase tracking-[0.28em] transition-opacity hover:opacity-70 ${
+                          active ? "text-foreground" : "text-foreground/50"
+                        }`}
+                      >
+                        {localeLabels[loc].slice(0, 2)}
+                      </Link>
+                    );
+                  })}
+                </div>
+                <div className="mt-4">
+                  <Link
+                    href={resolvedCtaHref}
+                    onClick={() => setOpen(false)}
+                    className="flex h-9 items-center justify-between overflow-hidden rounded bg-primary text-white"
+                  >
+                    <span className="px-5 font-mono text-[12px] uppercase tracking-[2px]">
+                      {resolvedCtaLabel}
+                    </span>
+                    <span className="flex items-center justify-center px-3">
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
       </div>
     </header>
   );
