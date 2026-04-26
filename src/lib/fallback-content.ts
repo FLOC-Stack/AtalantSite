@@ -72,7 +72,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       title: "Atalant | Polymer distribution in Europe",
     },
     footerLinks: [
-      { kind: "section", label: "Logistics", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistics" },
       { kind: "section", label: "Sustainability", sectionId: "sustainability" },
       { kind: "products", label: "Products" },
       { href: "mailto:hello@atalant.eu", kind: "external", label: "hello@atalant.eu" },
@@ -81,7 +81,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "en",
     navigation: [
       { kind: "products", label: "Products" },
-      { kind: "section", label: "Logistics", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistics" },
       { kind: "section", label: "Financing", sectionId: "financing" },
       { kind: "section", label: "Sustainability", sectionId: "sustainability" },
       { kind: "section", label: "Team", sectionId: "team" },
@@ -99,7 +99,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       title: "Atalant | Distribucion de polimeros en Europa",
     },
     footerLinks: [
-      { kind: "section", label: "Logistica", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistica" },
       { kind: "section", label: "Sostenibilidad", sectionId: "sustainability" },
       { kind: "products", label: "Productos" },
       { href: "mailto:hola@atalant.eu", kind: "external", label: "hola@atalant.eu" },
@@ -108,7 +108,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "es",
     navigation: [
       { kind: "products", label: "Productos" },
-      { kind: "section", label: "Logistica", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistica" },
       { kind: "section", label: "Financiacion", sectionId: "financing" },
       { kind: "section", label: "Sostenibilidad", sectionId: "sustainability" },
       { kind: "section", label: "Equipo", sectionId: "team" },
@@ -126,7 +126,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       title: "Atalant | Distribution de polymeres en Europe",
     },
     footerLinks: [
-      { kind: "section", label: "Logistique", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistique" },
       { kind: "section", label: "Durabilite", sectionId: "sustainability" },
       { kind: "products", label: "Produits" },
       { href: "mailto:bonjour@atalant.eu", kind: "external", label: "bonjour@atalant.eu" },
@@ -135,7 +135,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "fr",
     navigation: [
       { kind: "products", label: "Produits" },
-      { kind: "section", label: "Logistique", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistique" },
       { kind: "section", label: "Financement", sectionId: "financing" },
       { kind: "section", label: "Durabilite", sectionId: "sustainability" },
       { kind: "section", label: "Equipe", sectionId: "team" },
@@ -153,7 +153,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       title: "Atalant | Distribuicao de polimeros na Europa",
     },
     footerLinks: [
-      { kind: "section", label: "Logistica", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistica" },
       { kind: "section", label: "Sustentabilidade", sectionId: "sustainability" },
       { kind: "products", label: "Produtos" },
       { href: "mailto:ola@atalant.eu", kind: "external", label: "ola@atalant.eu" },
@@ -162,7 +162,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "pt",
     navigation: [
       { kind: "products", label: "Produtos" },
-      { kind: "section", label: "Logistica", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistica" },
       { kind: "section", label: "Financiamento", sectionId: "financing" },
       { kind: "section", label: "Sustentabilidade", sectionId: "sustainability" },
       { kind: "section", label: "Equipa", sectionId: "team" },

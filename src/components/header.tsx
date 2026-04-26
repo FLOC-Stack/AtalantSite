@@ -9,7 +9,12 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import type { NavItem } from "@/lib/content-types";
 import { localeLabels, locales, type AppLocale } from "@/lib/locales";
-import { buildProductsPath, buildSectionPath, switchLocalePath } from "@/lib/routes";
+import {
+  buildLogisticsPath,
+  buildProductsPath,
+  buildSectionPath,
+  switchLocalePath,
+} from "@/lib/routes";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
 type HeaderLink = { label: string; href: string };
@@ -97,6 +102,7 @@ function isContactNavItem(item: NavItem): boolean {
 
 function resolveHref(item: NavItem, locale: AppLocale): string {
   if (item.kind === "products") return buildProductsPath(locale);
+  if (item.kind === "logistics") return buildLogisticsPath(locale);
   if (item.kind === "external") return item.href ?? "#";
   return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
 }

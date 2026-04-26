@@ -29,6 +29,7 @@ export const SiteSettings: GlobalConfig = {
           options: [
             { label: "Section", value: "section" },
             { label: "Products", value: "products" },
+            { label: "Logistics", value: "logistics" },
             { label: "External", value: "external" },
           ],
           type: "select",
@@ -48,6 +49,7 @@ export const SiteSettings: GlobalConfig = {
           options: [
             { label: "Section", value: "section" },
             { label: "Products", value: "products" },
+            { label: "Logistics", value: "logistics" },
             { label: "External", value: "external" },
           ],
           type: "select",
