@@ -3,6 +3,7 @@ import { Hero } from "@/components/hero";
 import { HomeProductsIntro } from "@/components/home-products-intro";
 import { HomeLogistics } from "@/components/home-logistics";
 import { HomeFinancing } from "@/components/home-financing";
+import { HomeNews } from "@/components/home-news";
 import { AtalantGlobe } from "@/components/atalant-globe";
 import { FullpageScroll } from "@/components/fullpage-scroll";
 import { getHomePage } from "@/lib/payload-data";
@@ -50,6 +51,7 @@ export default async function LocaleHomePage({ params }: Props) {
         ctaHref={`/${typedLocale}/logistica`}
       />
       <HomeFinancing />
+      <HomeNews />
     </FullpageScroll>
   );
 }

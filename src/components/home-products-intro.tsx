@@ -16,6 +16,8 @@ type Props = {
   catalogHref?: string;
   ctaLabel?: string;
   ctaHref?: string;
+  primaryCtaLabel?: string;
+  primaryCtaHref?: string;
   stats?: HomeProductsIntroStat[];
   videoSrc?: string;
   videoPoster?: string;
@@ -81,6 +83,8 @@ export function HomeProductsIntro({
   catalogHref,
   ctaLabel = "Descargar fichas técnicas",
   ctaHref = "#",
+  primaryCtaLabel = "Ver productos",
+  primaryCtaHref = "/es/productos",
   stats = FALLBACK_STATS,
   videoSrc,
   videoPoster,
@@ -134,6 +138,19 @@ export function HomeProductsIntro({
               </span>
             </Link>
           ) : null}
+        {/* CTA */}
+        <div className="mt-7 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-10">
+          <Link
+            href={primaryCtaHref}
+            className="flex h-12 items-center rounded bg-primary text-white transition-opacity hover:opacity-90 sm:h-14"
+          >
+            <span className="border-r border-white/10 px-6 font-mono text-[10px] uppercase tracking-[2px] sm:px-10 sm:text-[11px] sm:tracking-[2.2px]">
+              {primaryCtaLabel}
+            </span>
+            <span className="flex items-center justify-center px-4 sm:px-5">
+              <ArrowRight className="h-3.5 w-3.5" />
+            </span>
+          </Link>
           <Link
             href={ctaHref}
             className="group inline-flex items-center gap-2 border-b border-primary-dark pb-1 font-sans text-[15px] font-medium tracking-[0.2px] text-primary-dark transition-opacity hover:opacity-70"

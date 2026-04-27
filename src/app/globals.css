@@ -31,15 +31,17 @@ a {
 }
 
 /* Frosted glass / translucent polymer effect */
-.glass {
-  background: rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(8px) saturate(1.6);
-  backdrop-filter: blur(8px) saturate(1.6);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(8px) saturate(1.6);
+    backdrop-filter: blur(8px) saturate(1.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+  }
 }
 
 .cta-primary {

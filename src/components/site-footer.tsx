@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { locales, type AppLocale } from "@/lib/locales";
 import { buildLocalePath, buildProductsPath } from "@/lib/routes";
 
@@ -44,7 +43,6 @@ function getColumns(locale: AppLocale): FooterColumn[] {
         { label: "Equipo", href: `${home}#equipo` },
         { label: "Principios de trabajo", href: `${home}#principios` },
         { label: "Evolución", href: `${home}#evolucion` },
-        { label: "Área de cliente", href: `${home}#cliente` },
       ],
     },
     {
@@ -61,9 +59,10 @@ function getColumns(locale: AppLocale): FooterColumn[] {
 
 export function SiteFooter({ locale }: Props) {
   const columns = getColumns(locale);
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-16 w-full bg-primary text-white md:mt-24 lg:mt-32">
+    <footer className="relative w-full bg-primary text-white">
       <div className="px-5 py-12 sm:px-8 sm:py-14 md:px-12 md:py-16 lg:px-20 lg:py-20">
         {/* Display title */}
         <h2 className="font-sans font-light leading-[0.95] tracking-tight text-white text-[clamp(2.5rem,11vw,10rem)] sm:leading-[0.95] lg:tracking-[-5.5px]">
@@ -101,7 +100,6 @@ export function SiteFooter({ locale }: Props) {
               <ul className="mt-7 flex flex-col gap-2.5">
                 {column.links.map((link) => {
                   const isExternal = link.href.startsWith("mailto:");
-                  const isClientArea = link.label === "Área de cliente";
 
                   if (isExternal) {
                     return (
@@ -120,15 +118,9 @@ export function SiteFooter({ locale }: Props) {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="group inline-flex items-center gap-1.5 font-sans text-[15px] tracking-[-0.1px] text-white/90 transition-opacity hover:opacity-70"
+                        className="font-sans text-[15px] tracking-[-0.1px] text-white/90 transition-opacity hover:opacity-70"
                       >
                         {link.label}
-                        {isClientArea ? (
-                          <ArrowRight
-                            className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
-                            aria-hidden="true"
-                          />
-                        ) : null}
                       </Link>
                     </li>
                   );
@@ -143,7 +135,7 @@ export function SiteFooter({ locale }: Props) {
         {/* Bottom bar */}
         <div className="mt-6 flex flex-col gap-4 font-mono text-[10px] uppercase tracking-[2px] sm:mt-7 md:flex-row md:items-center md:justify-between md:gap-6">
           <p className="text-white/50">
-            © MMXXVI · Atalant · MCMXCVII–MMXXVI · Todos los derechos reservados
+            © {currentYear} · Atalant · Todos los derechos reservados
           </p>
 
           <nav
@@ -165,21 +157,12 @@ export function SiteFooter({ locale }: Props) {
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/70">
             <a
-              href="https://www.linkedin.com/"
+              href="https://www.linkedin.com/company/atalant-europe/"
               target="_blank"
               rel="noopener noreferrer"
               className="transition-opacity hover:opacity-70"
             >
               LinkedIn
-            </a>
-            <span aria-hidden="true">·</span>
-            <a
-              href="https://twitter.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-opacity hover:opacity-70"
-            >
-              Twitter
             </a>
             <span aria-hidden="true" className="mx-1 text-white/30">/</span>
             <ul className="flex items-center gap-x-2.5">

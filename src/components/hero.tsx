@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { LogoParticles } from "./logo-particles";
 import type { HomeHero, StatsBlock } from "@/lib/content-types";
 
@@ -69,7 +69,7 @@ export function Hero({
           {hero.eyebrow}
         </span>
         <div className="hidden h-px w-16 bg-primary-dark/20 sm:block" />
-        <span className="hidden font-mono text-[10px] text-muted sm:inline">EST. 1994</span>
+        <span className="hidden font-mono text-[10px] text-muted sm:inline">EST. 1997</span>
       </div>
 
       {/* Headline */}
@@ -104,39 +104,26 @@ export function Hero({
           href={secondaryHref}
           className="glass flex h-12 items-center rounded transition-opacity hover:opacity-70 sm:h-14"
         >
-          <span className="border-r border-foreground/10 px-6 font-mono text-[10px] uppercase tracking-[2px] text-foreground sm:px-10 sm:text-[11px] sm:tracking-[2.2px]">
+          <span className="px-6 font-mono text-[10px] uppercase tracking-[2px] text-foreground sm:px-10 sm:text-[11px] sm:tracking-[2.2px]">
             {hero.secondaryLabel}
-          </span>
-          <span className="flex items-center justify-center px-4 sm:px-5">
-            <ChevronDown className="h-2 w-2 text-foreground" />
           </span>
         </Link>
       </div>
 
       {/* Bottom stats */}
       <div className="absolute bottom-0 left-5 right-5 z-10 pb-6 sm:left-8 sm:right-8 sm:pb-8 lg:left-20 lg:right-20">
-        <div className="h-px w-full bg-foreground" aria-hidden="true" />
-        <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="grid w-full grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4 sm:gap-x-12 lg:w-[800px]">
-            {statsList.map((stat) => (
-              <div key={stat.label} className="flex flex-col gap-2">
-                <span className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-                  {stat.label}
-                </span>
-                <span className="font-sans text-[14px] leading-[20px] tracking-[-0.1px] text-foreground">
-                  {stat.value}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="hidden items-center gap-4 rounded bg-primary-dark/50 px-6 py-3 sm:flex">
-            <span className="font-mono text-[10px] uppercase tracking-[2px] text-white">
-              Grade: PE-HD High Density
-            </span>
-            <div className="h-3 w-px bg-white/20" />
-            <span className="font-mono text-[10px] text-white">BATCH #92-A</span>
-          </div>
+        <div className="h-px w-full bg-black/20" aria-hidden="true" />
+        <div className="mt-6 grid w-full grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4 sm:gap-x-12">
+          {statsList.map((stat) => (
+            <div key={stat.label} className="flex flex-col gap-2">
+              <span className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
+                {stat.label}
+              </span>
+              <span className="font-sans text-[14px] leading-[20px] tracking-[-0.1px] text-foreground">
+                {stat.value}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
