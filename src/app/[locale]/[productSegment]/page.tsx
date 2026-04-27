@@ -43,7 +43,7 @@ export default async function ProductsIndexPage({ params }: Props) {
   const copy = catalogCopy[locale].index;
 
   return (
-    <main className="mx-auto max-w-7xl px-6 pb-24 pt-36 md:px-10 lg:px-16">
+    <main className="mx-auto max-w-7xl px-6 pb-24 pt-24 sm:pt-28 md:px-10 lg:px-16 lg:pt-32">
       <div className="max-w-3xl">
         <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary-dark">
           {copy.eyebrow}

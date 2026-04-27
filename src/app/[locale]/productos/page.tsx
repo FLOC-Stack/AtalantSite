@@ -71,7 +71,7 @@ export default async function ProductosPage({ params }: Props) {
   const hero: ProductsMorphHero | undefined = undefined;
 
   return (
-    <main className="bg-background">
+    <main className="bg-background pt-24 sm:pt-28 lg:pt-32">
       <ProductsMorph products={products} hero={hero} />
     </main>
   );
