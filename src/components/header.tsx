@@ -41,7 +41,7 @@ const fallbackStrings: Record<AppLocale, FallbackStrings> = {
     logistics: "Logística",
     financing: "Financiación",
     sustainability: "Sostenibilidad",
-    about: "Sobre nosotros",
+    about: "Nosotros",
     contact: "Contacto",
   },
   en: {
@@ -285,6 +285,10 @@ export function Header({
         <nav
           className={`glass relative z-20 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             open ? "rounded-3xl" : "rounded-[32px]"
+          } ${
+            isCompact
+              ? "shadow-[0_12px_32px_-12px_rgba(0,0,0,0.18)]"
+              : "shadow-none"
           }`}
         >
           {/* Top row — siempre visible, altura fija. */}
