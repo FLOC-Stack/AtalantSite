@@ -30,22 +30,22 @@ const FALLBACK_QUOTE =
 
 const FALLBACK_PRINCIPLES: FinancingPrinciple[] = [
   {
-    numeral: "I",
+    numeral: "01",
     title: "Compromiso",
     body: "Ampliar nuestro espíritu de servicio para dar lo mejor con cada solución.",
   },
   {
-    numeral: "II",
+    numeral: "02",
     title: "Flexibilidad",
     body: "Adaptarnos a la realidad de nuestros clientes y proveedores escuchando activamente sus necesidades.",
   },
   {
-    numeral: "III",
+    numeral: "03",
     title: "Agilidad",
     body: "Responder con energía y eficacia para ofrecer soluciones en constante evolución.",
   },
   {
-    numeral: "IV",
+    numeral: "04",
     title: "Fiabilidad",
     body: "Convertirse en la opción más segura en cada ocasión como expertos en la distribución.",
   },
