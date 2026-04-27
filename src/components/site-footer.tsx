@@ -62,7 +62,7 @@ export function SiteFooter({ locale }: Props) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-16 w-full bg-primary text-white md:mt-24 lg:mt-32">
+    <footer className="relative w-full bg-primary text-white">
       <div className="px-5 py-12 sm:px-8 sm:py-14 md:px-12 md:py-16 lg:px-20 lg:py-20">
         {/* Display title */}
         <h2 className="font-sans font-light leading-[0.95] tracking-tight text-white text-[clamp(2.5rem,11vw,10rem)] sm:leading-[0.95] lg:tracking-[-5.5px]">
