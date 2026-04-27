@@ -7,7 +7,7 @@ const serverURLParts = new URL(serverURL);
 const nextConfig: NextConfig = {
   reactCompiler: process.env.NODE_ENV === "production",
   images: {
-    localPatterns: [{ pathname: "/media/**" }],
+    localPatterns: [{ pathname: "/media/**" }, { pathname: "/imgsrc/**" }],
     remotePatterns: [
       {
         hostname: serverURLParts.hostname,
