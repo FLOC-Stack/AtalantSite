@@ -24,6 +24,8 @@ type Props = {
   legend?: string;
 };
 
+const REVEAL_DURATION = 2.4;
+
 export function NetworkTimeline({ hubs, caption, legend }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -44,8 +46,13 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
 
       if (!track || !dots.length || prefersReduced) return;
 
-      // `from`-style: los elementos quedan en su estado final por CSS; GSAP los
-      // lleva al estado "from" justo antes de animar y termina donde ya estaban.
+      // Estado inicial: nada visible, listo para el reveal sincronizado.
+      gsap.set(track, { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(dots, { scale: 0, autoAlpha: 0 });
+      gsap.set(stems, { scaleY: 0, transformOrigin: "bottom center", autoAlpha: 0 });
+      gsap.set(labels, { autoAlpha: 0, y: 6 });
+      if (flow) gsap.set(flow, { x: 0, autoAlpha: 0 });
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
@@ -54,94 +61,54 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
         },
       });
 
-      tl.from(
-        track,
-        {
-          scaleX: 0,
-          transformOrigin: "left center",
-          duration: 0.9,
-          ease: "power3.out",
-        },
-        0,
-      );
-      tl.from(
-        dots,
-        {
-          scale: 0,
-          opacity: 0,
-          duration: 0.4,
-          ease: "back.out(2)",
-          stagger: 0.08,
-        },
-        0.5,
-      );
-      tl.from(
-        stems,
-        {
-          scaleY: 0,
-          transformOrigin: "bottom center",
-          duration: 0.5,
-          ease: "power2.out",
-          stagger: 0.08,
-        },
-        0.55,
-      );
-      tl.from(
-        labels,
-        {
-          opacity: 0,
-          y: 6,
-          duration: 0.4,
-          ease: "power2.out",
-          stagger: 0.06,
-        },
-        0.7,
-      );
+      // La bola y la línea viajan al mismo ritmo: la bola es la cabeza del trazo.
+      tl.to(track, { scaleX: 1, duration: REVEAL_DURATION, ease: "power1.inOut" }, 0);
 
-      // Flujo oeste → este en loop. Arranca al terminar el reveal.
       if (flow) {
         const getDistance = () => track.getBoundingClientRect().width;
-        const flowLoop = gsap.timeline({
-          repeat: -1,
-          repeatDelay: 2.5,
-          defaults: { ease: "power1.inOut" },
-        });
-        flowLoop.set(flow, { x: 0, opacity: 0 });
-        flowLoop.to(flow, { opacity: 1, duration: 0.25 }, 0);
-        flowLoop.to(flow, { x: getDistance, duration: 4.2 }, 0);
-        flowLoop.to(flow, { opacity: 0, duration: 0.3 }, ">-0.3");
-        tl.add(flowLoop, ">");
+        tl.to(flow, { autoAlpha: 1, duration: 0.25 }, 0);
+        tl.to(
+          flow,
+          { x: getDistance, duration: REVEAL_DURATION, ease: "power1.inOut" },
+          0,
+        );
+        // La bola se apaga al llegar al final; vuelve en loop más abajo.
+        tl.to(flow, { autoAlpha: 0, duration: 0.35 }, REVEAL_DURATION - 0.15);
       }
+
+      // Cada hub se enciende exactamente cuando la bola pasa por su posición.
+      const segment = REVEAL_DURATION / Math.max(hubs.length - 1, 1);
+      hubs.forEach((_, i) => {
+        const t = i * segment;
+        tl.to(dots[i], { scale: 1, autoAlpha: 1, duration: 0.35, ease: "back.out(2)" }, t);
+        tl.to(stems[i], { scaleY: 1, autoAlpha: 1, duration: 0.45, ease: "power2.out" }, t);
+        tl.to(labels[i], { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" }, t + 0.08);
+      });
     },
     { scope: rootRef },
   );
 
   return (
-    <div
-      ref={rootRef}
-      className="relative border border-foreground bg-background/60 px-6 py-8 sm:px-10 sm:py-10"
-    >
+    <div ref={rootRef} className="relative">
       {caption ? (
         <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
           {caption}
         </p>
       ) : null}
 
-      {/* Timeline area — desktop: horizontal; mobile: lista vertical accesible con los mismos datos */}
+      {/* Timeline area — desktop: horizontal; mobile: lista vertical */}
       <div className="mt-8 hidden md:block">
         <div className="relative h-[160px]">
-          {/* Línea base */}
-          <div className="absolute left-0 right-0 top-[88px] h-px bg-foreground/25" />
-          {/* Línea animada encima (se dibuja) */}
+          {/* Línea única (se traza sincronizada con la bola) */}
           <div
             data-net-track
             className="absolute left-0 right-0 top-[88px] h-px bg-foreground will-change-transform"
             aria-hidden="true"
           />
-          {/* Punto viajero (flow) — viaja oeste→este en loop tras el reveal */}
+          {/* Bola "viajera" — dibuja la línea en el primer pase, después entra en loop */}
           <div
             data-net-flow
-            className="pointer-events-none absolute top-[85px] left-0 h-[7px] w-[7px] -translate-y-1/2 rounded-full bg-primary opacity-0 shadow-[0_0_18px_4px_rgba(30,75,182,0.35)]"
+            className="pointer-events-none absolute top-[85px] left-0 h-[9px] w-[9px] -translate-y-1/2 rounded-full bg-primary opacity-0 shadow-[0_0_22px_5px_rgba(30,75,182,0.4)]"
             aria-hidden="true"
           />
 
@@ -162,14 +129,11 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
                   className={`absolute w-px will-change-transform ${
                     isPrimary ? "bg-foreground/50" : "bg-foreground/30"
                   }`}
-                  style={{
-                    top: 88 - stemHeight,
-                    height: stemHeight,
-                  }}
+                  style={{ top: 88 - stemHeight, height: stemHeight }}
                   aria-hidden="true"
                 />
 
-                {/* Dot sobre la línea, con pulse para primary */}
+                {/* Dot sobre la línea */}
                 <div
                   data-net-dot
                   className="absolute top-[82px] flex h-[13px] w-[13px] items-center justify-center will-change-transform"
@@ -215,7 +179,7 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
         </div>
       </div>
 
-      {/* Mobile: lista vertical (sin animación compleja, mantiene legibilidad) */}
+      {/* Mobile: lista vertical */}
       <ul className="mt-8 md:hidden">
         {hubs.map((hub, i) => {
           const isPrimary = hub.tier === "primary";

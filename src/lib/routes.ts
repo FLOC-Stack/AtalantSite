@@ -9,6 +9,10 @@ export function buildProductsPath(locale: AppLocale) {
   return `/${locale}/${getProductSegment(locale)}`;
 }
 
+export function buildLogisticsPath(locale: AppLocale) {
+  return `/${locale}/logistica`;
+}
+
 export function buildFamilyPath(locale: AppLocale, slug: string) {
   return `${buildProductsPath(locale)}/${slug}`;
 }

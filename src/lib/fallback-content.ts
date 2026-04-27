@@ -72,7 +72,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       title: "Atalant | Polymer distribution in Europe",
     },
     footerLinks: [
-      { kind: "section", label: "Logistics", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistics" },
       { kind: "section", label: "Sustainability", sectionId: "sustainability" },
       { kind: "products", label: "Products" },
       { href: "mailto:hello@atalant.eu", kind: "external", label: "hello@atalant.eu" },
@@ -81,7 +81,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "en",
     navigation: [
       { kind: "products", label: "Products" },
-      { kind: "section", label: "Logistics", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistics" },
       { kind: "section", label: "Financing", sectionId: "financing" },
       { kind: "section", label: "Sustainability", sectionId: "sustainability" },
       { kind: "section", label: "Team", sectionId: "team" },
@@ -99,6 +99,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       title: "Atalant | Distribución de polímeros en Europa",
     },
     footerLinks: [
+      { kind: "logistics", label: "Logistica" },
       { kind: "section", label: "Logística", sectionId: "logistics" },
       { kind: "section", label: "Sostenibilidad", sectionId: "sustainability" },
       { kind: "products", label: "Productos" },
@@ -108,6 +109,8 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "es",
     navigation: [
       { kind: "products", label: "Productos" },
+      { kind: "logistics", label: "Logistica" },
+      { kind: "section", label: "Financiacion", sectionId: "financing" },
       { kind: "section", label: "Logística", sectionId: "logistics" },
       { kind: "section", label: "Financiación", sectionId: "financing" },
       { kind: "section", label: "Sostenibilidad", sectionId: "sustainability" },
@@ -126,6 +129,8 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       title: "Atalant | Distribution de polymères en Europe",
     },
     footerLinks: [
+      { kind: "logistics", label: "Logistique" },
+      { kind: "section", label: "Durabilite", sectionId: "sustainability" },
       { kind: "section", label: "Logistique", sectionId: "logistics" },
       { kind: "section", label: "Durabilité", sectionId: "sustainability" },
       { kind: "products", label: "Produits" },
@@ -135,7 +140,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "fr",
     navigation: [
       { kind: "products", label: "Produits" },
-      { kind: "section", label: "Logistique", sectionId: "logistics" },
+      { kind: "logistics", label: "Logistique" },
       { kind: "section", label: "Financement", sectionId: "financing" },
       { kind: "section", label: "Durabilité", sectionId: "sustainability" },
       { kind: "section", label: "Équipe", sectionId: "team" },
@@ -153,6 +158,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       title: "Atalant | Distribuição de polímeros na Europa",
     },
     footerLinks: [
+      { kind: "logistics", label: "Logistica" },
       { kind: "section", label: "Logística", sectionId: "logistics" },
       { kind: "section", label: "Sustentabilidade", sectionId: "sustainability" },
       { kind: "products", label: "Produtos" },
@@ -162,6 +168,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "pt",
     navigation: [
       { kind: "products", label: "Produtos" },
+      { kind: "logistics", label: "Logistica" },
       { kind: "section", label: "Logística", sectionId: "logistics" },
       { kind: "section", label: "Financiamento", sectionId: "financing" },
       { kind: "section", label: "Sustentabilidade", sectionId: "sustainability" },

@@ -53,7 +53,7 @@ export default async function ProductFamilyPage({ params }: Props) {
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-6 pb-24 pt-36 md:px-10 lg:px-16">
+    <main className="mx-auto max-w-7xl px-6 pb-24 pt-24 sm:pt-28 md:px-10 lg:px-16 lg:pt-32">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div>
           <Link className="text-sm text-primary" href={buildProductsPath(locale)}>

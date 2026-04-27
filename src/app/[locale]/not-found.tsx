@@ -38,7 +38,7 @@ type Props = {
   }>;
 };
 
-export default async function LocaleNotFound({ params }: Props) {
+export default async function NotFoundPage({ params }: Props) {
   const { locale } = await params;
   const validLocale = isLocale(locale) ? locale : defaultLocale;
   const text = copy[validLocale];

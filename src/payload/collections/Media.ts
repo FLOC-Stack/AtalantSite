@@ -19,6 +19,9 @@ export const Media: CollectionConfig = {
   upload: {
     adminThumbnail: "thumbnail",
     focalPoint: true,
+    // Aceptamos imagen y video para poder asignar cualquiera al heroMedia.
+    // `imageSizes` solo aplica a imágenes; Payload las omite para videos.
+    mimeTypes: ["image/*", "video/*"],
     imageSizes: [
       { name: "thumbnail", width: 320 },
       { name: "card", width: 960 },

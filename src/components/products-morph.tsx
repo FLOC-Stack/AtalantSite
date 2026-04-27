@@ -19,7 +19,10 @@ export type ProductsMorphItem = {
   variants?: string[];
   href?: string;
   recycled?: boolean;
+  /** Imagen estática (fallback). Ignorada si hay `video`. */
   image?: string;
+  /** Video (mp4/webm). Si existe, se reproduce autoplay/muted/loop. */
+  video?: string;
 };
 
 export type ProductsMorphHero = {
@@ -36,6 +39,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Resistencia química y procesabilidad para envase, tubería y film. Grados específicos para soplado, inyección y extrusión.",
     variants: ["HDPE", "LDPE", "LLDPE"],
     href: "/es/productos/pe",
+    image: "/imgsrc/botella_detergente.jpg",
   },
   {
     code: "PP",
@@ -44,6 +48,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Alta rigidez, estabilidad térmica y reciclabilidad para automoción, electrodomésticos y envase rígido.",
     variants: ["Homopolímero", "Random", "Impacto"],
     href: "/es/productos/pp",
+    image: "/imgsrc/yogurt.jpg",
   },
   {
     code: "PVC",
@@ -52,6 +57,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Versatilidad rígida y flexible. Perfilería, conducciones, recubrimientos y construcción con aditivación a medida.",
     variants: ["Rígido", "Flexible", "Emulsión"],
     href: "/es/productos/pvc",
+    image: "/imgsrc/molde-construccion.jpg",
   },
   {
     code: "PS",
@@ -60,6 +66,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Transparencia y facilidad de termoconformado. Envase alimentario, electrodomésticos y aislamiento térmico.",
     variants: ["GPPS", "HIPS", "EPS"],
     href: "/es/productos/ps",
+    image: "/imgsrc/Oso%20de%20Pl%C3%A1stico.jpg",
   },
   {
     code: "PET",
@@ -68,6 +75,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Barrera, transparencia y aptitud alimentaria. Grados soplado, inyección y fibra, incluyendo rPET certificado.",
     variants: ["Soplado", "Inyección", "Fibra", "rPET"],
     href: "/es/productos/pet",
+    video: "/imgsrc/v1.mp4",
   },
   {
     code: "REC",
@@ -77,6 +85,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
     variants: ["rPE", "rPP", "rPET"],
     href: "/es/productos/reciclados",
     recycled: true,
+    image: "/imgsrc/Botella%20premium.jpg",
   },
 ];
 
@@ -106,42 +115,81 @@ function displayCode(code: string): string {
   return CODE_DISPLAY_OVERRIDES[code.toLowerCase()] ?? code.toUpperCase();
 }
 
-const PLACEHOLDER_IMAGE = "/imgsrc/plastic-bottle.jpg";
+const PLACEHOLDER_IMAGE = "/imgsrc/botella_detergente.jpg";
 
 type ProductImageRevealProps = {
   src?: string;
+  videoSrc?: string;
   alt: string;
-  side: "left" | "right";
 };
 
-function ProductImageReveal({ src, alt, side }: ProductImageRevealProps) {
+function ProductImageReveal({ src, videoSrc, alt }: ProductImageRevealProps) {
   const imageSrc = src ?? PLACEHOLDER_IMAGE;
+  const isVideo = Boolean(videoSrc);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const root = rootRef.current;
       if (!root) return;
-      const overlay = root.querySelector<HTMLElement>("[data-reveal-overlay]");
-      const inner = root.querySelector<HTMLElement>("[data-reveal-inner]");
-      if (!overlay || !inner) return;
 
-      // Overlay retracts toward the outer edge (away from the card/center).
-      const origin = side === "right" ? "right center" : "left center";
+      const prefersReduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
-      gsap.set(inner, { scale: 1.55 });
-      gsap.set(overlay, { scaleX: 1, transformOrigin: origin });
+      if (prefersReduced) {
+        gsap.set(root, { opacity: 1, scale: 1, y: 0 });
+        return;
+      }
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: root,
-          start: "top 75%",
-          end: "top 30%",
-          toggleActions: "play none none reverse",
-        },
+      // Initial state: oculta, encogida al 80% y desplazada 8px hacia abajo.
+      gsap.set(root, { opacity: 0, scale: 0.8, y: 8 });
+
+      const DURATION = 2.6;
+      const fadeIn = () =>
+        gsap.to(root, {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: DURATION,
+          ease: "power3.out",
+          overwrite: true,
+        });
+      const fadeOutUp = () =>
+        gsap.to(root, {
+          opacity: 0,
+          scale: 0.8,
+          y: -8,
+          duration: DURATION,
+          ease: "power3.in",
+          overwrite: true,
+        });
+      const fadeOutDown = () =>
+        gsap.to(root, {
+          opacity: 0,
+          scale: 0.8,
+          y: 8,
+          duration: DURATION,
+          ease: "power3.in",
+          overwrite: true,
+        });
+
+      // Disparos cerca del centro del viewport (50%), no al asomar por el borde.
+      const trigger = ScrollTrigger.create({
+        trigger: root,
+        start: "top 50%",
+        end: "bottom 50%",
+        onEnter: fadeIn, // top cruza el centro bajando → aparece creciendo
+        onLeave: fadeOutUp, // bottom cruza el centro bajando → sale encogiendo hacia arriba
+        onEnterBack: fadeIn, // bottom cruza el centro subiendo → aparece creciendo
+        onLeaveBack: fadeOutDown, // top cruza el centro subiendo → sale encogiendo hacia abajo
       });
-      tl.to(overlay, { scaleX: 0, duration: 1.2, ease: "expo.inOut" }, 0);
-      tl.to(inner, { scale: 1, duration: 1.8, ease: "power3.out" }, 0);
+
+      // Si al montar ya estamos dentro del rango (deep link o recarga con scroll
+      // persistido), deja la imagen visible de inmediato sin tween.
+      if (trigger.progress > 0 && trigger.progress < 1) {
+        gsap.set(root, { opacity: 1, scale: 1, y: 0 });
+      }
     },
     { scope: rootRef },
   );
@@ -149,26 +197,45 @@ function ProductImageReveal({ src, alt, side }: ProductImageRevealProps) {
   return (
     <div
       ref={rootRef}
-      className="relative aspect-[4/5] w-[300px] overflow-hidden rounded-3xl xl:w-[340px]"
+      className="relative h-full w-[320px] overflow-hidden rounded-3xl opacity-0 will-change-transform sm:w-[360px]"
     >
-      <div data-reveal-inner className="absolute inset-0 will-change-transform">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+      {isVideo ? (
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src={videoSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label={alt}
+        />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={imageSrc}
           alt={alt}
-          className="h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
         />
-      </div>
-      <div
-        data-reveal-overlay
-        className="absolute inset-0 bg-background will-change-transform"
-      />
+      )}
     </div>
   );
 }
 
 export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
-  const items = products?.length ? products.slice(0, 6) : FALLBACK_PRODUCTS;
+  // Si el CMS devuelve items sin imagen/video, caemos al media del fallback
+  // con el mismo `code` para que cada producto tenga su cover sin tener que
+  // tocar Payload. Cuando el cliente suba su propio heroMedia, pisa al fallback.
+  const fallbackMediaByCode = new Map(
+    FALLBACK_PRODUCTS.map((p) => [p.code.toUpperCase(), { image: p.image, video: p.video }]),
+  );
+  const items = (products?.length ? products.slice(0, 6) : FALLBACK_PRODUCTS).map(
+    (item) => {
+      if (item.image || item.video) return item;
+      const fb = fallbackMediaByCode.get(item.code.toUpperCase());
+      return fb ? { ...item, image: fb.image, video: fb.video } : item;
+    },
+  );
   const morphRef = useRef<ParticleMorphHandle>(null);
   const sectionRefs = useRef<Array<HTMLElement | null>>([]);
   const rootRef = useRef<HTMLElement | null>(null);
@@ -335,8 +402,8 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
           const image = (
             <ProductImageReveal
               src={product.image}
+              videoSrc={product.video}
               alt={product.name}
-              side={isLeft ? "right" : "left"}
             />
           );
 
@@ -347,21 +414,25 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                 sectionRefs.current[index + 1] = el;
               }}
               data-shape-index={index}
-              className={`pointer-events-none relative flex min-h-screen items-center px-5 py-24 sm:px-8 md:px-16 lg:justify-between lg:px-[10%] xl:px-[14%] 2xl:px-[18%] ${
-                isLeft ? "justify-start" : "justify-end"
-              }`}
+              className="pointer-events-none relative flex min-h-screen items-center px-5 py-24 sm:px-8 md:px-16 lg:px-[10%] xl:px-[14%] 2xl:px-[18%]"
             >
-              {isLeft ? (
-                <>
-                  <div className="pointer-events-auto">{card}</div>
-                  <div className="pointer-events-auto hidden lg:block">{image}</div>
-                </>
-              ) : (
-                <>
-                  <div className="pointer-events-auto hidden lg:block">{image}</div>
-                  <div className="pointer-events-auto">{card}</div>
-                </>
-              )}
+              <div
+                className={`flex w-full items-stretch lg:justify-between ${
+                  isLeft ? "justify-start" : "justify-end"
+                }`}
+              >
+                {isLeft ? (
+                  <>
+                    <div className="pointer-events-auto">{card}</div>
+                    <div className="pointer-events-auto hidden lg:flex">{image}</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="pointer-events-auto hidden lg:flex">{image}</div>
+                    <div className="pointer-events-auto">{card}</div>
+                  </>
+                )}
+              </div>
             </article>
           );
         })}

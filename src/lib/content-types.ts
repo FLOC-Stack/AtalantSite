@@ -9,7 +9,7 @@ export type SeoData = {
 
 export type NavItem = {
   label: string;
-  kind: "section" | "products" | "external";
+  kind: "section" | "products" | "logistics" | "external";
   sectionId?: string;
   href?: string;
 };
@@ -83,6 +83,12 @@ export type HomePageData = {
   blocks: HomeBlock[];
 };
 
+export type ProductFamilyMedia = {
+  url: string;
+  kind: "image" | "video";
+  alt?: string;
+};
+
 export type ProductFamilyData = {
   locale: AppLocale;
   code: string;
@@ -94,5 +100,6 @@ export type ProductFamilyData = {
   applications: string[];
   recycled: boolean;
   featured: boolean;
+  heroMedia?: ProductFamilyMedia;
   seo: SeoData;
 };

@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export type LogisticsMilestone = {
   year: string;
@@ -15,6 +17,8 @@ type Props = {
   counter?: string;
   title?: string;
   body?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
   timelineLabel?: string;
   milestones?: LogisticsMilestone[];
   /** Video de fondo. Se renderiza con object-cover detrás del overlay. */
@@ -74,6 +78,8 @@ export function HomeLogistics({
   counter = "03 / 05",
   title = FALLBACK_TITLE,
   body = FALLBACK_BODY,
+  ctaLabel = "Ver depósitos",
+  ctaHref,
   timelineLabel = "Evolución Atalant",
   milestones = FALLBACK_MILESTONES,
   videoSrc,
@@ -109,10 +115,10 @@ export function HomeLogistics({
       className="relative flex min-h-screen flex-col overflow-hidden bg-background text-foreground"
     >
       {/* Background: video / animación / globo.
-          Composición invertida: en desktop el globo vive en la mitad izquierda
-          y deja respirar la columna editorial a la derecha. En mobile ocupa
-          todo el ancho. */}
-      <div className="absolute inset-0 z-0 md:right-1/3">
+          Composición invertida: en desktop el globo vive en la mitad izquierda,
+          contenido en un cuadrante reducido para no robar protagonismo a la
+          columna editorial. En mobile ocupa todo el ancho. */}
+      <div className="absolute inset-0 z-0 md:left-[2%] md:right-1/2 md:top-[10%] md:bottom-[10%]">
         {bgNode}
       </div>
       {/* Fade muy suave en el borde derecho del globo para que no se corte en seco */}
@@ -120,7 +126,7 @@ export function HomeLogistics({
         className="pointer-events-none absolute inset-y-0 left-0 right-0 z-0 hidden md:block"
         style={{
           background:
-            "linear-gradient(to left, rgba(246,247,253,1) 30%, rgba(246,247,253,0) 50%)",
+            "linear-gradient(to left, rgba(246,247,253,1) 50%, rgba(246,247,253,0) 70%)",
         }}
         aria-hidden="true"
       />
@@ -129,7 +135,7 @@ export function HomeLogistics({
       <div className="relative z-10 flex w-full flex-1 flex-col px-10 pt-16 pb-12 sm:px-14 sm:pt-20 sm:pb-14 lg:px-20 lg:pt-[100px] lg:pb-[80px]">
         {/* Bloque editorial: en mobile full-width; en desktop empujado a la
             derecha para no solaparse con el globo que ahora vive a la izquierda. */}
-        <div className="md:ml-auto md:w-1/3">
+        <div className="md:ml-auto md:w-[45%]">
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary-dark">
@@ -155,6 +161,23 @@ export function HomeLogistics({
           <p className="mt-8 max-w-[680px] font-sans text-[17px] font-light leading-[1.55] tracking-[-0.15px] text-foreground sm:text-lg lg:text-[18px] lg:leading-[28px]">
             {body}
           </p>
+
+          {/* CTA */}
+          {ctaHref ? (
+            <div className="mt-8">
+              <Link
+                href={ctaHref}
+                className="inline-flex h-11 items-center rounded bg-primary text-white transition-opacity hover:opacity-90"
+              >
+                <span className="border-r border-white/10 px-5 font-mono text-[10px] uppercase tracking-[2px] sm:text-[11px] sm:tracking-[2.2px]">
+                  {ctaLabel}
+                </span>
+                <span className="flex items-center justify-center px-3.5">
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </Link>
+            </div>
+          ) : null}
         </div>
 
         {/* Spacer: empuja el timeline hacia el fondo del viewport en desktop */}

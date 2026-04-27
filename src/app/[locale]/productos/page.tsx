@@ -53,6 +53,14 @@ export default async function ProductosPage({ params }: Props) {
       variants: family.variants,
       recycled: family.recycled,
       href: `/${typedLocale}/productos/${family.slug}`,
+      image:
+        family.heroMedia && family.heroMedia.kind === "image"
+          ? family.heroMedia.url
+          : undefined,
+      video:
+        family.heroMedia && family.heroMedia.kind === "video"
+          ? family.heroMedia.url
+          : undefined,
     }));
   } catch {
     // Fallback a los 6 hardcodeados en el componente
@@ -63,7 +71,7 @@ export default async function ProductosPage({ params }: Props) {
   const hero: ProductsMorphHero | undefined = undefined;
 
   return (
-    <main className="bg-background">
+    <main className="bg-background pt-24 sm:pt-28 lg:pt-32">
       <ProductsMorph products={products} hero={hero} />
     </main>
   );

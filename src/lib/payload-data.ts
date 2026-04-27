@@ -4,6 +4,7 @@ import type {
   HomeBlock,
   HomePageData,
   ProductFamilyData,
+  ProductFamilyMedia,
   SiteSettingsData,
 } from "@/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "@/lib/fallback-content";
@@ -49,7 +50,10 @@ function normalizeNavItems(items: unknown): SiteSettingsData["navigation"] {
       const label = record.label;
 
       if (
-        (kind === "section" || kind === "products" || kind === "external") &&
+        (kind === "section" ||
+          kind === "products" ||
+          kind === "logistics" ||
+          kind === "external") &&
         typeof label === "string"
       ) {
         return {
@@ -284,12 +288,26 @@ export const getHomePage = cache(async function getHomePage(
   }
 });
 
+function mapHeroMedia(value: unknown): ProductFamilyMedia | undefined {
+  const record = asRecord(value);
+  if (!record) return undefined;
+  const url = typeof record.url === "string" ? record.url : null;
+  if (!url) return undefined;
+  const mimeType = typeof record.mimeType === "string" ? record.mimeType : "";
+  const kind: ProductFamilyMedia["kind"] = mimeType.startsWith("video/")
+    ? "video"
+    : "image";
+  const alt = typeof record.alt === "string" ? record.alt : undefined;
+  return { url, kind, alt };
+}
+
 function mapFamily(locale: AppLocale, doc: Record<string, unknown>): ProductFamilyData | null {
   if (typeof doc.code !== "string" || typeof doc.slug !== "string") {
     return null;
   }
 
   const seo = asRecord(doc.seo);
+  const heroMedia = mapHeroMedia(doc.heroMedia);
 
   const variants = Array.isArray(doc.variants)
     ? doc.variants
@@ -323,6 +341,7 @@ function mapFamily(locale: AppLocale, doc: Record<string, unknown>): ProductFami
         ? doc.excerpt
         : "",
     featured: Boolean(doc.featured),
+    heroMedia,
     locale,
     recycled: Boolean(doc.recycled),
     seo: {
@@ -349,6 +368,7 @@ export const getProductFamilies = cache(async function getProductFamilies(
     const payload = await getPayloadClient();
     const result = await payload.find({
       collection: "productFamilies",
+      depth: 2,
       draft: false,
       limit: 100,
       locale,
@@ -378,6 +398,7 @@ export const getProductFamilyBySlug = cache(async function getProductFamilyBySlu
     const payload = await getPayloadClient();
     const result = await payload.find({
       collection: "productFamilies",
+      depth: 2,
       draft: false,
       limit: 1,
       locale,

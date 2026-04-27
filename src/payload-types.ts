@@ -674,7 +674,7 @@ export interface SiteSetting {
   navigation?:
     | {
         label: string;
-        kind?: ('section' | 'products' | 'external') | null;
+        kind?: ('section' | 'products' | 'logistics' | 'external') | null;
         sectionId?: string | null;
         href?: string | null;
         id?: string | null;
@@ -683,7 +683,7 @@ export interface SiteSetting {
   footerLinks?:
     | {
         label: string;
-        kind?: ('section' | 'products' | 'external') | null;
+        kind?: ('section' | 'products' | 'logistics' | 'external') | null;
         sectionId?: string | null;
         href?: string | null;
         id?: string | null;

@@ -151,7 +151,7 @@ export function LogisticaPage({ locale }: Props) {
   return (
     <main className="relative bg-background text-foreground">
       {/* ======= Breadcrumb ======= */}
-      <div className="px-10 pt-10 sm:px-14 lg:px-20 lg:pt-16">
+      <div className="px-10 pt-24 sm:px-14 sm:pt-28 lg:px-20 lg:pt-32">
         <div className="flex items-center justify-between gap-4">
           <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong sm:text-[11px]">
             {copy.breadcrumb}
