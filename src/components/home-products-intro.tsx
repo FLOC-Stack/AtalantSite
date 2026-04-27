@@ -138,6 +138,7 @@ export function HomeProductsIntro({
               </span>
             </Link>
           ) : null}
+        </div>
         {/* CTA */}
         <div className="mt-7 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-10">
           <Link
