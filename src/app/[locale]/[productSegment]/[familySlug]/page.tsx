@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ProductDetailPE } from "@/components/product-detail-pe";
+import { ProductHeroParticles } from "@/components/product-hero-particles";
 import { catalogCopy } from "@/lib/catalog-copy";
 import { getProductFamilyBySlug } from "@/lib/payload-data";
 import { defaultLocale, getProductSegment, isLocale, locales, type AppLocale } from "@/lib/locales";
@@ -52,6 +54,10 @@ export default async function ProductFamilyPage({ params }: Props) {
     notFound();
   }
 
+  if (familySlug === "pe") {
+    return <ProductDetailPE locale={locale} />;
+  }
+
   return (
     <main className="mx-auto max-w-7xl px-6 pb-24 pt-24 sm:pt-28 md:px-10 lg:px-16 lg:pt-32">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
@@ -59,18 +65,21 @@ export default async function ProductFamilyPage({ params }: Props) {
           <Link className="text-sm text-primary" href={buildProductsPath(locale)}>
             &lt;- {copy.backToCatalog}
           </Link>
-          <div className="mt-8 rounded-[2.75rem] bg-[radial-gradient(circle_at_top_left,_rgba(30,75,182,0.24),_transparent_42%),linear-gradient(180deg,_#f8fbff,_#e8edf7)] p-8 md:p-10">
-            <span
-              className={`inline-flex rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.25em] ${
-                family.recycled ? "bg-green/10 text-green" : "bg-primary/10 text-primary"
-              }`}
-            >
-              {family.code.toUpperCase()}
-            </span>
-            <h1 className="mt-6 max-w-4xl text-5xl leading-none tracking-tight text-foreground md:text-7xl">
-              {family.title}
-            </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-body">{family.excerpt}</p>
+          <div className="relative mt-8 overflow-hidden rounded-[2.75rem]">
+            <ProductHeroParticles code={family.code} />
+            <div className="glass relative z-10 rounded-[2.75rem] p-8 md:p-10">
+              <span
+                className={`inline-flex rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.25em] ${
+                  family.recycled ? "bg-green/10 text-green" : "bg-primary/10 text-primary"
+                }`}
+              >
+                {family.code.toUpperCase()}
+              </span>
+              <h1 className="mt-6 max-w-4xl text-5xl leading-none tracking-tight text-foreground md:text-7xl">
+                {family.title}
+              </h1>
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-body">{family.excerpt}</p>
+            </div>
           </div>
         </div>
 

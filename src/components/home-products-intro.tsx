@@ -12,8 +12,6 @@ type Props = {
   counter?: string;
   title?: string;
   body?: string;
-  catalogLabel?: string;
-  catalogHref?: string;
   ctaLabel?: string;
   ctaHref?: string;
   primaryCtaLabel?: string;
@@ -79,12 +77,10 @@ export function HomeProductsIntro({
   counter = "02 / 05",
   title = FALLBACK_TITLE,
   body = FALLBACK_BODY,
-  catalogLabel = "Ver catálogo",
-  catalogHref,
   ctaLabel = "Descargar fichas técnicas",
   ctaHref = "#",
   primaryCtaLabel = "Ver productos",
-  primaryCtaHref = "/es/productos",
+  primaryCtaHref = "#",
   stats = FALLBACK_STATS,
   videoSrc,
   videoPoster,
@@ -124,21 +120,6 @@ export function HomeProductsIntro({
         </p>
 
         {/* CTAs */}
-        <div className="mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
-          {catalogHref ? (
-            <Link
-              href={catalogHref}
-              className="flex h-11 items-center rounded bg-primary text-white transition-opacity hover:opacity-90"
-            >
-              <span className="border-r border-white/10 px-5 font-mono text-[10px] uppercase tracking-[2px] sm:text-[11px] sm:tracking-[2.2px]">
-                {catalogLabel}
-              </span>
-              <span className="flex items-center justify-center px-3.5">
-                <ArrowRight className="h-3.5 w-3.5" />
-              </span>
-            </Link>
-          ) : null}
-        {/* CTA */}
         <div className="mt-7 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-10">
           <Link
             href={primaryCtaHref}

@@ -43,7 +43,7 @@ export default async function LocaleHomePage({ params }: Props) {
       <Hero hero={heroProps} stats={statsProps} primaryHref={productsHref} />
       <HomeProductsIntro
         locale={typedLocale}
-        catalogHref={productsHref}
+        primaryCtaHref={productsHref}
         videoSrc="/Morphing%20Figures%20Animation.mp4"
       />
       <HomeLogistics
