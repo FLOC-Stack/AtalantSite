@@ -80,7 +80,7 @@ export function HomeProductsIntro({
   ctaLabel = "Descargar fichas técnicas",
   ctaHref = "#",
   primaryCtaLabel = "Ver productos",
-  primaryCtaHref = "/es/productos",
+  primaryCtaHref = "#",
   stats = FALLBACK_STATS,
   videoSrc,
   videoPoster,
@@ -119,7 +119,7 @@ export function HomeProductsIntro({
           {body}
         </p>
 
-        {/* CTA */}
+        {/* CTAs */}
         <div className="mt-7 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-10">
           <Link
             href={primaryCtaHref}

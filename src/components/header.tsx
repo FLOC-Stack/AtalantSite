@@ -86,6 +86,21 @@ function buildFallbackNav(locale: AppLocale): HeaderLink[] {
   ];
 }
 
+// Dedupe por destino real: dos items que resuelven al mismo href son el
+// mismo enlace aunque difieran en `kind` (p. ej. `logistics` vs.
+// `section/logistics`). También colapsamos secciones con el mismo
+// sectionId aunque sus labels difieran en tildes ("Logistica" vs.
+// "Logística").
+function dedupeNav(items: NavItem[], locale: AppLocale): NavItem[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const href = resolveHref(item, locale);
+    if (seen.has(href)) return false;
+    seen.add(href);
+    return true;
+  });
+}
+
 // Filtro defensivo: si Payload devuelve un item "Contacto" en el nav, lo
 // eliminamos — el CTA ya cubre esa acción y duplicarlo ensucia la barra.
 function isContactNavItem(item: NavItem): boolean {
@@ -142,9 +157,12 @@ export function Header({
   const hamburgerRef = useRef<HTMLButtonElement>(null);
 
   const links: HeaderLink[] = nav?.length
-    ? nav
-        .filter((item) => !isContactNavItem(item))
-        .map((item) => ({ label: item.label, href: resolveHref(item, locale) }))
+    ? dedupeNav(nav.filter((item) => !isContactNavItem(item)), locale).map(
+        (item) => ({
+          label: item.label,
+          href: resolveHref(item, locale),
+        }),
+      )
     : buildFallbackNav(locale);
   const resolvedCtaLabel = ctaLabel ?? fallbackStrings[locale].contact;
   const resolvedCtaHref = ctaHref ?? buildSectionPath(locale, "contacto");
