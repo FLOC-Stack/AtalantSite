@@ -60,6 +60,15 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
     image: "/imgsrc/molde-construccion.jpg",
   },
   {
+    code: "EVA",
+    name: "Etileno acetato de vinilo",
+    description:
+      "Grados con diferentes MFI y contenido de acetato de vinilo para plantillas, láminas, films, calzado, adhesivos, automoción y construcción.",
+    variants: ["Diferentes MFI", "Acetato de vinilo"],
+    href: "/es/productos/eva",
+    image: "/imgsrc/atalant-post-2.jpeg",
+  },
+  {
     code: "PS",
     name: "Poliestireno",
     description:
@@ -83,7 +92,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
     description:
       "Corrientes recicladas tratadas como línea de producto, con trazabilidad y encaje real en el plan de suministro.",
     variants: ["rPE", "rPP", "rPET"],
-    href: "/es/productos/reciclados",
+    href: "/es/productos/recycled",
     recycled: true,
     image: "/imgsrc/Botella%20premium.jpg",
   },
@@ -92,7 +101,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
 const FALLBACK_HERO: ProductsMorphHero = {
   eyebrow: "Catálogo de producto",
   title: "Polímeros técnicos\npara cada línea.",
-  body: "Seis familias de material con grados específicos para inyección, extrusión, soplado y termoconformado. Stock permanente en Europa, trazabilidad por lote y asesoría técnica en cada especificación.",
+  body: "Siete familias de material con grados específicos para inyección, extrusión, soplado y termoconformado. Stock permanente en Europa, trazabilidad por lote y asesoría técnica en cada especificación.",
 };
 
 type Props = {
@@ -229,7 +238,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
   const fallbackMediaByCode = new Map(
     FALLBACK_PRODUCTS.map((p) => [p.code.toUpperCase(), { image: p.image, video: p.video }]),
   );
-  const items = (products?.length ? products.slice(0, 6) : FALLBACK_PRODUCTS).map(
+  const items = (products?.length ? products.slice(0, 7) : FALLBACK_PRODUCTS).map(
     (item) => {
       if (item.image || item.video) return item;
       const fb = fallbackMediaByCode.get(item.code.toUpperCase());
@@ -303,7 +312,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
       <div className="relative" style={{ marginTop: "-100vh" }}>
         {/* Hero: shape 0 lo deja fijado el setShape(0) inicial */}
         <article
-          className="relative flex min-h-screen flex-col items-center justify-center px-5 pt-32 text-center sm:px-8 md:px-12 lg:px-20"
+          className="relative flex min-h-screen flex-col items-center justify-center px-5 text-center sm:px-8 md:px-12 lg:px-20"
         >
           <div className="mx-auto w-full max-w-[1100px]">
             <span className="font-mono text-[10px] uppercase tracking-[2.5px] text-primary-dark sm:text-[11px] sm:tracking-[3px]">
