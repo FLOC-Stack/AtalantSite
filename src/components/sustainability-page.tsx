@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { AppLocale } from "@/lib/locales";
+import { SustainabilityParticles } from "@/components/sustainability-particles";
 
 type Props = {
   locale: AppLocale;
@@ -22,7 +22,6 @@ type SustainabilityCopy = {
   introEyebrow: string;
   introTitle: string;
   introBody: string;
-  mediaCaption: string;
   meta: Array<{
     label: string;
     value: string;
@@ -89,7 +88,6 @@ const COPY_ES: SustainabilityCopy = {
   introTitle: "Reducir impacto sin reducir respuesta.",
   introBody:
     "Uno de los retos industriales más complejos es ser sostenible manteniendo un trabajo eficiente. La estrategia de Atalant parte de una idea concreta: cada mejora ambiental debe integrarse en el sistema operativo, no vivir separada de la realidad logística y comercial.",
-  mediaCaption: "RESIDUOS · ENERGÍA · FLOTA · MATERIALES",
   meta: [
     { label: "CERTIFICACIÓN", value: "ISO 14001" },
     { label: "ENERGÍA", value: "Placas solares logísticas" },
@@ -168,39 +166,7 @@ export function SustainabilityPage({ locale }: Props) {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-4 lg:mt-16 lg:grid-cols-[1.35fr_0.65fr]">
-          <div className="relative aspect-[16/9] overflow-hidden bg-green sm:aspect-[21/9] lg:aspect-[1300/620]">
-            <Image
-              src="/imgsrc/Botella premium.jpg"
-              alt="Material reciclado de alta calidad integrado en el plan de sostenibilidad de Atalant"
-              fill
-              priority
-              sizes="(min-width: 1024px) 68vw, 100vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-            <div className="relative min-h-[220px] overflow-hidden bg-white">
-              <Image
-                src="/imgsrc/atalant-post-2.jpeg"
-                alt="Operación logística de Atalant con foco en eficiencia energética"
-                fill
-                sizes="(min-width: 1024px) 28vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="border border-green/25 bg-white p-6 sm:p-7">
-              <p className="font-mono text-[10px] uppercase tracking-[2px] text-green">
-                {copy.mediaCaption}
-              </p>
-              <p className="mt-8 max-w-[360px] text-pretty font-sans text-[22px] font-light leading-[1.15] tracking-[-0.5px] text-foreground">
-                Mejoras ambientales conectadas a la cadena real de suministro.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <dl className="mt-10 grid grid-cols-2 gap-y-8 border-t border-foreground/15 pt-8 sm:mt-14 lg:mt-16 lg:grid-cols-4 lg:gap-x-10">
+        <dl className="mt-12 grid grid-cols-2 gap-y-8 border-t border-foreground/15 pt-8 sm:mt-14 lg:mt-16 lg:grid-cols-4 lg:gap-x-10">
           {copy.meta.map((item) => (
             <div key={item.label}>
               <dt className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
@@ -218,19 +184,24 @@ export function SustainabilityPage({ locale }: Props) {
         aria-labelledby="sustainability-intro-title"
         className="mt-24 border-t border-foreground/15 px-10 pt-16 sm:px-14 lg:mt-32 lg:px-20 lg:pt-24"
       >
-        <p className="font-mono text-[11px] uppercase tracking-[2px] text-green">
-          {copy.introEyebrow}
-        </p>
-        <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] lg:gap-20">
-          <h2
-            id="sustainability-intro-title"
-            className="max-w-[1100px] text-balance font-sans text-[32px] font-light leading-[1.08] tracking-[-1px] text-foreground sm:text-[44px] lg:text-[56px] lg:tracking-[-1.8px]"
-          >
-            {copy.introTitle}
-          </h2>
-          <p className="text-pretty font-sans text-[17px] font-light leading-[28px] tracking-[-0.15px] text-body lg:pt-2 lg:text-[20px] lg:leading-[32px]">
-            {copy.introBody}
-          </p>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)] lg:gap-12">
+          <div className="relative min-h-[420px] overflow-hidden lg:min-h-[560px]">
+            <SustainabilityParticles className="absolute inset-0" />
+          </div>
+          <div className="flex flex-col justify-center lg:pl-6">
+            <p className="font-mono text-[11px] uppercase tracking-[2px] text-green">
+              {copy.introEyebrow}
+            </p>
+            <h2
+              id="sustainability-intro-title"
+              className="mt-6 max-w-[680px] text-balance font-sans text-[32px] font-light leading-[1.08] tracking-[-1px] text-foreground sm:text-[44px] lg:text-[52px] lg:tracking-[-1.6px]"
+            >
+              {copy.introTitle}
+            </h2>
+            <p className="mt-8 max-w-[560px] text-pretty font-sans text-[16px] font-light leading-[26px] tracking-[-0.1px] text-body lg:text-[18px] lg:leading-[30px]">
+              {copy.introBody}
+            </p>
+          </div>
         </div>
       </section>
 
@@ -331,7 +302,7 @@ export function SustainabilityPage({ locale }: Props) {
 
       <section
         aria-labelledby="sustainability-cta-title"
-        className="mt-24 bg-green px-10 py-16 text-white sm:px-14 sm:py-20 lg:mt-32 lg:px-20 lg:py-24"
+        className="mt-24 bg-foreground px-10 py-16 text-white sm:px-14 sm:py-20 lg:mt-32 lg:px-20 lg:py-24"
       >
         <div className="h-px w-full bg-white/25" aria-hidden="true" />
         <h2
