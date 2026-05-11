@@ -13,6 +13,10 @@ export function buildLogisticsPath(locale: AppLocale) {
   return `/${locale}/logistica`;
 }
 
+export function buildAboutPath(locale: AppLocale) {
+  return `/${locale}/nosotros`;
+}
+
 export function buildFamilyPath(locale: AppLocale, slug: string) {
   return `${buildProductsPath(locale)}/${slug}`;
 }

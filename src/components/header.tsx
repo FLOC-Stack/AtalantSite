@@ -10,6 +10,7 @@ import { useGSAP } from "@gsap/react";
 import type { NavItem } from "@/lib/content-types";
 import { localeLabels, locales, type AppLocale } from "@/lib/locales";
 import {
+  buildAboutPath,
   buildLogisticsPath,
   buildProductsPath,
   buildSectionPath,
@@ -82,7 +83,7 @@ function buildFallbackNav(locale: AppLocale): HeaderLink[] {
     { label: t.logistics, href: buildSectionPath(locale, "logistica") },
     { label: t.financing, href: buildSectionPath(locale, "financiacion") },
     { label: t.sustainability, href: buildSectionPath(locale, "sostenibilidad") },
-    { label: t.about, href: buildSectionPath(locale, "equipo") },
+    { label: t.about, href: buildAboutPath(locale) },
   ];
 }
 
@@ -115,10 +116,21 @@ function isContactNavItem(item: NavItem): boolean {
   );
 }
 
+// Items que apuntan al "Nosotros". Aceptamos varios sectionId y labels
+// porque la copia de Payload puede llegar como "equipo", "nosotros",
+// "about", "sobre nós", "à propos", etc.
+function isAboutNavItem(item: NavItem): boolean {
+  const sectionId = item.kind === "section" ? (item.sectionId ?? "").toLowerCase() : "";
+  const label = item.label.toLowerCase();
+  const aboutTokens = ["equipo", "nosotros", "about", "sobre", "sobre nós", "à propos", "a propos"];
+  return aboutTokens.includes(sectionId) || aboutTokens.includes(label);
+}
+
 function resolveHref(item: NavItem, locale: AppLocale): string {
   if (item.kind === "products") return buildProductsPath(locale);
   if (item.kind === "logistics") return buildLogisticsPath(locale);
   if (item.kind === "external") return item.href ?? "#";
+  if (isAboutNavItem(item)) return buildAboutPath(locale);
   return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
 }
 
