@@ -109,9 +109,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "es",
     navigation: [
       { kind: "products", label: "Productos" },
-      { kind: "logistics", label: "Logistica" },
-      { kind: "section", label: "Financiacion", sectionId: "financing" },
-      { kind: "section", label: "Logística", sectionId: "logistics" },
+      { kind: "logistics", label: "Logística" },
       { kind: "section", label: "Financiación", sectionId: "financing" },
       { kind: "section", label: "Sostenibilidad", sectionId: "sustainability" },
       { kind: "section", label: "Nosotros", sectionId: "team" },
@@ -168,8 +166,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     locale: "pt",
     navigation: [
       { kind: "products", label: "Produtos" },
-      { kind: "logistics", label: "Logistica" },
-      { kind: "section", label: "Logística", sectionId: "logistics" },
+      { kind: "logistics", label: "Logística" },
       { kind: "section", label: "Financiamento", sectionId: "financing" },
       { kind: "section", label: "Sustentabilidade", sectionId: "sustainability" },
       { kind: "section", label: "Equipa", sectionId: "team" },

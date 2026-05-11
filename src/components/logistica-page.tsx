@@ -96,19 +96,19 @@ const COPY_ES: LogisticaCopy = {
   networkLegend: "●  SEDE / HUB / DA      ○  DISTRIBUCIÓN / EXPORTACIÓN",
   processEyebrow: "PROCESO  /  PUERTA A PUERTA",
   process: [
-    { roman: "i.", title: "Origen", body: "Fabricante europeo." },
+    { roman: "01", title: "Origen", body: "Fabricante europeo." },
     {
-      roman: "ii.",
+      roman: "02",
       title: "Importación",
       body: "Entrada sin carga fiscal en depósito aduanero.",
     },
     {
-      roman: "iii.",
+      roman: "03",
       title: "Almacenaje",
       body: "Stock disponible en ES, IT o NL.",
     },
     {
-      roman: "iv.",
+      roman: "04",
       title: "Entrega",
       body: "Liberación y transporte a planta del cliente.",
     },
