@@ -33,13 +33,13 @@ const copy: Record<
 };
 
 type Props = {
-  params: Promise<{
+  params?: Promise<{
     locale: string;
   }>;
 };
 
 export default async function NotFoundPage({ params }: Props) {
-  const { locale } = await params;
+  const { locale } = (await params) ?? { locale: defaultLocale };
   const validLocale = isLocale(locale) ? locale : defaultLocale;
   const text = copy[validLocale];
 
