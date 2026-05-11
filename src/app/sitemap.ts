@@ -1,7 +1,12 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/lib/locales";
 import { getPublishedFamilySitemapEntries } from "@/lib/payload-data";
-import { buildFamilyPath, buildLocalePath, buildProductsPath } from "@/lib/routes";
+import {
+  buildFamilyPath,
+  buildLocalePath,
+  buildProductsPath,
+  buildSustainabilityPath,
+} from "@/lib/routes";
 import { getServerURL } from "@/lib/server-url";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -24,6 +29,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       priority: 0.8,
       url: `${baseURL}${buildProductsPath(locale)}`,
+    });
+
+    routes.push({
+      changeFrequency: "monthly",
+      lastModified: new Date(),
+      priority: 0.7,
+      url: `${baseURL}${buildSustainabilityPath(locale)}`,
     });
 
     for (const family of families) {
