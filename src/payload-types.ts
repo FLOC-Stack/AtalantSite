@@ -305,6 +305,55 @@ export interface ProductFamily {
     title: string;
     description: string;
   };
+  /**
+   * Contenido de la página detalle con el estilo editorial de producto.
+   */
+  detail: {
+    heroLines?:
+      | {
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+    intro: string;
+    meta?:
+      | {
+          label: string;
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+    tableTitle: string;
+    grades?:
+      | {
+          code: string;
+          denomination: string;
+          spec: string;
+          application: string;
+          process: string;
+          id?: string | null;
+        }[]
+      | null;
+    detailApplications?:
+      | {
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+    highlight?: {
+      eyebrow?: string | null;
+      title?: string | null;
+      body?: string | null;
+      stats?:
+        | {
+            value: string;
+            label: string;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    footerQuestion: string;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -595,6 +644,56 @@ export interface ProductFamiliesSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+      };
+  detail?:
+    | T
+    | {
+        heroLines?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+        intro?: T;
+        meta?:
+          | T
+          | {
+              label?: T;
+              value?: T;
+              id?: T;
+            };
+        tableTitle?: T;
+        grades?:
+          | T
+          | {
+              code?: T;
+              denomination?: T;
+              spec?: T;
+              application?: T;
+              process?: T;
+              id?: T;
+            };
+        detailApplications?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+        highlight?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              body?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    id?: T;
+                  };
+            };
+        footerQuestion?: T;
       };
   updatedAt?: T;
   createdAt?: T;

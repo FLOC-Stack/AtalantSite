@@ -137,6 +137,20 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
         return points;
       };
 
+      const getWave = (count: number, width: number, depth: number) => {
+        const points: { x: number; y: number; z: number }[] = [];
+        for (let i = 0; i < count; i++) {
+          const x = (Math.random() - 0.5) * width;
+          const z = (Math.random() - 0.5) * depth;
+          points.push({
+            x,
+            y: Math.sin(x * 0.018) * 90 + Math.cos(z * 0.014) * 70,
+            z,
+          });
+        }
+        return points;
+      };
+
       const loadLogoShape = (
         count: number,
         callback: (points: { x: number; y: number; z: number }[]) => void
@@ -273,14 +287,15 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
           getSphere(PARTICLE_COUNT, 400),       // 0 - PE
           getTorus(PARTICLE_COUNT, 320, 130),    // 1 - PP
           getHelix(PARTICLE_COUNT, 240, 1000),   // 2 - PVC
-          getCube(PARTICLE_COUNT, 600),          // 3 - PS
-          getCylinder(PARTICLE_COUNT, 260, 800), // 4 - PET
-          getSphere(PARTICLE_COUNT, 400),        // 5 - placeholder for logo (REC)
+          getWave(PARTICLE_COUNT, 900, 620),     // 3 - EVA
+          getCube(PARTICLE_COUNT, 600),          // 4 - PS
+          getCylinder(PARTICLE_COUNT, 260, 800), // 5 - PET
+          getSphere(PARTICLE_COUNT, 400),        // 6 - placeholder for logo (REC)
         ];
 
         loadLogoShape(PARTICLE_COUNT, (logoPoints) => {
-          shapes[5] = logoPoints;
-          if (currentShapeIndex === 5) updateTargets(5);
+          shapes[6] = logoPoints;
+          if (currentShapeIndex === 6) updateTargets(6);
         });
 
         // Start dispersed, targets converge to sphere

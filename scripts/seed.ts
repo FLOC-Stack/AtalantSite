@@ -2,6 +2,7 @@ import config from "../src/payload.config";
 import type { HomeBlock } from "../src/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "../src/lib/fallback-content";
 import { locales, type AppLocale } from "../src/lib/locales";
+import { productDetailData, type ProductDetailData } from "../src/lib/product-detail-data";
 import { getPayload } from "payload";
 
 function serializeBlocks(blocks: HomeBlock[]) {
@@ -51,6 +52,40 @@ function serializeBlocks(blocks: HomeBlock[]) {
       title: block.title,
     };
   });
+}
+
+function serializeProductDetail(detail: ProductDetailData | undefined) {
+  if (!detail) return undefined;
+
+  return {
+    detailApplications: detail.applications.map((value) => ({ value })),
+    footerQuestion: detail.footerQuestion,
+    grades: detail.grades.map((grade) => ({
+      application: grade.application,
+      code: grade.code,
+      denomination: grade.denomination,
+      process: grade.process,
+      spec: grade.spec,
+    })),
+    heroLines: detail.heroLines.map((value) => ({ value })),
+    highlight: detail.highlight
+      ? {
+          body: detail.highlight.body,
+          eyebrow: detail.highlight.eyebrow,
+          stats: detail.highlight.stats.map((stat) => ({
+            label: stat.label,
+            value: stat.value,
+          })),
+          title: detail.highlight.title,
+        }
+      : undefined,
+    intro: detail.intro,
+    meta: detail.meta.map((entry) => ({
+      label: entry.label,
+      value: entry.value,
+    })),
+    tableTitle: detail.tableTitle,
+  };
 }
 
 async function seedSiteSettings(locale: AppLocale) {
@@ -126,6 +161,7 @@ async function seedFamilies(locale: AppLocale) {
       applications: family.applications.map((value) => ({ value })),
       body: family.body,
       code: family.code,
+      detail: serializeProductDetail(productDetailData[family.slug]),
       excerpt: family.excerpt,
       featured: family.featured,
       order: fallbackFamilies[locale].findIndex((entry) => entry.code === family.code) + 1,
@@ -135,11 +171,12 @@ async function seedFamilies(locale: AppLocale) {
       title: family.title,
       variants: family.variants.map((value) => ({ value })),
     };
+    const payloadData = data as never;
 
     if (existing.docs[0]) {
       await payload.update({
         collection: "productFamilies",
-        data,
+        data: payloadData,
         id: existing.docs[0].id,
         locale,
       });
@@ -148,7 +185,7 @@ async function seedFamilies(locale: AppLocale) {
 
     await payload.create({
       collection: "productFamilies",
-      data,
+      data: payloadData,
       locale,
     });
   }

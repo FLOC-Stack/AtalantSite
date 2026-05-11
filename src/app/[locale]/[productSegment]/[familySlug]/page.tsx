@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductDetailPE } from "@/components/product-detail-pe";
+import { ProductDetailStandard } from "@/components/product-detail-standard";
 import { ProductHeroParticles } from "@/components/product-hero-particles";
 import { catalogCopy } from "@/lib/catalog-copy";
 import { getProductFamilyBySlug } from "@/lib/payload-data";
+import { productDetailData } from "@/lib/product-detail-data";
 import { defaultLocale, getProductSegment, isLocale, locales, type AppLocale } from "@/lib/locales";
 import { buildFamilyPath, buildProductsPath, buildSectionPath } from "@/lib/routes";
 
@@ -56,6 +58,21 @@ export default async function ProductFamilyPage({ params }: Props) {
 
   if (familySlug === "pe") {
     return <ProductDetailPE locale={locale} />;
+  }
+
+  const fallbackDetail = productDetailData[familySlug];
+  const detailData = family.detail
+    ? {
+        ...family.detail,
+        code: fallbackDetail?.code ?? family.code.toUpperCase(),
+        related: fallbackDetail?.related ?? [],
+        slug: family.slug,
+        title: family.title,
+      }
+    : fallbackDetail;
+
+  if (detailData) {
+    return <ProductDetailStandard data={detailData} locale={locale} />;
   }
 
   return (

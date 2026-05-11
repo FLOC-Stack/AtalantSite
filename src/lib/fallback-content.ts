@@ -506,6 +506,26 @@ const baseFamilies = {
     title: { en: "PVC", es: "PVC", fr: "PVC", pt: "PVC" },
     variants: ["Rígido", "Flexible"],
   },
+  eva: {
+    applications: [
+      "Plantillas y láminas",
+      "Films",
+      "Calzado",
+      "Adhesivos",
+      "Automoción",
+      "Construcción",
+    ],
+    excerpt:
+      "Etileno acetato de vinilo con diferentes MFI y contenido de acetato de vinilo.",
+    seoTitle: "EVA | Atalant",
+    title: {
+      en: "Ethylene vinyl acetate",
+      es: "Etileno acetato de vinilo",
+      fr: "Éthylène-acétate de vinyle",
+      pt: "Etileno acetato de vinila",
+    },
+    variants: ["Diferentes MFI", "Contenido de acetato de vinilo"],
+  },
   ps: {
     applications: ["Packaging", "Menaje", "Transformación general"],
     excerpt: "Poliestireno general e impacto para uso industrial práctico.",

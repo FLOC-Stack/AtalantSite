@@ -89,6 +89,36 @@ export type ProductFamilyMedia = {
   alt?: string;
 };
 
+export type ProductFamilyDetailGrade = {
+  code: string;
+  denomination: string;
+  spec: string;
+  application: string;
+  process: string;
+};
+
+export type ProductFamilyDetailData = {
+  applications: string[];
+  footerQuestion: string;
+  grades: ProductFamilyDetailGrade[];
+  highlight?: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    stats: Array<{
+      value: string;
+      label: string;
+    }>;
+  };
+  heroLines: string[];
+  intro: string;
+  meta: Array<{
+    label: string;
+    value: string;
+  }>;
+  tableTitle: string;
+};
+
 export type ProductFamilyData = {
   locale: AppLocale;
   code: string;
@@ -101,5 +131,6 @@ export type ProductFamilyData = {
   recycled: boolean;
   featured: boolean;
   heroMedia?: ProductFamilyMedia;
+  detail?: ProductFamilyDetailData;
   seo: SeoData;
 };

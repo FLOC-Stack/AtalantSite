@@ -50,7 +50,7 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
     },
     morph: {
       seoDescription:
-        "Six families of technical and recycled polymers with European stock, batch traceability and technical advice on every specification.",
+        "Seven families of technical and recycled polymers with European stock, batch traceability and technical advice on every specification.",
       seoTitle: "Polymer catalog — Atalant",
     },
   },
@@ -74,7 +74,7 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
     },
     morph: {
       seoDescription:
-        "Seis familias de polímeros técnicos y reciclados con stock europeo, trazabilidad por lote y asesoría técnica en cada especificación.",
+        "Siete familias de polímeros técnicos y reciclados con stock europeo, trazabilidad por lote y asesoría técnica en cada especificación.",
       seoTitle: "Catálogo de polímeros — Atalant",
     },
   },
@@ -98,7 +98,7 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
     },
     morph: {
       seoDescription:
-        "Six familles de polymères techniques et recyclés avec stock européen, traçabilité par lot et conseil technique pour chaque spécification.",
+        "Sept familles de polymères techniques et recyclés avec stock européen, traçabilité par lot et conseil technique pour chaque spécification.",
       seoTitle: "Catalogue de polymères — Atalant",
     },
   },
@@ -122,7 +122,7 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
     },
     morph: {
       seoDescription:
-        "Seis famílias de polímeros técnicos e reciclados com stock europeu, rastreabilidade por lote e assessoria técnica em cada especificação.",
+        "Sete famílias de polímeros técnicos e reciclados com stock europeu, rastreabilidade por lote e assessoria técnica em cada especificação.",
       seoTitle: "Catálogo de polímeros — Atalant",
     },
   },
