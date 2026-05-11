@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { AppLocale } from "@/lib/locales";
 import { NosotrosChapters, type Chapter } from "@/components/nosotros-chapters";
+import { NosotrosGrid } from "@/components/nosotros-grid";
 
 type Props = {
   locale: AppLocale;
@@ -182,9 +183,21 @@ export function NosotrosPage({ locale }: Props) {
       {/* ======= Hero: monograma + título + bajada ======= */}
       <section
         aria-labelledby="ns-hero-title"
-        className="px-10 pt-12 sm:px-14 sm:pt-16 lg:px-20 lg:pt-20"
+        className="relative overflow-x-clip px-10 pt-12 sm:px-14 sm:pt-16 lg:px-20 lg:pt-20"
       >
-        <div className="grid grid-cols-1 gap-x-12 gap-y-10 lg:grid-cols-[auto_1fr] lg:gap-x-16 lg:gap-y-12 2xl:grid-cols-[auto_minmax(0,1fr)_minmax(0,420px)] 2xl:gap-x-24">
+        {/* Retícula full-bleed: arranca en el borde superior del hero
+            (donde están el monograma NS y el titular) y se extiende
+            -bottom-40 / lg:-bottom-56 más allá del meta row para cubrir
+            el `mt-24 + pt-16` (lg: `mt-32 + pt-24`) hasta el inicio del
+            primer capítulo del manifesto. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-0 -bottom-40 z-0 w-screen -translate-x-1/2 lg:-bottom-56"
+        >
+          <NosotrosGrid />
+        </div>
+
+        <div className="relative z-10 grid grid-cols-1 gap-x-12 gap-y-10 lg:grid-cols-[auto_1fr] lg:gap-x-16 lg:gap-y-12 2xl:grid-cols-[auto_minmax(0,1fr)_minmax(0,420px)] 2xl:gap-x-24">
           {/* Monograma NS */}
           <p
             aria-hidden="true"
@@ -207,8 +220,8 @@ export function NosotrosPage({ locale }: Props) {
           </p>
         </div>
 
-        {/* ======= Bloque visual (video hero) ======= */}
-        <div className="mt-14 aspect-[16/9] w-full overflow-hidden bg-primary sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
+        {/* ======= Vídeo hero (sobre la retícula) ======= */}
+        <div className="relative z-10 mt-14 aspect-[16/9] w-full overflow-hidden bg-primary sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
           <video
             className="h-full w-full object-cover"
             src="/Morphing%20Figures%20Animation.mp4"
@@ -222,7 +235,7 @@ export function NosotrosPage({ locale }: Props) {
         </div>
 
         {/* ======= Meta row ======= */}
-        <div className="mt-10 grid grid-cols-2 gap-y-8 border-t border-foreground/15 pt-8 sm:mt-14 lg:mt-16 lg:grid-cols-4 lg:gap-x-10">
+        <div className="relative z-10 mt-10 grid grid-cols-2 gap-y-8 pt-8 sm:mt-14 lg:mt-16 lg:grid-cols-4 lg:gap-x-10">
           {(
             [
               ["experiencia"],
@@ -246,7 +259,7 @@ export function NosotrosPage({ locale }: Props) {
       {/* ======= Manifiesto: capítulos texto-imagen con scroll reveal ======= */}
       <section
         aria-label="Manifiesto Atalant"
-        className="mt-24 border-t border-foreground/15 px-10 pt-16 sm:px-14 lg:mt-32 lg:px-20 lg:pt-24"
+        className="mt-24 px-10 pt-16 sm:px-14 lg:mt-32 lg:px-20 lg:pt-24"
       >
         <NosotrosChapters chapters={copy.chapters} />
       </section>
@@ -288,23 +301,34 @@ export function NosotrosPage({ locale }: Props) {
         </div>
       </section>
 
-      {/* ======= Cierre: posicionamiento ======= */}
+      {/* ======= Cierre: posicionamiento (composición centrada sobre
+          retícula full-bleed) ======= */}
       <section
         aria-labelledby="ns-closing-title"
-        className="mt-24 px-10 sm:px-14 lg:mt-32 lg:px-20"
+        className="relative mt-24 overflow-x-clip px-10 py-20 sm:px-14 lg:mt-32 lg:px-20 lg:py-36"
       >
-        <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary">
-          {copy.closingEyebrow}
-        </p>
-        <h2
-          id="ns-closing-title"
-          className="mt-6 max-w-[1400px] font-sans text-[32px] font-light leading-[1.08] tracking-[-1px] text-foreground sm:text-[44px] lg:text-[56px] lg:tracking-[-1.8px]"
+        {/* Retícula de fondo, full-bleed (100vw), cubre toda la sección */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-1/2 z-0 w-screen -translate-x-1/2"
         >
-          {renderMultiline(copy.closingTitle)}
-        </h2>
-        <p className="mt-8 max-w-[920px] font-sans text-[15px] font-light leading-[24px] tracking-[-0.1px] text-muted-strong lg:text-[18px] lg:leading-[30px]">
-          {copy.closingBody}
-        </p>
+          <NosotrosGrid />
+        </div>
+
+        <div className="relative z-10 mx-auto flex max-w-[1280px] flex-col items-center text-center">
+          <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary">
+            {copy.closingEyebrow}
+          </p>
+          <h2
+            id="ns-closing-title"
+            className="mt-8 font-sans text-[40px] font-medium leading-[1.02] tracking-[-1.5px] text-foreground sm:text-[56px] lg:mt-10 lg:text-[80px] lg:leading-[0.98] lg:tracking-[-3px]"
+          >
+            {renderMultiline(copy.closingTitle)}
+          </h2>
+          <p className="mt-10 max-w-[720px] font-sans text-[17px] font-light leading-[28px] tracking-[-0.1px] text-muted-strong lg:mt-14 lg:text-[20px] lg:leading-[32px]">
+            {copy.closingBody}
+          </p>
+        </div>
       </section>
 
       {/* ======= CTA dark ======= */}

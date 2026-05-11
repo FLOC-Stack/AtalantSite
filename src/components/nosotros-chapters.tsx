@@ -134,8 +134,16 @@ export function NosotrosChapters({ chapters }: Props) {
             data-chapter
             className="grid grid-cols-1 gap-x-16 gap-y-10 lg:grid-cols-2 lg:items-center"
           >
-            {/* Texto */}
-            <div className={chapter.reverse ? "lg:order-2" : ""}>
+            {/* Texto — anclado al borde interior de su columna y capado a
+                640px, para que la distancia con la imagen sea siempre el
+                gap del grid (64px) tanto en layout normal como en reverse. */}
+            <div
+              className={`w-full max-w-[640px] ${
+                chapter.reverse
+                  ? "lg:order-2 lg:justify-self-start"
+                  : "lg:justify-self-end"
+              }`}
+            >
               <div className="grid grid-cols-[auto_1fr] gap-x-8">
                 {/* Numeral 01/02/03 — mismo registro tipográfico que la sección de valores */}
                 <p
@@ -165,10 +173,14 @@ export function NosotrosChapters({ chapters }: Props) {
               </div>
             </div>
 
-            {/* Imagen */}
+            {/* Imagen — cap a 690px y anclada al borde interior de su
+                columna (junto al texto). La distancia con el texto es
+                siempre exactamente el `gap-x-16` del grid. */}
             <div
-              className={`relative aspect-[4/5] w-full overflow-hidden bg-foreground/5 sm:aspect-[5/4] lg:aspect-[4/5] ${
-                chapter.reverse ? "lg:order-1" : ""
+              className={`relative aspect-square w-full max-w-[690px] justify-self-center overflow-hidden rounded-[24px] bg-foreground/5 ${
+                chapter.reverse
+                  ? "lg:order-1 lg:justify-self-end"
+                  : "lg:justify-self-start"
               }`}
             >
               <Image
