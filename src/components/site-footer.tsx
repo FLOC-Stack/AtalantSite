@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { locales, type AppLocale } from "@/lib/locales";
-import { buildLocalePath, buildProductsPath } from "@/lib/routes";
+import { buildLocalePath, buildProductsPath, buildSustainabilityPath } from "@/lib/routes";
 
 type FooterLink = {
   label: string;
@@ -26,6 +26,7 @@ const localeShort: Record<AppLocale, string> = {
 function getColumns(locale: AppLocale): FooterColumn[] {
   const home = buildLocalePath(locale);
   const products = buildProductsPath(locale);
+  const sustainability = buildSustainabilityPath(locale);
 
   return [
     {
@@ -34,7 +35,7 @@ function getColumns(locale: AppLocale): FooterColumn[] {
         { label: "Productos", href: products },
         { label: "Logística", href: `${home}#logistica` },
         { label: "Financiación", href: `${home}#financiacion` },
-        { label: "Sostenibilidad", href: `${home}#sostenibilidad` },
+        { label: "Sostenibilidad", href: sustainability },
       ],
     },
     {
