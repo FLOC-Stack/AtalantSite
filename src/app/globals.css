@@ -11,6 +11,7 @@
   --color-green: #228b22;
   --font-sans: "Aeonik", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+  --breakpoint-3xl: 100rem;
 }
 
 html {
