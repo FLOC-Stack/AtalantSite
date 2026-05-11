@@ -18,10 +18,10 @@ tocar código:
 
 - **Formato:** `.jpg` (preferido) o `.webp`. Para no romper la referencia
   mantén la extensión `.jpg` o actualiza el `src` en `nosotros-page.tsx`.
-- **Ratio:** se renderizan con `aspect-[4/5]` en mobile/desktop grande y
-  `aspect-[5/4]` en tablet. Sube originales en **4:5** vertical y el
-  `object-cover` se encarga del recorte horizontal.
-- **Resolución mínima:** 1200 × 1500 px. Recomendado 1600 × 2000 px.
+- **Ratio:** se renderizan en **1:1** (`aspect-square`) con
+  `border-radius: 24px`. Sube originales cuadrados y el `object-cover`
+  se encarga de cualquier recorte residual.
+- **Resolución mínima:** 1400 × 1400 px. Recomendado 1800 × 1800 px.
 - **Peso máximo:** ~ 350 KB por archivo (optimizar antes de subir).
 
 ## Migración a Payload
