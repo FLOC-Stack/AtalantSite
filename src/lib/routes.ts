@@ -17,6 +17,10 @@ export function buildAboutPath(locale: AppLocale) {
   return `/${locale}/nosotros`;
 }
 
+export function buildSustainabilityPath(locale: AppLocale) {
+  return `/${locale}/sostenibilidad`;
+}
+
 export function buildFamilyPath(locale: AppLocale, slug: string) {
   return `${buildProductsPath(locale)}/${slug}`;
 }
@@ -47,6 +51,16 @@ export function switchLocalePath(pathname: string, nextLocale: AppLocale) {
     if (isProductPath) {
       nextSegments.push(getProductSegment(nextLocale));
       if (maybeSlug) nextSegments.push(maybeSlug);
+      return `/${nextSegments.join("/")}`;
+    }
+
+    if (maybeSegment === "sostenibilidad") {
+      nextSegments.push("sostenibilidad");
+      return `/${nextSegments.join("/")}`;
+    }
+
+    if (maybeSegment === "nosotros") {
+      nextSegments.push("nosotros");
       return `/${nextSegments.join("/")}`;
     }
   }

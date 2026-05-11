@@ -13,6 +13,7 @@ import {
   buildAboutPath,
   buildLogisticsPath,
   buildProductsPath,
+  buildSustainabilityPath,
   buildSectionPath,
   switchLocalePath,
 } from "@/lib/routes";
@@ -82,7 +83,7 @@ function buildFallbackNav(locale: AppLocale): HeaderLink[] {
     { label: t.products, href: buildProductsPath(locale) },
     { label: t.logistics, href: buildSectionPath(locale, "logistica") },
     { label: t.financing, href: buildSectionPath(locale, "financiacion") },
-    { label: t.sustainability, href: buildSectionPath(locale, "sostenibilidad") },
+    { label: t.sustainability, href: buildSustainabilityPath(locale) },
     { label: t.about, href: buildAboutPath(locale) },
   ];
 }
@@ -130,6 +131,12 @@ function resolveHref(item: NavItem, locale: AppLocale): string {
   if (item.kind === "products") return buildProductsPath(locale);
   if (item.kind === "logistics") return buildLogisticsPath(locale);
   if (item.kind === "external") return item.href ?? "#";
+  if (
+    item.kind === "section" &&
+    ["sustainability", "sostenibilidad"].includes((item.sectionId ?? "").toLowerCase())
+  ) {
+    return buildSustainabilityPath(locale);
+  }
   if (isAboutNavItem(item)) return buildAboutPath(locale);
   return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
 }

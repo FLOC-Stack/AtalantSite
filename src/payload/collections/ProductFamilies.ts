@@ -43,6 +43,68 @@ export const ProductFamilies: CollectionConfig = {
       name: "seo",
       type: "group",
     },
+    {
+      admin: {
+        description: "Contenido de la página detalle con el estilo editorial de producto.",
+      },
+      fields: [
+        {
+          fields: [{ localized: true, name: "value", required: true, type: "text" }],
+          minRows: 1,
+          name: "heroLines",
+          type: "array",
+        },
+        { localized: true, name: "intro", required: true, type: "textarea" },
+        {
+          fields: [
+            { localized: true, name: "label", required: true, type: "text" },
+            { localized: true, name: "value", required: true, type: "text" },
+          ],
+          minRows: 1,
+          name: "meta",
+          type: "array",
+        },
+        { localized: true, name: "tableTitle", required: true, type: "text" },
+        {
+          fields: [
+            { name: "code", required: true, type: "text" },
+            { localized: true, name: "denomination", required: true, type: "text" },
+            { localized: true, name: "spec", required: true, type: "text" },
+            { localized: true, name: "application", required: true, type: "textarea" },
+            { localized: true, name: "process", required: true, type: "text" },
+          ],
+          minRows: 1,
+          name: "grades",
+          type: "array",
+        },
+        {
+          fields: [{ localized: true, name: "value", required: true, type: "text" }],
+          minRows: 1,
+          name: "detailApplications",
+          type: "array",
+        },
+        {
+          fields: [
+            { localized: true, name: "eyebrow", type: "text" },
+            { localized: true, name: "title", type: "text" },
+            { localized: true, name: "body", type: "textarea" },
+            {
+              fields: [
+                { localized: true, name: "value", required: true, type: "text" },
+                { localized: true, name: "label", required: true, type: "text" },
+              ],
+              name: "stats",
+              type: "array",
+            },
+          ],
+          name: "highlight",
+          type: "group",
+        },
+        { localized: true, name: "footerQuestion", required: true, type: "text" },
+      ],
+      name: "detail",
+      type: "group",
+    },
   ],
   versions: {
     drafts: true,

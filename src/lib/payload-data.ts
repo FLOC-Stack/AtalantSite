@@ -3,12 +3,14 @@ import { cache } from "react";
 import type {
   HomeBlock,
   HomePageData,
+  ProductFamilyDetailData,
   ProductFamilyData,
   ProductFamilyMedia,
   SiteSettingsData,
 } from "@/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "@/lib/fallback-content";
 import type { AppLocale } from "@/lib/locales";
+import { productDetailData } from "@/lib/product-detail-data";
 import { getPayload } from "payload";
 
 type PageDoc = {
@@ -301,6 +303,107 @@ function mapHeroMedia(value: unknown): ProductFamilyMedia | undefined {
   return { url, kind, alt };
 }
 
+function mapStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((entry) => {
+      const record = asRecord(entry);
+      return typeof record?.value === "string" ? record.value : null;
+    })
+    .filter(Boolean) as string[];
+}
+
+function mapProductDetail(value: unknown): ProductFamilyDetailData | undefined {
+  const detail = asRecord(value);
+  if (!detail) return undefined;
+
+  const heroLines = mapStringArray(detail.heroLines);
+  const applications = mapStringArray(detail.detailApplications);
+  const meta = Array.isArray(detail.meta)
+    ? detail.meta
+        .map((entry) => {
+          const record = asRecord(entry);
+          if (typeof record?.label === "string" && typeof record.value === "string") {
+            return { label: record.label, value: record.value };
+          }
+          return null;
+        })
+        .filter(Boolean)
+    : [];
+  const grades = Array.isArray(detail.grades)
+    ? detail.grades
+        .map((entry) => {
+          const record = asRecord(entry);
+          if (
+            typeof record?.code === "string" &&
+            typeof record.denomination === "string" &&
+            typeof record.spec === "string" &&
+            typeof record.application === "string" &&
+            typeof record.process === "string"
+          ) {
+            return {
+              application: record.application,
+              code: record.code,
+              denomination: record.denomination,
+              process: record.process,
+              spec: record.spec,
+            };
+          }
+          return null;
+        })
+        .filter(Boolean)
+    : [];
+
+  if (
+    !heroLines.length ||
+    !applications.length ||
+    !meta.length ||
+    !grades.length ||
+    typeof detail.intro !== "string" ||
+    typeof detail.tableTitle !== "string" ||
+    typeof detail.footerQuestion !== "string"
+  ) {
+    return undefined;
+  }
+
+  const highlightRecord = asRecord(detail.highlight);
+  const highlightStats = Array.isArray(highlightRecord?.stats)
+    ? highlightRecord.stats
+        .map((entry) => {
+          const record = asRecord(entry);
+          if (typeof record?.value === "string" && typeof record.label === "string") {
+            return { value: record.value, label: record.label };
+          }
+          return null;
+        })
+        .filter(Boolean)
+    : [];
+  const highlight =
+    typeof highlightRecord?.eyebrow === "string" &&
+    typeof highlightRecord.title === "string" &&
+    typeof highlightRecord.body === "string" &&
+    highlightStats.length
+      ? {
+          body: highlightRecord.body,
+          eyebrow: highlightRecord.eyebrow,
+          stats: highlightStats as Array<{ value: string; label: string }>,
+          title: highlightRecord.title,
+        }
+      : undefined;
+
+  return {
+    applications,
+    footerQuestion: detail.footerQuestion,
+    grades: grades as ProductFamilyDetailData["grades"],
+    heroLines,
+    highlight,
+    intro: detail.intro,
+    meta: meta as ProductFamilyDetailData["meta"],
+    tableTitle: detail.tableTitle,
+  };
+}
+
 function mapFamily(locale: AppLocale, doc: Record<string, unknown>): ProductFamilyData | null {
   if (typeof doc.code !== "string" || typeof doc.slug !== "string") {
     return null;
@@ -309,25 +412,9 @@ function mapFamily(locale: AppLocale, doc: Record<string, unknown>): ProductFami
   const seo = asRecord(doc.seo);
   const heroMedia = mapHeroMedia(doc.heroMedia);
 
-  const variants = Array.isArray(doc.variants)
-    ? doc.variants
-        .map((entry) =>
-          entry && typeof entry === "object" && typeof entry.value === "string"
-            ? entry.value
-            : null,
-        )
-        .filter(Boolean)
-    : [];
-
-  const applications = Array.isArray(doc.applications)
-    ? doc.applications
-        .map((entry) =>
-          entry && typeof entry === "object" && typeof entry.value === "string"
-            ? entry.value
-            : null,
-        )
-        .filter(Boolean)
-    : [];
+  const variants = mapStringArray(doc.variants);
+  const applications = mapStringArray(doc.applications);
+  const fallbackDetail = productDetailData[doc.slug];
 
   return {
     applications: applications as string[],
@@ -341,6 +428,7 @@ function mapFamily(locale: AppLocale, doc: Record<string, unknown>): ProductFami
         ? doc.excerpt
         : "",
     featured: Boolean(doc.featured),
+    detail: mapProductDetail(doc.detail) ?? fallbackDetail,
     heroMedia,
     locale,
     recycled: Boolean(doc.recycled),
@@ -380,7 +468,19 @@ export const getProductFamilies = cache(async function getProductFamilies(
       .map((doc) => mapFamily(locale, doc as unknown as Record<string, unknown>))
       .filter(Boolean) as ProductFamilyData[];
 
-    return docs.length ? docs : fallbackFamilies[locale];
+    if (!docs.length) {
+      return fallbackFamilies[locale];
+    }
+
+    const docsBySlug = new Map(docs.map((family) => [family.slug, family]));
+    const orderedKnownFamilies = fallbackFamilies[locale].map(
+      (family) => docsBySlug.get(family.slug) ?? family,
+    );
+    const extraFamilies = docs.filter(
+      (family) => !fallbackFamilies[locale].some((fallback) => fallback.slug === family.slug),
+    );
+
+    return [...orderedKnownFamilies, ...extraFamilies];
   } catch {
     return fallbackFamilies[locale];
   }

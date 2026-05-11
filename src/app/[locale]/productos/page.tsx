@@ -46,7 +46,7 @@ export default async function ProductosPage({ params }: Props) {
 
   try {
     const families = await getProductFamilies(typedLocale);
-    products = families.slice(0, 6).map((family) => ({
+    products = families.slice(0, 7).map((family) => ({
       code: family.code,
       name: family.title,
       description: family.excerpt,
@@ -71,7 +71,7 @@ export default async function ProductosPage({ params }: Props) {
   const hero: ProductsMorphHero | undefined = undefined;
 
   return (
-    <main className="bg-background pt-24 sm:pt-28 lg:pt-32">
+    <main className="bg-background">
       <ProductsMorph products={products} hero={hero} />
     </main>
   );

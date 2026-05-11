@@ -25,6 +25,43 @@ type Props = {
 };
 
 const REVEAL_DURATION = 2.4;
+const TRAIL_PARTICLE_COUNT = 120;
+const TRAIL_COLORS = [
+  "rgba(30,75,182,0.88)",
+  "rgba(100,150,240,0.72)",
+  "rgba(160,185,235,0.58)",
+  "rgba(255,255,255,0.78)",
+];
+
+function seededUnit(index: number, salt: number) {
+  const value = Math.sin(index * 12.9898 + salt * 78.233) * 43758.5453;
+  return value - Math.floor(value);
+}
+
+const TRAIL_PARTICLES = Array.from({ length: TRAIL_PARTICLE_COUNT }, (_, index) => {
+  const progress = index / (TRAIL_PARTICLE_COUNT - 1);
+  const spread = Math.sin(progress * Math.PI) ** 0.65;
+  const yRoll = seededUnit(index, 1) - 0.5;
+  const colorRoll = seededUnit(index, 2);
+  const sizeRoll = seededUnit(index, 3);
+  const depthRoll = seededUnit(index, 4);
+  const color =
+    colorRoll < 0.55
+      ? TRAIL_COLORS[0]
+      : colorRoll < 0.8
+        ? TRAIL_COLORS[1]
+        : colorRoll < 0.94
+          ? TRAIL_COLORS[2]
+          : TRAIL_COLORS[3];
+
+  return {
+    color,
+    left: progress * 100,
+    opacity: 0.22 + depthRoll * 0.68,
+    size: 1.8 + sizeRoll * 6.2,
+    y: 88 + yRoll * 86 * spread,
+  };
+});
 
 export function NetworkTimeline({ hubs, caption, legend }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -39,6 +76,7 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
       ).matches;
 
       const track = root.querySelector<HTMLElement>("[data-net-track]");
+      const particleTrail = root.querySelector<HTMLElement>("[data-net-particle-trail]");
       const dots = gsap.utils.toArray<HTMLElement>("[data-net-dot]", root);
       const stems = gsap.utils.toArray<HTMLElement>("[data-net-stem]", root);
       const labels = gsap.utils.toArray<HTMLElement>("[data-net-label]", root);
@@ -48,6 +86,9 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
 
       // Estado inicial: nada visible, listo para el reveal sincronizado.
       gsap.set(track, { scaleX: 0, transformOrigin: "left center" });
+      if (particleTrail) {
+        gsap.set(particleTrail, { scaleX: 0, autoAlpha: 0, transformOrigin: "left center" });
+      }
       gsap.set(dots, { scale: 0, autoAlpha: 0 });
       gsap.set(stems, { scaleY: 0, transformOrigin: "bottom center", autoAlpha: 0 });
       gsap.set(labels, { autoAlpha: 0, y: 6 });
@@ -63,6 +104,14 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
 
       // La bola y la línea viajan al mismo ritmo: la bola es la cabeza del trazo.
       tl.to(track, { scaleX: 1, duration: REVEAL_DURATION, ease: "power1.inOut" }, 0);
+      if (particleTrail) {
+        tl.to(particleTrail, { autoAlpha: 1, duration: 0.2 }, 0);
+        tl.to(
+          particleTrail,
+          { scaleX: 1, duration: REVEAL_DURATION, ease: "power1.inOut" },
+          0,
+        );
+      }
 
       if (flow) {
         const getDistance = () => track.getBoundingClientRect().width;
@@ -99,6 +148,29 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
       {/* Timeline area — desktop: horizontal; mobile: lista vertical */}
       <div className="mt-8 hidden md:block">
         <div className="relative h-[160px]">
+          <div
+            data-net-particle-trail
+            className="pointer-events-none absolute inset-0 opacity-0 will-change-[transform,opacity]"
+            style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
+            aria-hidden="true"
+          >
+            {TRAIL_PARTICLES.map((particle, index) => (
+              <span
+                key={index}
+                className="absolute block rounded-full mix-blend-screen"
+                style={{
+                  background: `radial-gradient(circle, ${particle.color} 0%, ${particle.color} 42%, transparent 74%)`,
+                  boxShadow: `0 0 ${Math.round(particle.size * 5)}px ${particle.color}`,
+                  height: particle.size,
+                  left: `${particle.left}%`,
+                  opacity: particle.opacity,
+                  top: particle.y,
+                  transform: "translate(-50%, -50%)",
+                  width: particle.size,
+                }}
+              />
+            ))}
+          </div>
           {/* Línea única (se traza sincronizada con la bola) */}
           <div
             data-net-track
@@ -233,6 +305,7 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
         }
         @media (prefers-reduced-motion: reduce) {
           [data-net-flow] { display: none; }
+          [data-net-particle-trail] { display: none; }
           .nt-pulse-ring { animation: none !important; }
         }
       `}</style>
