@@ -13,6 +13,10 @@ export function buildLogisticsPath(locale: AppLocale) {
   return `/${locale}/logistica`;
 }
 
+export function buildAboutPath(locale: AppLocale) {
+  return `/${locale}/nosotros`;
+}
+
 export function buildSustainabilityPath(locale: AppLocale) {
   return `/${locale}/sostenibilidad`;
 }
@@ -52,6 +56,11 @@ export function switchLocalePath(pathname: string, nextLocale: AppLocale) {
 
     if (maybeSegment === "sostenibilidad") {
       nextSegments.push("sostenibilidad");
+      return `/${nextSegments.join("/")}`;
+    }
+
+    if (maybeSegment === "nosotros") {
+      nextSegments.push("nosotros");
       return `/${nextSegments.join("/")}`;
     }
   }
