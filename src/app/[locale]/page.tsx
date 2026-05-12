@@ -50,7 +50,7 @@ export default async function LocaleHomePage({ params }: Props) {
         background={<AtalantGlobe style="dotted" />}
         ctaHref={`/${typedLocale}/logistica`}
       />
-      <HomeFinancing />
+      <HomeFinancing locale={typedLocale} />
       <HomeNews />
     </FullpageScroll>
   );
