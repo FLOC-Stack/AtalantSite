@@ -11,6 +11,7 @@ import type { NavItem } from "@/lib/content-types";
 import { localeLabels, locales, type AppLocale } from "@/lib/locales";
 import {
   buildAboutPath,
+  buildFinancingPath,
   buildLogisticsPath,
   buildProductsPath,
   buildSustainabilityPath,
@@ -82,7 +83,7 @@ function buildFallbackNav(locale: AppLocale): HeaderLink[] {
   return [
     { label: t.products, href: buildProductsPath(locale) },
     { label: t.logistics, href: buildSectionPath(locale, "logistica") },
-    { label: t.financing, href: buildSectionPath(locale, "financiacion") },
+    { label: t.financing, href: buildFinancingPath(locale) },
     { label: t.sustainability, href: buildSustainabilityPath(locale) },
     { label: t.about, href: buildAboutPath(locale) },
   ];
@@ -136,6 +137,14 @@ function resolveHref(item: NavItem, locale: AppLocale): string {
     ["sustainability", "sostenibilidad"].includes((item.sectionId ?? "").toLowerCase())
   ) {
     return buildSustainabilityPath(locale);
+  }
+  if (
+    item.kind === "section" &&
+    ["financing", "financiacion", "financement", "financiamento"].includes(
+      (item.sectionId ?? "").toLowerCase(),
+    )
+  ) {
+    return buildFinancingPath(locale);
   }
   if (isAboutNavItem(item)) return buildAboutPath(locale);
   return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
