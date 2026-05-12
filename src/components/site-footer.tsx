@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { locales, type AppLocale } from "@/lib/locales";
 import {
+  buildCookiesPath,
   buildFinancingPath,
+  buildLegalNoticePath,
   buildLocalePath,
+  buildPrivacyPath,
   buildProductsPath,
   buildSustainabilityPath,
 } from "@/lib/routes";

@@ -84,10 +84,12 @@ export function HomeFinancing({
 
   return (
     <section
+      id="financing"
       ref={sectionRef}
       aria-labelledby="home-financing-title"
       className="relative flex min-h-screen flex-col overflow-hidden bg-white text-foreground"
     >
+      <span id="financiacion" className="absolute top-0" aria-hidden="true" />
       {/* Content wrapper — inherits side padding from the layout system */}
       <div className="relative z-10 flex w-full flex-1 flex-col px-10 pt-16 pb-12 sm:px-14 sm:pt-20 sm:pb-14 lg:px-20 lg:pt-[100px] lg:pb-[80px]">
         {/* Top header row */}

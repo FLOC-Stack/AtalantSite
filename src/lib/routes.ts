@@ -25,6 +25,18 @@ export function buildFinancingPath(locale: AppLocale) {
   return `/${locale}/financiacion`;
 }
 
+export function buildPrivacyPath(locale: AppLocale) {
+  return `/${locale}/privacidad`;
+}
+
+export function buildCookiesPath(locale: AppLocale) {
+  return `/${locale}/cookies`;
+}
+
+export function buildLegalNoticePath(locale: AppLocale) {
+  return `/${locale}/aviso-legal`;
+}
+
 export function buildFamilyPath(locale: AppLocale, slug: string) {
   return `${buildProductsPath(locale)}/${slug}`;
 }
@@ -70,6 +82,11 @@ export function switchLocalePath(pathname: string, nextLocale: AppLocale) {
 
     if (maybeSegment === "financiacion") {
       nextSegments.push("financiacion");
+      return `/${nextSegments.join("/")}`;
+    }
+
+    if (["privacidad", "cookies", "aviso-legal"].includes(maybeSegment)) {
+      nextSegments.push(maybeSegment);
       return `/${nextSegments.join("/")}`;
     }
   }

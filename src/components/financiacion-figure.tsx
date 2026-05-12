@@ -39,13 +39,17 @@ export function FinanciacionFigure({
     const el = ref.current;
     if (!el) return;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setCurrent(to);
-      setProgress(1);
-      return;
-    }
-
     let raf: number | null = null;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      raf = requestAnimationFrame(() => {
+        setCurrent(to);
+        setProgress(1);
+      });
+      return () => {
+        if (raf !== null) cancelAnimationFrame(raf);
+      };
+    }
 
     const runCounter = () => {
       const startTime = performance.now();
