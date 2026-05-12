@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { locales, type AppLocale } from "@/lib/locales";
-import { buildLocalePath, buildProductsPath, buildSustainabilityPath } from "@/lib/routes";
+import {
+  buildCookiesPath,
+  buildLegalNoticePath,
+  buildLocalePath,
+  buildPrivacyPath,
+  buildProductsPath,
+  buildSustainabilityPath,
+} from "@/lib/routes";
 
 type FooterLink = {
   label: string;
@@ -143,15 +150,15 @@ export function SiteFooter({ locale }: Props) {
             aria-label="Legal"
             className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/55"
           >
-            <Link href={`${buildLocalePath(locale)}/privacidad`} className="transition-opacity hover:opacity-70">
+            <Link href={buildPrivacyPath(locale)} className="transition-opacity hover:opacity-70">
               Privacidad
             </Link>
             <span aria-hidden="true">·</span>
-            <Link href={`${buildLocalePath(locale)}/cookies`} className="transition-opacity hover:opacity-70">
+            <Link href={buildCookiesPath(locale)} className="transition-opacity hover:opacity-70">
               Cookies
             </Link>
             <span aria-hidden="true">·</span>
-            <Link href={`${buildLocalePath(locale)}/aviso-legal`} className="transition-opacity hover:opacity-70">
+            <Link href={buildLegalNoticePath(locale)} className="transition-opacity hover:opacity-70">
               Aviso legal
             </Link>
           </nav>
