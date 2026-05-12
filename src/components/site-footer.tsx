@@ -41,7 +41,7 @@ function getColumns(locale: AppLocale): FooterColumn[] {
       links: [
         { label: "Productos", href: products },
         { label: "Logística", href: `${home}#logistica` },
-        { label: "Financiación", href: `${home}#financiacion` },
+        { label: "Financiación", href: `${home}#financing` },
         { label: "Sostenibilidad", href: sustainability },
       ],
     },

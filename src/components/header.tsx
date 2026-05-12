@@ -29,10 +29,8 @@ type Props = {
   ctaHref?: string;
 };
 
-// Copia de fallback por locale. Los IDs de sección (logistica, financiacion,
-// sostenibilidad, equipo, contacto) son identificadores técnicos estables
-// que viven en español para casar con los anchors reales del DOM; los labels
-// sí se traducen.
+// Copia de fallback por locale. Los IDs de sección siguen los identificadores
+// técnicos estables de contenido/Payload; los labels sí se traducen.
 type FallbackStrings = {
   products: string;
   logistics: string;
@@ -82,7 +80,7 @@ function buildFallbackNav(locale: AppLocale): HeaderLink[] {
   return [
     { label: t.products, href: buildProductsPath(locale) },
     { label: t.logistics, href: buildSectionPath(locale, "logistica") },
-    { label: t.financing, href: buildSectionPath(locale, "financiacion") },
+    { label: t.financing, href: buildSectionPath(locale, "financing") },
     { label: t.sustainability, href: buildSustainabilityPath(locale) },
     { label: t.about, href: buildAboutPath(locale) },
   ];
