@@ -1,7 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useRef } from "react";
+import { ArrowRight } from "lucide-react";
 import { ParticleOcean } from "@/components/particle-ocean";
+import { buildFinancingPath } from "@/lib/routes";
+import type { AppLocale } from "@/lib/locales";
 
 export type FinancingPrinciple = {
   numeral: string;
@@ -10,10 +14,14 @@ export type FinancingPrinciple = {
 };
 
 type Props = {
+  /** Locale del documento — usado para construir el href del CTA */
+  locale?: AppLocale;
   indexLabel?: string;
   counter?: string;
   title?: string;
   body?: string;
+  /** Etiqueta del CTA primary que enlaza a la página interna */
+  ctaLabel?: string;
   quote?: string;
   quoteLabel?: string;
   principlesLabel?: string;
@@ -60,16 +68,19 @@ function renderMultiline(text: string) {
 }
 
 export function HomeFinancing({
+  locale = "es",
   indexLabel = "N° 04 — CRÉDITO / PRINCIPIOS",
   counter = "04 / 05",
   title = FALLBACK_TITLE,
   body = FALLBACK_BODY,
+  ctaLabel = "Descubre cómo",
   quote = FALLBACK_QUOTE,
   quoteLabel = "PRINCIPIOS DE TRABAJO — ATALANT",
   principlesLabel = "CUATRO PRINCIPIOS",
   principles = FALLBACK_PRINCIPLES,
 }: Props = {}) {
   const sectionRef = useRef<HTMLElement>(null);
+  const ctaHref = buildFinancingPath(locale);
 
   return (
     <section
@@ -100,8 +111,18 @@ export function HomeFinancing({
           {/* Ocean layer */}
           <div className="pointer-events-none absolute inset-y-0 right-0 z-0 w-full md:w-3/4">
             <ParticleOcean
-              className="h-full w-full"
+              className="absolute inset-0"
               mouseTargetRef={sectionRef}
+            />
+            {/* Fade vertical en el borde inferior, para que las olas se
+                fundan con el blanco de la sección sin un corte duro. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+              style={{
+                background:
+                  "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
+              }}
             />
           </div>
           {/* Soft horizontal fade so the ocean doesn't fight with the text column */}
@@ -126,6 +147,20 @@ export function HomeFinancing({
             <p className="mt-8 max-w-[560px] font-sans text-[17px] font-light leading-[1.55] tracking-[-0.15px] text-foreground sm:text-lg lg:text-[18px] lg:leading-[28px]">
               {body}
             </p>
+
+            <div className="mt-8">
+              <Link
+                href={ctaHref}
+                className="inline-flex h-12 items-center rounded bg-primary text-white transition-opacity hover:opacity-90 sm:h-14"
+              >
+                <span className="border-r border-white/10 px-6 font-mono text-[10px] uppercase tracking-[2px] sm:px-10 sm:text-[11px] sm:tracking-[2.2px]">
+                  {ctaLabel}
+                </span>
+                <span className="flex items-center justify-center px-4 sm:px-5">
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </Link>
+            </div>
 
             <div className="mt-14 max-w-[520px] lg:mt-20">
               <p className="font-sans text-[clamp(1.5rem,2.6vw,2.25rem)] font-light leading-[1.25] tracking-[-0.8px] text-foreground">

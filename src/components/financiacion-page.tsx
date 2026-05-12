@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { AppLocale } from "@/lib/locales";
 import { FinanciacionFigure } from "@/components/financiacion-figure";
+import { ParticleOcean } from "@/components/particle-ocean";
 
 type Props = {
   locale: AppLocale;
@@ -47,10 +48,6 @@ type FinanciacionCopy = {
   dataEyebrow: string;
   dataTitle: string;
   modules: DataModule[];
-  ctaTitle: string;
-  ctaAction: string;
-  ctaFootnote: string;
-  phone: string;
 };
 
 const COPY_ES: FinanciacionCopy = {
@@ -107,11 +104,6 @@ const COPY_ES: FinanciacionCopy = {
       body: "Capital interno comprometido en operaciones de crédito a clientes durante el último ejercicio.",
     },
   ],
-
-  ctaTitle: "Hablemos de tu cadena\nde suministro.",
-  ctaAction: "Solicitar condiciones  →",
-  ctaFootnote: "© MMXXVI ATALANT  /  FN",
-  phone: "+34 965 661 828",
 };
 
 const COPY: Record<AppLocale, FinanciacionCopy> = {
@@ -262,35 +254,22 @@ export function FinanciacionPage({ locale }: Props) {
         </div>
       </section>
 
-      {/* ======= CTA dark ======= */}
-      <section
-        aria-labelledby="fn-cta-title"
-        className="mt-24 bg-foreground px-10 py-16 text-white sm:px-14 sm:py-20 lg:mt-32 lg:px-20 lg:py-24"
-      >
-        <div className="h-px w-full bg-white/20" aria-hidden="true" />
-        <h2
-          id="fn-cta-title"
-          className="mt-10 max-w-[1700px] font-sans text-[34px] font-light leading-[1.1] tracking-[-1px] text-white/95 sm:text-[48px] lg:text-[64px] lg:leading-[72px] lg:tracking-[-2px]"
-        >
-          {renderMultiline(copy.ctaTitle)}
-        </h2>
-        <Link
-          href={`mailto:financiacion@atalant.com?subject=${encodeURIComponent("Consulta crédito Atalant")}`}
-          className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
-        >
-          <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">
-            {copy.ctaAction}
-          </span>
-          <span className="mt-2 block h-px w-[212px] bg-white" aria-hidden="true" />
-        </Link>
-
-        <div className="mt-14 flex flex-col gap-4 border-t border-white/20 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[9px] uppercase tracking-[1.5px] text-white/50">
-            {copy.ctaFootnote}
-          </p>
-          <p className="font-mono text-[11px] uppercase tracking-[2px] text-white/80">
-            {copy.phone}
-          </p>
+      {/* ======= Banda full-width con animación de partículas =======
+          Misma capa que el fondo de la sección Financiación del home.
+          Fondo en `bg-background` para que haya continuidad con la
+          página. Gradient inferior fundiéndose con ese mismo color
+          para evitar un corte duro contra el footer. */}
+      <section aria-hidden="true" className="mt-10 lg:mt-14">
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-background sm:aspect-[21/9] lg:aspect-[1760/600]">
+          <ParticleOcean className="absolute inset-0" />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(246,247,253,0) 0%, var(--color-background) 100%)",
+            }}
+          />
         </div>
       </section>
     </main>
