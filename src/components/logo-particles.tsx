@@ -9,6 +9,7 @@ interface LogoParticlesProps {
   assemblyDelay?: number;
   mouseRepulsionRadius?: number;
   particleStep?: number;
+  startDelayAfterLoadMs?: number;
   backgroundColor?: string;
   className?: string;
   /** Parent element to listen for mouse events (covers full section) */
@@ -27,6 +28,7 @@ export function LogoParticles({
   assemblyDelay = 0.5,
   mouseRepulsionRadius = 160,
   particleStep = 3,
+  startDelayAfterLoadMs = 0,
   backgroundColor = "transparent",
   className,
   mouseTargetRef,
@@ -47,6 +49,8 @@ export function LogoParticles({
     if (!canvas || !container) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    const containerEl = container;
+    const ctx2d = ctx;
 
     let count = 0;
     let x: Float32Array;
@@ -62,6 +66,12 @@ export function LogoParticles({
     let floatAmplitude: Float32Array;
     // 0 = primary blue, 1 = light blue, 2 = white
     let colorType: Uint8Array;
+    let isVisible = true;
+    let isFrameScheduled = false;
+    let hasStarted = false;
+    let loadTimer: number | undefined;
+    let reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const mouseTarget = mouseTargetRef?.current ?? canvas;
     const handleMouseMove = (e: MouseEvent) => {
@@ -77,7 +87,7 @@ export function LogoParticles({
     mouseTarget.addEventListener("mouseleave", handleMouseLeave);
 
     const init = () => {
-      const rect = container.getBoundingClientRect();
+      const rect = containerEl.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio, 2);
       const w = Math.floor(rect.width);
       const h = Math.floor(rect.height);
@@ -85,7 +95,7 @@ export function LogoParticles({
       canvas.height = h * dpr;
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       // Use a fixed rasterization size for consistent pixel sampling
       const rasterW = Math.floor(w);
@@ -111,7 +121,7 @@ export function LogoParticles({
         offCtx.drawImage(img, offX, offY, svgW, svgH);
         const imageData = offCtx.getImageData(0, 0, rasterW, rasterH);
 
-        const step = particleStep;
+        const step = window.innerWidth < 768 ? Math.max(particleStep, 5) : particleStep;
         const positions: { px: number; py: number }[] = [];
 
         for (let row = 0; row < rasterH; row += step) {
@@ -143,7 +153,7 @@ export function LogoParticles({
           baseY[i] = p.py;
 
           const angle = Math.random() * Math.PI * 2;
-          const dist = Math.random() * Math.max(w, h) + 100;
+          const dist = Math.random() * Math.max(w, h) * 0.72 + 80;
           startX[i] = p.px + Math.cos(angle) * dist;
           startY[i] = p.py + Math.sin(angle) * dist;
           x[i] = startX[i];
@@ -168,38 +178,92 @@ export function LogoParticles({
         }
 
         startTimeRef.current = performance.now();
+        if (reduceMotion) {
+          x.set(baseX);
+          y.set(baseY);
+          progressRef.current = 1;
+        }
       };
       img.src = `data:image/svg+xml;utf8,${encodeURIComponent(svgString)}`;
     };
 
     let resizeTimer: ReturnType<typeof setTimeout>;
     const ro = new ResizeObserver(() => {
+      if (!hasStarted) return;
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(init, 200);
     });
-    ro.observe(container);
+    ro.observe(containerEl);
     init();
 
-    const animate = () => {
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = Boolean(entry?.isIntersecting);
+        if (isVisible && hasStarted) {
+          requestNextFrame();
+        }
+      },
+      { threshold: 0.05 },
+    );
+    visibilityObserver.observe(containerEl);
+
+    const handleReducedMotionChange = (event: MediaQueryListEvent) => {
+      reduceMotion = event.matches;
+      if (reduceMotion && count > 0) {
+        x.set(baseX);
+        y.set(baseY);
+        progressRef.current = 1;
+        requestNextFrame();
+      } else {
+        startTimeRef.current = performance.now();
+        requestNextFrame();
+      }
+    };
+    reducedMotionQuery.addEventListener("change", handleReducedMotionChange);
+
+    const start = () => {
+      if (hasStarted) return;
+      hasStarted = true;
+      init();
+      requestNextFrame();
+    };
+
+    const scheduleStart = () => {
+      loadTimer = window.setTimeout(start, startDelayAfterLoadMs);
+    };
+
+    function requestNextFrame() {
+      if (!isVisible || isFrameScheduled) return;
+      isFrameScheduled = true;
+      animFrameRef.current = requestAnimationFrame(() => {
+        isFrameScheduled = false;
+        animate();
+      });
+    }
+
+    function animate() {
+      if (!isVisible) return;
       if (count === 0 || startTimeRef.current === null) {
-        animFrameRef.current = requestAnimationFrame(animate);
+        requestNextFrame();
         return;
       }
 
-      const rect = container.getBoundingClientRect();
+      const rect = containerEl.getBoundingClientRect();
       const w = rect.width;
       const h = rect.height;
-      ctx.clearRect(0, 0, w, h);
+      ctx2d.clearRect(0, 0, w, h);
 
       // Time-based assembly progress
       const elapsed =
         (performance.now() - startTimeRef.current) / 1000 - assemblyDelay;
-      const rawProgress = Math.max(0, Math.min(1, elapsed / assemblyDuration));
+      const rawProgress = reduceMotion
+        ? 1
+        : Math.max(0, Math.min(1, elapsed / assemblyDuration));
       const sp = easeOutCubic(rawProgress);
       progressRef.current = sp;
 
       // After assembly, subtle idle float
-      const idleAmplitude = sp >= 1 ? 3 : 0;
+      const idleAmplitude = !reduceMotion && sp >= 1 ? 3 : 0;
       const floatFactor = 1 - sp;
       const t = performance.now() * 0.001;
       const mx = mouseRef.current.x;
@@ -224,8 +288,9 @@ export function LogoParticles({
           if (dist < repR) {
             const force = ((repR - dist) / repR) ** 2;
             const push = force * density[i] * 3;
-            tx -= (dx / dist) * push;
-            ty -= (dy / dist) * push;
+            const safeDist = Math.max(dist, 0.001);
+            tx -= (dx / safeDist) * push;
+            ty -= (dy / safeDist) * push;
           }
         }
 
@@ -240,38 +305,56 @@ export function LogoParticles({
 
       // Fade in particles during assembly
       const opacity = Math.min(1, rawProgress * 3);
+      const introOpacity = reduceMotion ? 1 : Math.max(0.18, opacity);
 
       // Draw particles in 3 color batches for performance
       const colors = [
-        `rgba(30, 75, 182, ${0.75 * opacity})`,    // primary blue
-        `rgba(100, 150, 240, ${0.7 * opacity})`,    // light blue
-        `rgba(160, 185, 235, ${0.8 * opacity})`,    // pale blue (visible on #f6f7fd)
+        `rgba(30, 75, 182, ${0.75 * introOpacity})`,    // primary blue
+        `rgba(100, 150, 240, ${0.7 * introOpacity})`,    // light blue
+        `rgba(160, 185, 235, ${0.8 * introOpacity})`,    // pale blue (visible on #f6f7fd)
       ];
 
       for (let c = 0; c < 3; c++) {
-        ctx.beginPath();
+        ctx2d.beginPath();
         for (let i = 0; i < count; i++) {
           if (colorType[i] !== c) continue;
-          ctx.moveTo(x[i] + size[i], y[i]);
-          ctx.arc(x[i], y[i], size[i], 0, Math.PI * 2);
+          ctx2d.moveTo(x[i] + size[i], y[i]);
+          ctx2d.arc(x[i], y[i], size[i], 0, Math.PI * 2);
         }
-        ctx.fillStyle = colors[c];
-        ctx.fill();
+        ctx2d.fillStyle = colors[c];
+        ctx2d.fill();
       }
 
-      animFrameRef.current = requestAnimationFrame(animate);
-    };
+      if (!reduceMotion) {
+        requestNextFrame();
+      }
+    }
 
-    animate();
+    if (document.readyState === "complete") {
+      scheduleStart();
+    } else {
+      window.addEventListener("load", scheduleStart, { once: true });
+    }
 
     return () => {
       cancelAnimationFrame(animFrameRef.current);
       clearTimeout(resizeTimer);
+      if (loadTimer !== undefined) window.clearTimeout(loadTimer);
+      window.removeEventListener("load", scheduleStart);
       ro.disconnect();
+      visibilityObserver.disconnect();
+      reducedMotionQuery.removeEventListener("change", handleReducedMotionChange);
       mouseTarget.removeEventListener("mousemove", handleMouseMove);
       mouseTarget.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [particleStep, mouseRepulsionRadius, assemblyDuration, assemblyDelay, mouseTargetRef]);
+  }, [
+    particleStep,
+    mouseRepulsionRadius,
+    assemblyDuration,
+    assemblyDelay,
+    startDelayAfterLoadMs,
+    mouseTargetRef,
+  ]);
 
   return (
     <div

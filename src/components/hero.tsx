@@ -56,9 +56,10 @@ export function Hero({
     >
       {/* Logo particles background */}
       <LogoParticles
-        assemblyDuration={3.5}
-        assemblyDelay={0.3}
-        particleStep={3}
+        assemblyDuration={2.4}
+        assemblyDelay={0}
+        particleStep={4}
+        startDelayAfterLoadMs={250}
         mouseTargetRef={sectionRef}
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
