@@ -185,8 +185,8 @@ export function SustainabilityPage({ locale }: Props) {
         className="mt-24 border-t border-foreground/15 px-10 pt-16 sm:px-14 lg:mt-32 lg:px-20 lg:pt-24"
       >
         <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)] lg:gap-12">
-          <div className="relative min-h-[420px] overflow-hidden lg:min-h-[560px]">
-            <SustainabilityParticles className="absolute inset-0" />
+          <div className="relative min-h-[500px] overflow-visible lg:min-h-[560px]">
+            <SustainabilityParticles className="absolute -inset-x-16 -inset-y-24 sm:-inset-x-24 lg:-inset-x-32 lg:-inset-y-28" />
           </div>
           <div className="flex flex-col justify-center lg:pl-6">
             <p className="font-mono text-[11px] uppercase tracking-[2px] text-green">
