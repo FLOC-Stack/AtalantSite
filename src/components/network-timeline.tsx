@@ -38,6 +38,10 @@ function seededUnit(index: number, salt: number) {
   return value - Math.floor(value);
 }
 
+function fixed(value: number, digits = 4) {
+  return Number(value.toFixed(digits));
+}
+
 const TRAIL_PARTICLES = Array.from({ length: TRAIL_PARTICLE_COUNT }, (_, index) => {
   const progress = index / (TRAIL_PARTICLE_COUNT - 1);
   const spread = Math.sin(progress * Math.PI) ** 0.65;
@@ -56,10 +60,11 @@ const TRAIL_PARTICLES = Array.from({ length: TRAIL_PARTICLE_COUNT }, (_, index) 
 
   return {
     color,
-    left: progress * 100,
-    opacity: 0.22 + depthRoll * 0.68,
-    size: 1.8 + sizeRoll * 6.2,
-    y: 88 + yRoll * 86 * spread,
+    left: fixed(progress * 100),
+    opacity: fixed(0.22 + depthRoll * 0.68, 6),
+    shadow: Math.round((1.8 + sizeRoll * 6.2) * 5),
+    size: fixed(1.8 + sizeRoll * 6.2),
+    y: fixed(88 + yRoll * 86 * spread),
   };
 });
 
@@ -159,14 +164,14 @@ export function NetworkTimeline({ hubs, caption, legend }: Props) {
                 key={index}
                 className="absolute block rounded-full mix-blend-screen"
                 style={{
-                  background: `radial-gradient(circle, ${particle.color} 0%, ${particle.color} 42%, transparent 74%)`,
-                  boxShadow: `0 0 ${Math.round(particle.size * 5)}px ${particle.color}`,
-                  height: particle.size,
+                  backgroundImage: `radial-gradient(circle, ${particle.color} 0%, ${particle.color} 42%, transparent 74%)`,
+                  boxShadow: `0 0 ${particle.shadow}px ${particle.color}`,
+                  height: `${particle.size}px`,
                   left: `${particle.left}%`,
                   opacity: particle.opacity,
-                  top: particle.y,
+                  top: `${particle.y}px`,
                   transform: "translate(-50%, -50%)",
-                  width: particle.size,
+                  width: `${particle.size}px`,
                 }}
               />
             ))}

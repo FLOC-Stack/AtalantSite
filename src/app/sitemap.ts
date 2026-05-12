@@ -3,7 +3,10 @@ import { locales } from "@/lib/locales";
 import { getPublishedFamilySitemapEntries } from "@/lib/payload-data";
 import {
   buildFamilyPath,
+  buildCookiesPath,
+  buildLegalNoticePath,
   buildLocalePath,
+  buildPrivacyPath,
   buildProductsPath,
   buildSustainabilityPath,
 } from "@/lib/routes";
@@ -37,6 +40,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
       url: `${baseURL}${buildSustainabilityPath(locale)}`,
     });
+
+    for (const legalPath of [
+      buildPrivacyPath(locale),
+      buildCookiesPath(locale),
+      buildLegalNoticePath(locale),
+    ]) {
+      routes.push({
+        changeFrequency: "yearly",
+        lastModified: new Date(),
+        priority: 0.3,
+        url: `${baseURL}${legalPath}`,
+      });
+    }
 
     for (const family of families) {
       routes.push({
