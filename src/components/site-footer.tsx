@@ -7,6 +7,7 @@ import {
   buildLocalePath,
   buildPrivacyPath,
   buildProductsPath,
+  buildAboutPath,
   buildSustainabilityPath,
 } from "@/lib/routes";
 
@@ -36,6 +37,7 @@ function getColumns(locale: AppLocale): FooterColumn[] {
   const products = buildProductsPath(locale);
   const sustainability = buildSustainabilityPath(locale);
   const financing = buildFinancingPath(locale);
+  const about = buildAboutPath(locale);
 
   return [
     {
@@ -49,11 +51,7 @@ function getColumns(locale: AppLocale): FooterColumn[] {
     },
     {
       heading: "Empresa",
-      links: [
-        { label: "Equipo", href: `${home}#equipo` },
-        { label: "Principios de trabajo", href: `${home}#principios` },
-        { label: "Evolución", href: `${home}#evolucion` },
-      ],
+      links: [{ label: "Nosotros", href: about }],
     },
     {
       heading: "Contacto",
