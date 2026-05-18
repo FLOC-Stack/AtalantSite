@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Recycle } from "lucide-react";
 import gsap from "gsap";
@@ -39,7 +40,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Resistencia química y procesabilidad para envase, tubería y film. Grados específicos para soplado, inyección y extrusión.",
     variants: ["HDPE", "LDPE", "LLDPE"],
     href: "/es/productos/pe",
-    image: "/imgsrc/botella_detergente.jpg",
+    image: "/imgsrc/products/3d-product-PE.webp",
   },
   {
     code: "PP",
@@ -48,7 +49,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Alta rigidez, estabilidad térmica y reciclabilidad para automoción, electrodomésticos y envase rígido.",
     variants: ["Homopolímero", "Random", "Impacto"],
     href: "/es/productos/pp",
-    image: "/imgsrc/yogurt.jpg",
+    image: "/imgsrc/products/3d-product-PP.webp",
   },
   {
     code: "PVC",
@@ -57,7 +58,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Versatilidad rígida y flexible. Perfilería, conducciones, recubrimientos y construcción con aditivación a medida.",
     variants: ["Rígido", "Flexible", "Emulsión"],
     href: "/es/productos/pvc",
-    image: "/imgsrc/molde-construccion.jpg",
+    image: "/imgsrc/products/3d-product-PVC.webp",
   },
   {
     code: "EVA",
@@ -66,7 +67,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Grados con diferentes MFI y contenido de acetato de vinilo para plantillas, láminas, films, calzado, adhesivos, automoción y construcción.",
     variants: ["Diferentes MFI", "Acetato de vinilo"],
     href: "/es/productos/eva",
-    image: "/imgsrc/atalant-post-2.jpeg",
+    image: "/imgsrc/products/3d-product-EVA.webp",
   },
   {
     code: "PS",
@@ -75,7 +76,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Transparencia y facilidad de termoconformado. Envase alimentario, electrodomésticos y aislamiento térmico.",
     variants: ["GPPS", "HIPS", "EPS"],
     href: "/es/productos/ps",
-    image: "/imgsrc/Oso%20de%20Pl%C3%A1stico.jpg",
+    image: "/imgsrc/products/3d-product-PS.webp",
   },
   {
     code: "PET",
@@ -84,7 +85,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Barrera, transparencia y aptitud alimentaria. Grados soplado, inyección y fibra, incluyendo rPET certificado.",
     variants: ["Soplado", "Inyección", "Fibra", "rPET"],
     href: "/es/productos/pet",
-    video: "/imgsrc/v1.mp4",
+    image: "/imgsrc/products/3d-product-PET.webp",
   },
   {
     code: "REC",
@@ -94,7 +95,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
     variants: ["rPE", "rPP", "rPET"],
     href: "/es/productos/recycled",
     recycled: true,
-    image: "/imgsrc/Botella%20premium.jpg",
+    image: "/imgsrc/products/3d-product-RE.webp",
   },
 ];
 
@@ -124,7 +125,7 @@ function displayCode(code: string): string {
   return CODE_DISPLAY_OVERRIDES[code.toLowerCase()] ?? code.toUpperCase();
 }
 
-const PLACEHOLDER_IMAGE = "/imgsrc/botella_detergente.jpg";
+const PLACEHOLDER_IMAGE = "/imgsrc/botella_detergente.webp";
 
 type ProductImageRevealProps = {
   src?: string;
@@ -220,11 +221,16 @@ function ProductImageReveal({ src, videoSrc, alt }: ProductImageRevealProps) {
           aria-label={alt}
         />
       ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        // next/image sirve variantes en WebP al tamaño exacto del
+        // contenedor (320/360 px en este slide), evitando descargar el
+        // PNG original de 2048×2048 y el escalado por CSS — que es lo
+        // que producía el efecto aliasing/crispy en Safari.
+        <Image
           src={imageSrc}
           alt={alt}
-          className="absolute inset-0 h-full w-full object-cover"
+          fill
+          sizes="(min-width: 640px) 360px, 320px"
+          className="object-cover"
         />
       )}
     </div>
@@ -235,13 +241,17 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
   // Si el CMS devuelve items sin imagen/video, caemos al media del fallback
   // con el mismo `code` para que cada producto tenga su cover sin tener que
   // tocar Payload. Cuando el cliente suba su propio heroMedia, pisa al fallback.
+  // Indexamos por `displayCode` para que tanto si Payload devuelve el
+  // slug en minúsculas ("recycled") como si llega ya el código display
+  // ("REC"), el lookup acierte. Sin esto, el item de reciclados caía al
+  // PLACEHOLDER_IMAGE porque "RECYCLED" ≠ "REC".
   const fallbackMediaByCode = new Map(
-    FALLBACK_PRODUCTS.map((p) => [p.code.toUpperCase(), { image: p.image, video: p.video }]),
+    FALLBACK_PRODUCTS.map((p) => [displayCode(p.code), { image: p.image, video: p.video }]),
   );
   const items = (products?.length ? products.slice(0, 7) : FALLBACK_PRODUCTS).map(
     (item) => {
       if (item.image || item.video) return item;
-      const fb = fallbackMediaByCode.get(item.code.toUpperCase());
+      const fb = fallbackMediaByCode.get(displayCode(item.code));
       return fb ? { ...item, image: fb.image, video: fb.video } : item;
     },
   );

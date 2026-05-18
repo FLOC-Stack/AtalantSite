@@ -16,8 +16,8 @@ tocar código:
 
 ## Especificaciones
 
-- **Formato:** `.jpg` (preferido) o `.webp`. Para no romper la referencia
-  mantén la extensión `.jpg` o actualiza el `src` en `nosotros-page.tsx`.
+- **Formato:** `.webp` (preferido por compresión + alpha). Para no romper la
+  referencia mantén la extensión `.webp` o actualiza el `src` en `nosotros-page.tsx`.
 - **Ratio:** se renderizan en **1:1** (`aspect-square`) con
   `border-radius: 24px`. Sube originales cuadrados y el `object-cover`
   se encarga de cualquier recorte residual.

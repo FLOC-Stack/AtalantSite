@@ -77,7 +77,7 @@ const COPY_ES: NosotrosCopy = {
         "En estos años, hemos aprendido a creer en las relaciones fuertes y a largo plazo.",
       ],
       image: {
-        src: "/imgsrc/about/atalant-about-1.jpg",
+        src: "/imgsrc/about/atalant-about-1.webp",
         alt: "Materia prima plástica lista para producción",
       },
     },
@@ -89,7 +89,7 @@ const COPY_ES: NosotrosCopy = {
         "De esta forma, mantenemos siempre los niveles de disponibilidad para nuestros clientes —desde volúmenes regulares hasta pedidos urgentes— sin perder de vista la sostenibilidad ni la calidad de trabajo.",
       ],
       image: {
-        src: "/imgsrc/about/atalant-about-2.jpg",
+        src: "/imgsrc/about/atalant-about-2.webp",
         alt: "Centro logístico y almacenaje Atalant",
       },
       reverse: true,
@@ -102,7 +102,7 @@ const COPY_ES: NosotrosCopy = {
         "Ofrecemos soluciones de abastecimiento flexibles, adaptadas a la realidad operativa de cada planta y a los ritmos reales de cada producción.",
       ],
       image: {
-        src: "/imgsrc/about/atalant-about-3-v2.jpg",
+        src: "/imgsrc/about/atalant-about-3-v2.webp",
         alt: "Muelle de carga y descarga de camiones",
       },
     },
@@ -224,7 +224,7 @@ export function NosotrosPage({ locale }: Props) {
         {/* ======= Imagen hero (sobre la retícula) ======= */}
         <div className="relative z-10 mt-14 aspect-[16/9] w-full overflow-hidden bg-foreground/5 sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
           <Image
-            src="/imgsrc/about/atalant-about-hero.jpg"
+            src="/imgsrc/about/atalant-about-hero.webp"
             alt="Equipo Atalant en planta de polímeros"
             fill
             priority
