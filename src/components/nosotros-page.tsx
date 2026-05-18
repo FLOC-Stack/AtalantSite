@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { AppLocale } from "@/lib/locales";
 import { NosotrosChapters, type Chapter } from "@/components/nosotros-chapters";
@@ -76,7 +77,7 @@ const COPY_ES: NosotrosCopy = {
         "En estos años, hemos aprendido a creer en las relaciones fuertes y a largo plazo.",
       ],
       image: {
-        src: "/imgsrc/about/atalant-about-2.jpg",
+        src: "/imgsrc/about/atalant-about-1.jpg",
         alt: "Materia prima plástica lista para producción",
       },
     },
@@ -101,8 +102,8 @@ const COPY_ES: NosotrosCopy = {
         "Ofrecemos soluciones de abastecimiento flexibles, adaptadas a la realidad operativa de cada planta y a los ritmos reales de cada producción.",
       ],
       image: {
-        src: "/imgsrc/about/atalant-about-2.jpg",
-        alt: "Producto terminado en polímero de alta calidad",
+        src: "/imgsrc/about/atalant-about-3-v2.jpg",
+        alt: "Muelle de carga y descarga de camiones",
       },
     },
   ],
@@ -220,17 +221,15 @@ export function NosotrosPage({ locale }: Props) {
           </p>
         </div>
 
-        {/* ======= Vídeo hero (sobre la retícula) ======= */}
-        <div className="relative z-10 mt-14 aspect-[16/9] w-full overflow-hidden bg-primary sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
-          <video
-            className="h-full w-full object-cover"
-            src="/Morphing%20Figures%20Animation.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
+        {/* ======= Imagen hero (sobre la retícula) ======= */}
+        <div className="relative z-10 mt-14 aspect-[16/9] w-full overflow-hidden bg-foreground/5 sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
+          <Image
+            src="/imgsrc/about/atalant-about-hero.jpg"
+            alt="Equipo Atalant en planta de polímeros"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
         </div>
 
