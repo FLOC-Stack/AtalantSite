@@ -102,8 +102,8 @@ const COPY_ES: NosotrosCopy = {
         "Ofrecemos soluciones de abastecimiento flexibles, adaptadas a la realidad operativa de cada planta y a los ritmos reales de cada producción.",
       ],
       image: {
-        src: "/imgsrc/about/atalant-about-3.jpg",
-        alt: "Producto terminado en polímero de alta calidad",
+        src: "/imgsrc/about/atalant-about-3-v2.jpg",
+        alt: "Muelle de carga y descarga de camiones",
       },
     },
   ],
