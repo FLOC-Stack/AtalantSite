@@ -10,12 +10,12 @@ sin tocar código:
 
 | Slot | Path | Uso |
 |------|------|-----|
-| Hero | `/imgsrc/financing/atalant-bg-financiacion.jpg` | Imagen grande del hero, debajo del titular |
+| Hero | `/imgsrc/financing/atalant-bg-financiacion.webp` | Imagen grande del hero, debajo del titular |
 
 ## Especificaciones
 
-- **Formato:** `.jpg` (preferido) o `.webp`. Para no romper la
-  referencia mantén la extensión `.jpg` o actualiza el `src` en
+- **Formato:** `.webp` (preferido por compresión + alpha). Para no romper la
+  referencia mantén la extensión `.webp` o actualiza el `src` en
   `financiacion-page.tsx`.
 - **Ratio:** se renderiza en horizontal panorámico:
   `aspect-[16/9]` en mobile, `sm:aspect-[21/9]` en tablet,

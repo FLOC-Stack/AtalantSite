@@ -174,7 +174,7 @@ export function FinanciacionPage({ locale }: Props) {
         {/* ======= Imagen hero ======= */}
         <div className="relative mt-14 aspect-[16/9] w-full overflow-hidden bg-primary sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
           <Image
-            src="/imgsrc/financing/atalant-bg-financiacion.jpg"
+            src="/imgsrc/financing/atalant-bg-financiacion.webp"
             alt="Equipo de Atalant trabajando con clientes"
             fill
             priority
