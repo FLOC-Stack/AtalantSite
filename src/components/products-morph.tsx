@@ -432,7 +432,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
               ref={(el) => {
                 sectionRefs.current[index + 1] = el;
               }}
-              data-shape-index={index}
+              data-shape-index={index + 1}
               className="pointer-events-none relative flex min-h-screen items-center px-5 py-24 sm:px-8 md:px-16 lg:px-[10%] xl:px-[14%] 2xl:px-[18%]"
             >
               <div
