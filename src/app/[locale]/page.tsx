@@ -44,7 +44,7 @@ export default async function LocaleHomePage({ params }: Props) {
       <HomeProductsIntro
         locale={typedLocale}
         primaryCtaHref={productsHref}
-        videoSrc="/Morphing%20Figures%20Animation.mp4"
+        videoSrc="/video-morp-atalant.mp4"
       />
       <HomeLogistics
         background={<AtalantGlobe style="dotted" />}

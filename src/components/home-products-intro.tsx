@@ -51,15 +51,21 @@ function MediaLayer({
   return (
     <>
       {videoSrc ? (
-        <video
-          src={videoSrc}
-          poster={videoPoster}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover mix-blend-multiply"
-        />
+        <div className="absolute inset-y-0 left-1/2 aspect-square h-full max-w-none -translate-x-1/2">
+          <video
+            src={videoSrc}
+            poster={videoPoster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 h-full w-full object-contain opacity-95 contrast-[1.08] saturate-[0.9]"
+          />
+          <div
+            className="pointer-events-none absolute inset-0 bg-background mix-blend-multiply"
+            aria-hidden="true"
+          />
+        </div>
       ) : (
         <div
           className="absolute inset-0 flex items-center justify-center bg-[#d9d9d9] font-mono text-[11px] uppercase tracking-[2px] text-muted-strong"
@@ -162,8 +168,8 @@ export function HomeProductsIntro({
         </dl>
       </div>
 
-      {/* Video/imagen — full-bleed detrás en desktop, debajo del texto en mobile */}
-      <div className="relative z-0 h-[60vh] w-full sm:h-[70vh] lg:absolute lg:inset-0 lg:h-full">
+      {/* Video/imagen: full-bleed sobre el fondo base de la web */}
+      <div className="relative z-0 h-[60vh] w-full bg-background sm:h-[70vh] lg:absolute lg:inset-0 lg:h-full">
         <MediaLayer videoSrc={videoSrc} videoPoster={videoPoster} />
       </div>
 
