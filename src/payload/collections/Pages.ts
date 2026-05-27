@@ -16,6 +16,20 @@ const localizedTextarea = (name: string, label: string, required = false) => ({
   label,
 });
 
+const text = (name: string, label: string, required = false) => ({
+  name,
+  required,
+  type: "text" as const,
+  label,
+});
+
+const textarea = (name: string, label: string, required = false) => ({
+  name,
+  required,
+  type: "textarea" as const,
+  label,
+});
+
 export const Pages: CollectionConfig = {
   slug: "pages",
   access: {
@@ -61,13 +75,13 @@ export const Pages: CollectionConfig = {
         {
           fields: [
             { name: "anchorId", required: true, type: "text" },
-            localizedText("eyebrow", "Eyebrow", true),
-            localizedText("title", "Title", true),
-            localizedTextarea("body", "Body", true),
+            text("eyebrow", "Eyebrow", true),
+            text("title", "Title", true),
+            textarea("body", "Body", true),
             {
               fields: [
-                localizedText("label", "Label", true),
-                localizedText("value", "Value", true),
+                text("label", "Label", true),
+                text("value", "Value", true),
               ],
               minRows: 1,
               name: "stats",
@@ -79,34 +93,35 @@ export const Pages: CollectionConfig = {
         {
           fields: [
             { name: "anchorId", required: true, type: "text" },
-            localizedText("eyebrow", "Eyebrow", true),
-            localizedText("title", "Title", true),
-            localizedTextarea("body", "Body", true),
+            text("eyebrow", "Eyebrow", true),
+            text("title", "Title", true),
+            textarea("body", "Body", true),
           ],
           slug: "section",
         },
         {
           fields: [
             { name: "anchorId", required: true, type: "text" },
-            localizedText("eyebrow", "Eyebrow", true),
-            localizedText("title", "Title", true),
-            localizedTextarea("body", "Body", true),
-            localizedText("ctaLabel", "CTA label", true),
+            text("eyebrow", "Eyebrow", true),
+            text("title", "Title", true),
+            textarea("body", "Body", true),
+            text("ctaLabel", "CTA label", true),
           ],
           slug: "productPreview",
         },
         {
           fields: [
             { name: "anchorId", required: true, type: "text" },
-            localizedText("eyebrow", "Eyebrow", true),
-            localizedText("title", "Title", true),
-            localizedTextarea("body", "Body", true),
-            localizedTextarea("note", "Note", true),
-            localizedText("submitLabel", "Submit label", true),
+            text("eyebrow", "Eyebrow", true),
+            text("title", "Title", true),
+            textarea("body", "Body", true),
+            textarea("note", "Note", true),
+            text("submitLabel", "Submit label", true),
           ],
           slug: "contact",
         },
       ],
+      localized: true,
       name: "layoutBlocks",
       type: "blocks",
     },
