@@ -39,6 +39,16 @@ const homeSectionCtaLabels: Record<AppLocale, Record<string, string>> = {
   },
 };
 
+const productHeroMediaByCode: Record<string, string> = {
+  eva: "3d-product-EVA.webp",
+  pe: "3d-product-PE.webp",
+  pet: "3d-product-PET.webp",
+  pp: "3d-product-PP.webp",
+  ps: "3d-product-PS.webp",
+  pvc: "3d-product-PVC.webp",
+  recycled: "3d-product-RE.webp",
+};
+
 function serializeBlocks(blocks: HomeBlock[], locale: AppLocale) {
   return blocks.map((block) => {
     const common = {
@@ -301,6 +311,14 @@ async function seedStaticPages(locale: AppLocale) {
 
 async function seedFamilies(locale: AppLocale) {
   const payload = await getPayload({ config });
+  const mediaResult = await payload.find({
+    collection: "media",
+    limit: 100,
+    pagination: false,
+  });
+  const mediaByFilename = new Map(
+    mediaResult.docs.map((media) => [media.filename, media.id]),
+  );
 
   for (const family of fallbackFamilies[locale]) {
     const existing = await payload.find({
@@ -323,6 +341,7 @@ async function seedFamilies(locale: AppLocale) {
       detail: serializeProductDetail(productDetailData[family.slug]),
       excerpt: family.excerpt,
       featured: family.featured,
+      heroMedia: mediaByFilename.get(productHeroMediaByCode[family.code]),
       order: fallbackFamilies[locale].findIndex((entry) => entry.code === family.code) + 1,
       recycled: family.recycled,
       seo: family.seo,

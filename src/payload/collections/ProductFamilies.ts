@@ -24,13 +24,15 @@ export const ProductFamilies: CollectionConfig = {
     { localized: true, name: "excerpt", required: true, type: "textarea" },
     { localized: true, name: "body", required: true, type: "textarea" },
     {
-      fields: [{ localized: true, name: "value", required: true, type: "text" }],
+      fields: [{ name: "value", required: true, type: "text" }],
+      localized: true,
       minRows: 1,
       name: "variants",
       type: "array",
     },
     {
-      fields: [{ localized: true, name: "value", required: true, type: "text" }],
+      fields: [{ name: "value", required: true, type: "text" }],
+      localized: true,
       minRows: 1,
       name: "applications",
       type: "array",
@@ -49,7 +51,8 @@ export const ProductFamilies: CollectionConfig = {
       },
       fields: [
         {
-          fields: [{ localized: true, name: "value", required: true, type: "text" }],
+          fields: [{ name: "value", required: true, type: "text" }],
+          localized: true,
           minRows: 1,
           name: "heroLines",
           type: "array",
@@ -57,9 +60,10 @@ export const ProductFamilies: CollectionConfig = {
         { localized: true, name: "intro", required: true, type: "textarea" },
         {
           fields: [
-            { localized: true, name: "label", required: true, type: "text" },
-            { localized: true, name: "value", required: true, type: "text" },
+            { name: "label", required: true, type: "text" },
+            { name: "value", required: true, type: "text" },
           ],
+          localized: true,
           minRows: 1,
           name: "meta",
           type: "array",
@@ -68,17 +72,19 @@ export const ProductFamilies: CollectionConfig = {
         {
           fields: [
             { name: "code", required: true, type: "text" },
-            { localized: true, name: "denomination", required: true, type: "text" },
-            { localized: true, name: "spec", required: true, type: "text" },
-            { localized: true, name: "application", required: true, type: "textarea" },
-            { localized: true, name: "process", required: true, type: "text" },
+            { name: "denomination", required: true, type: "text" },
+            { name: "spec", required: true, type: "text" },
+            { name: "application", required: true, type: "textarea" },
+            { name: "process", required: true, type: "text" },
           ],
+          localized: true,
           minRows: 1,
           name: "grades",
           type: "array",
         },
         {
-          fields: [{ localized: true, name: "value", required: true, type: "text" }],
+          fields: [{ name: "value", required: true, type: "text" }],
+          localized: true,
           minRows: 1,
           name: "detailApplications",
           type: "array",
@@ -90,9 +96,10 @@ export const ProductFamilies: CollectionConfig = {
             { localized: true, name: "body", type: "textarea" },
             {
               fields: [
-                { localized: true, name: "value", required: true, type: "text" },
-                { localized: true, name: "label", required: true, type: "text" },
+                { name: "value", required: true, type: "text" },
+                { name: "label", required: true, type: "text" },
               ],
+              localized: true,
               name: "stats",
               type: "array",
             },
