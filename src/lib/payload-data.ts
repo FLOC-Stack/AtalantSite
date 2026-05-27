@@ -1,6 +1,16 @@
 import configPromise from "@payload-config";
 import { cache } from "react";
 import type {
+  FinanciacionCopy,
+} from "@/components/financiacion-page";
+import { FINANCIACION_COPY } from "@/components/financiacion-page";
+import type { LogisticaCopy } from "@/components/logistica-page";
+import { LOGISTICA_COPY } from "@/components/logistica-page";
+import type { NosotrosCopy } from "@/components/nosotros-page";
+import { NOSOTROS_COPY } from "@/components/nosotros-page";
+import type { SustainabilityCopy } from "@/components/sustainability-page";
+import { SUSTAINABILITY_COPY } from "@/components/sustainability-page";
+import type {
   HomeBlock,
   HomePageData,
   ProductFamilyDetailData,
@@ -22,10 +32,33 @@ type PageDoc = {
     secondaryLabel?: string | null;
   };
   layoutBlocks?: Array<Record<string, unknown>>;
+  pageData?: unknown;
   seo?: {
     description?: string | null;
     title?: string | null;
   };
+};
+
+export type StaticPageSlug =
+  | "financiacion"
+  | "logistica"
+  | "nosotros"
+  | "sostenibilidad";
+
+type StaticPageCopyMap = {
+  financiacion: FinanciacionCopy;
+  logistica: LogisticaCopy;
+  nosotros: NosotrosCopy;
+  sostenibilidad: SustainabilityCopy;
+};
+
+const staticPageFallbacks: {
+  [Slug in StaticPageSlug]: Record<AppLocale, StaticPageCopyMap[Slug]>;
+} = {
+  financiacion: FINANCIACION_COPY,
+  logistica: LOGISTICA_COPY,
+  nosotros: NOSOTROS_COPY,
+  sostenibilidad: SUSTAINABILITY_COPY,
 };
 
 type ProductFamilySitemapEntry = {
@@ -287,6 +320,41 @@ export const getHomePage = cache(async function getHomePage(
     };
   } catch {
     return fallbackHomePages[locale];
+  }
+});
+
+export const getStaticPageCopy = cache(async function getStaticPageCopy<
+  Slug extends StaticPageSlug,
+>(slug: Slug, locale: AppLocale): Promise<StaticPageCopyMap[Slug]> {
+  const fallback = staticPageFallbacks[slug][locale];
+
+  if (!hasPayloadDatabase()) {
+    return fallback;
+  }
+
+  try {
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "pages",
+      draft: false,
+      limit: 1,
+      locale,
+      pagination: false,
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+    });
+
+    const page = result.docs[0] as PageDoc | undefined;
+    const pageData = asRecord(page?.pageData);
+
+    return pageData
+      ? ({ ...fallback, ...pageData } as StaticPageCopyMap[Slug])
+      : fallback;
+  } catch {
+    return fallback;
   }
 });
 

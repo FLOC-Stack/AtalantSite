@@ -6,18 +6,19 @@ import { NosotrosGrid } from "@/components/nosotros-grid";
 
 type Props = {
   locale: AppLocale;
+  copy?: NosotrosCopy;
 };
 
 // === i18n preparado ===
 // Estructura tipada por locale, igual que en logistica-page.tsx.
 // Por ahora solo `es` está traducido; el resto cae al fallback.
-type ValueCard = {
+export type ValueCard = {
   number: string;
   title: string;
   body: string;
 };
 
-type NosotrosCopy = {
+export type NosotrosCopy = {
   breadcrumb: string;
   back: string;
   monogram: string;
@@ -144,7 +145,7 @@ const COPY_ES: NosotrosCopy = {
   phone: "+34 965 661 828",
 };
 
-const COPY: Record<AppLocale, NosotrosCopy> = {
+export const NOSOTROS_COPY: Record<AppLocale, NosotrosCopy> = {
   es: COPY_ES,
   en: COPY_ES,
   pt: COPY_ES,
@@ -159,8 +160,8 @@ function renderMultiline(text: string) {
   ));
 }
 
-export function NosotrosPage({ locale }: Props) {
-  const copy = COPY[locale];
+export function NosotrosPage({ locale, copy: pageCopy }: Props) {
+  const copy = pageCopy ?? NOSOTROS_COPY[locale];
   const homeHref = `/${locale}`;
 
   return (

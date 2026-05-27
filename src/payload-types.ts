@@ -209,6 +209,7 @@ export interface Media {
 export interface Page {
   id: number;
   slug: string;
+  pageType: 'home' | 'logistica' | 'nosotros' | 'sostenibilidad' | 'financiacion';
   hero: {
     eyebrow?: string | null;
     headline: string;
@@ -270,6 +271,18 @@ export interface Page {
     title: string;
     description: string;
   };
+  /**
+   * Structured content for non-home pages. Keep object keys intact when editing.
+   */
+  pageData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -540,6 +553,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface PagesSelect<T extends boolean = true> {
   slug?: T;
+  pageType?: T;
   hero?:
     | T
     | {
@@ -609,6 +623,7 @@ export interface PagesSelect<T extends boolean = true> {
         title?: T;
         description?: T;
       };
+  pageData?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SustainabilityPage } from "@/components/sustainability-page";
 import { isLocale, type AppLocale } from "@/lib/locales";
+import { getStaticPageCopy } from "@/lib/payload-data";
 import { buildSustainabilityPath } from "@/lib/routes";
 
 export const dynamic = "force-dynamic";
@@ -29,5 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SustainabilityRoute({ params }: Props) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  return <SustainabilityPage locale={locale as AppLocale} />;
+  const typedLocale = locale as AppLocale;
+  const copy = await getStaticPageCopy("sostenibilidad", typedLocale);
+  return <SustainabilityPage locale={typedLocale} copy={copy} />;
 }

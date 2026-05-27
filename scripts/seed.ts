@@ -1,4 +1,8 @@
 import config from "../src/payload.config";
+import { FINANCIACION_COPY } from "../src/components/financiacion-page";
+import { LOGISTICA_COPY } from "../src/components/logistica-page";
+import { NOSOTROS_COPY } from "../src/components/nosotros-page";
+import { SUSTAINABILITY_COPY } from "../src/components/sustainability-page";
 import type { HomeBlock } from "../src/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "../src/lib/fallback-content";
 import { locales, type AppLocale } from "../src/lib/locales";
@@ -119,6 +123,7 @@ async function seedHomePage(locale: AppLocale) {
     _status: "published" as const,
     hero: data.hero,
     layoutBlocks: serializeBlocks(data.blocks),
+    pageType: "home" as const,
     seo: data.seo,
     slug: "home",
   };
@@ -133,11 +138,105 @@ async function seedHomePage(locale: AppLocale) {
     return;
   }
 
-  await payload.create({
-    collection: "pages",
-    data: pageData,
-    locale,
-  });
+    await payload.create({
+      collection: "pages",
+      data: pageData,
+      draft: false,
+      locale,
+    });
+}
+
+const staticPages = {
+  financiacion: {
+    copy: FINANCIACION_COPY,
+    pageType: "financiacion",
+    seo: {
+      description:
+        "Sistema de crédito interno de Atalant: financiación caso a caso para acompañar la producción de cada cliente y crecer de forma equilibrada.",
+      title: "Financiación · Crédito interno — Atalant",
+    },
+  },
+  logistica: {
+    copy: LOGISTICA_COPY,
+    pageType: "logistica",
+    seo: {
+      description:
+        "Almacenes con estatus oficial de Depósito Aduanero en Valencia y Alicante, hubs de distribución en Italia y Países Bajos, exportación a Norte de África.",
+      title: "Logística · Depósito Aduanero — Atalant",
+    },
+  },
+  nosotros: {
+    copy: NOSOTROS_COPY,
+    pageType: "nosotros",
+    seo: {
+      description:
+        "Treinta años conectando polímeros y personas. Atalant ofrece materias primas plásticas de máxima calidad con red logística propia en Iberia y Europa.",
+      title: "Nosotros · Socio estratégico — Atalant",
+    },
+  },
+  sostenibilidad: {
+    copy: SUSTAINABILITY_COPY,
+    pageType: "sostenibilidad",
+    seo: {
+      description:
+        "Sostenibilidad industrial en Atalant: ISO 14001, gestión de residuos, materiales reciclados, energía solar, flota eficiente e I+D en hidrógeno verde.",
+      title: "Sostenibilidad industrial — Atalant",
+    },
+  },
+} as const;
+
+async function seedStaticPages(locale: AppLocale) {
+  const payload = await getPayload({ config });
+
+  for (const [slug, page] of Object.entries(staticPages)) {
+    const existing = await payload.find({
+      collection: "pages",
+      limit: 1,
+      locale,
+      pagination: false,
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+    });
+
+    const data = {
+      _status: "published" as const,
+      hero: {
+        body: page.copy[locale].heroBody,
+        eyebrow: page.copy[locale].breadcrumb,
+        headline: page.copy[locale].heroTitle,
+        primaryLabel:
+          "ctaAction" in page.copy[locale]
+            ? page.copy[locale].ctaAction
+            : page.copy[locale].dataEyebrow,
+        secondaryLabel: page.copy[locale].back,
+      },
+      pageData: page.copy[locale],
+      pageType: page.pageType,
+      seo: page.seo,
+      slug,
+    };
+
+    if (existing.docs[0]) {
+      await payload.update({
+        collection: "pages",
+        data,
+        draft: false,
+        id: existing.docs[0].id,
+        locale,
+      });
+      continue;
+    }
+
+    await payload.create({
+      collection: "pages",
+      data,
+      draft: false,
+      locale,
+    });
+  }
 }
 
 async function seedFamilies(locale: AppLocale) {
@@ -195,6 +294,7 @@ async function run() {
   for (const locale of locales) {
     await seedSiteSettings(locale);
     await seedHomePage(locale);
+    await seedStaticPages(locale);
     await seedFamilies(locale);
   }
 }

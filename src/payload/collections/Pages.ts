@@ -33,6 +33,19 @@ export const Pages: CollectionConfig = {
       unique: true,
     },
     {
+      name: "pageType",
+      type: "select",
+      defaultValue: "home",
+      options: [
+        { label: "Home", value: "home" },
+        { label: "Logistica", value: "logistica" },
+        { label: "Nosotros", value: "nosotros" },
+        { label: "Sostenibilidad", value: "sostenibilidad" },
+        { label: "Financiacion", value: "financiacion" },
+      ],
+      required: true,
+    },
+    {
       fields: [
         localizedText("eyebrow", "Eyebrow"),
         localizedText("headline", "Headline", true),
@@ -104,6 +117,15 @@ export const Pages: CollectionConfig = {
       ],
       name: "seo",
       type: "group",
+    },
+    {
+      admin: {
+        description:
+          "Structured content for non-home pages. Keep object keys intact when editing.",
+      },
+      localized: true,
+      name: "pageData",
+      type: "json",
     },
   ],
   versions: {

@@ -4,12 +4,13 @@ import { NetworkTimeline, type NetworkHub } from "@/components/network-timeline"
 
 type Props = {
   locale: AppLocale;
+  copy?: LogisticaCopy;
 };
 
 // === i18n preparado ===
 // Los textos quedan tipados por locale para cuando llegue la traducción.
 // Por ahora solo `es` está traducido; el resto cae al fallback.
-type LogisticaCopy = {
+export type LogisticaCopy = {
   breadcrumb: string;
   back: string;
   monogram: string;
@@ -129,7 +130,7 @@ const COPY_ES: LogisticaCopy = {
   ],
 };
 
-const COPY: Record<AppLocale, LogisticaCopy> = {
+export const LOGISTICA_COPY: Record<AppLocale, LogisticaCopy> = {
   es: COPY_ES,
   en: COPY_ES,
   pt: COPY_ES,
@@ -144,8 +145,8 @@ function renderMultiline(text: string) {
   ));
 }
 
-export function LogisticaPage({ locale }: Props) {
-  const copy = COPY[locale];
+export function LogisticaPage({ locale, copy: pageCopy }: Props) {
+  const copy = pageCopy ?? LOGISTICA_COPY[locale];
   const homeHref = `/${locale}`;
 
   return (

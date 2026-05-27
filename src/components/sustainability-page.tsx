@@ -4,9 +4,10 @@ import { SustainabilityParticles } from "@/components/sustainability-particles";
 
 type Props = {
   locale: AppLocale;
+  copy?: SustainabilityCopy;
 };
 
-type SustainabilityCopy = {
+export type SustainabilityCopy = {
   back: string;
   breadcrumb: string;
   ctaAction: string;
@@ -108,7 +109,7 @@ const COPY_ES: SustainabilityCopy = {
     "La gestión ambiental se conecta con compras, almacenaje, transporte, energía e I+D. Esa integración permite avanzar en reducción de impacto sin perder capacidades industriales ni velocidad de respuesta.",
 };
 
-const COPY: Record<AppLocale, SustainabilityCopy> = {
+export const SUSTAINABILITY_COPY: Record<AppLocale, SustainabilityCopy> = {
   es: COPY_ES,
   en: COPY_ES,
   pt: COPY_ES,
@@ -123,8 +124,8 @@ function renderMultiline(text: string) {
   ));
 }
 
-export function SustainabilityPage({ locale }: Props) {
-  const copy = COPY[locale];
+export function SustainabilityPage({ locale, copy: pageCopy }: Props) {
+  const copy = pageCopy ?? SUSTAINABILITY_COPY[locale];
   const homeHref = `/${locale}`;
 
   return (
