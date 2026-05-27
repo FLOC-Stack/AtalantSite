@@ -72,12 +72,15 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       title: "Atalant | Polymer distribution in Europe",
     },
     footerLinks: [
-      { kind: "logistics", label: "Logistics" },
-      { kind: "section", label: "Sustainability", sectionId: "sustainability" },
       { kind: "products", label: "Products" },
-      { href: "mailto:hello@atalant.eu", kind: "external", label: "hello@atalant.eu" },
+      { kind: "logistics", label: "Logistics" },
+      { kind: "section", label: "Financing", sectionId: "financing" },
+      { kind: "section", label: "Sustainability", sectionId: "sustainability" },
+      { kind: "section", label: "About", sectionId: "team" },
     ],
     footerText: byLocale.en.footerText,
+    headerCtaHref: "/en#contact",
+    headerCtaLabel: "Contact",
     locale: "en",
     navigation: [
       { kind: "products", label: "Products" },
@@ -88,6 +91,9 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Contact", sectionId: "contact" },
     ],
     phone: "+34 93 555 0101",
+    socialLinks: [
+      { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
+    ],
     tagline: byLocale.en.tagline,
   },
   es: {
@@ -101,10 +107,13 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     footerLinks: [
       { kind: "products", label: "Productos" },
       { kind: "logistics", label: "Logística" },
+      { kind: "section", label: "Financiación", sectionId: "financing" },
       { kind: "section", label: "Sostenibilidad", sectionId: "sustainability" },
-      { href: "mailto:hola@atalant.eu", kind: "external", label: "hola@atalant.eu" },
+      { kind: "section", label: "Nosotros", sectionId: "team" },
     ],
     footerText: byLocale.es.footerText,
+    headerCtaHref: "/es#contact",
+    headerCtaLabel: "Contacto",
     locale: "es",
     navigation: [
       { kind: "products", label: "Productos" },
@@ -115,6 +124,9 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Contacto", sectionId: "contact" },
     ],
     phone: "+34 93 555 0101",
+    socialLinks: [
+      { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
+    ],
     tagline: byLocale.es.tagline,
   },
   fr: {
@@ -128,10 +140,13 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     footerLinks: [
       { kind: "products", label: "Produits" },
       { kind: "logistics", label: "Logistique" },
+      { kind: "section", label: "Financement", sectionId: "financing" },
       { kind: "section", label: "Durabilité", sectionId: "sustainability" },
-      { href: "mailto:bonjour@atalant.eu", kind: "external", label: "bonjour@atalant.eu" },
+      { kind: "section", label: "À propos", sectionId: "team" },
     ],
     footerText: byLocale.fr.footerText,
+    headerCtaHref: "/fr#contact",
+    headerCtaLabel: "Contact",
     locale: "fr",
     navigation: [
       { kind: "products", label: "Produits" },
@@ -142,6 +157,9 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Contact", sectionId: "contact" },
     ],
     phone: "+34 93 555 0101",
+    socialLinks: [
+      { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
+    ],
     tagline: byLocale.fr.tagline,
   },
   pt: {
@@ -155,10 +173,13 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     footerLinks: [
       { kind: "products", label: "Produtos" },
       { kind: "logistics", label: "Logística" },
+      { kind: "section", label: "Financiamento", sectionId: "financing" },
       { kind: "section", label: "Sustentabilidade", sectionId: "sustainability" },
-      { href: "mailto:ola@atalant.eu", kind: "external", label: "ola@atalant.eu" },
+      { kind: "section", label: "Sobre nós", sectionId: "team" },
     ],
     footerText: byLocale.pt.footerText,
+    headerCtaHref: "/pt#contact",
+    headerCtaLabel: "Contato",
     locale: "pt",
     navigation: [
       { kind: "products", label: "Produtos" },
@@ -169,6 +190,9 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Contacto", sectionId: "contact" },
     ],
     phone: "+34 93 555 0101",
+    socialLinks: [
+      { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
+    ],
     tagline: byLocale.pt.tagline,
   },
 };

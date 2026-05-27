@@ -48,6 +48,7 @@ export type FinanciacionCopy = {
   };
   dataEyebrow: string;
   dataTitle: string;
+  backHref?: string;
   modules: DataModule[];
 };
 
@@ -124,7 +125,7 @@ function renderMultiline(text: string) {
 
 export function FinanciacionPage({ locale, copy: pageCopy }: Props) {
   const copy = pageCopy ?? FINANCIACION_COPY[locale];
-  const homeHref = `/${locale}`;
+  const homeHref = copy.backHref ?? `/${locale}`;
 
   return (
     <main className="relative bg-background text-foreground">

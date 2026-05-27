@@ -1,8 +1,6 @@
 import configPromise from "@payload-config";
 import { cache } from "react";
-import type {
-  FinanciacionCopy,
-} from "@/components/financiacion-page";
+import type { FinanciacionCopy } from "@/components/financiacion-page";
 import { FINANCIACION_COPY } from "@/components/financiacion-page";
 import type { LogisticaCopy } from "@/components/logistica-page";
 import { LOGISTICA_COPY } from "@/components/logistica-page";
@@ -29,7 +27,9 @@ type PageDoc = {
     eyebrow?: string | null;
     headline?: string | null;
     primaryLabel?: string | null;
+    primaryHref?: string | null;
     secondaryLabel?: string | null;
+    secondaryHref?: string | null;
   };
   layoutBlocks?: Array<Record<string, unknown>>;
   pageData?: unknown;
@@ -105,6 +105,20 @@ function normalizeNavItems(items: unknown): SiteSettingsData["navigation"] {
     .filter(Boolean) as SiteSettingsData["navigation"];
 }
 
+function normalizeSimpleLinks(items: unknown): NonNullable<SiteSettingsData["socialLinks"]> {
+  if (!Array.isArray(items)) return [];
+
+  return items
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const record = item as Record<string, unknown>;
+      return typeof record.label === "string" && typeof record.href === "string"
+        ? { href: record.href, label: record.label }
+        : null;
+    })
+    .filter(Boolean) as NonNullable<SiteSettingsData["socialLinks"]>;
+}
+
 function mapBlocks(blocks: unknown): HomeBlock[] {
   if (!Array.isArray(blocks)) return [];
 
@@ -145,6 +159,8 @@ function mapBlocks(blocks: unknown): HomeBlock[] {
         return {
           anchorId,
           body: typeof record.body === "string" ? record.body : "",
+          ctaHref: typeof record.ctaHref === "string" ? record.ctaHref : undefined,
+          ctaLabel: typeof record.ctaLabel === "string" ? record.ctaLabel : undefined,
           eyebrow,
           stats,
           title,
@@ -156,6 +172,8 @@ function mapBlocks(blocks: unknown): HomeBlock[] {
         return {
           anchorId,
           body: typeof record.body === "string" ? record.body : "",
+          ctaHref: typeof record.ctaHref === "string" ? record.ctaHref : undefined,
+          ctaLabel: typeof record.ctaLabel === "string" ? record.ctaLabel : undefined,
           eyebrow,
           title,
           type: "section" as const,
@@ -168,6 +186,7 @@ function mapBlocks(blocks: unknown): HomeBlock[] {
           body: typeof record.body === "string" ? record.body : "",
           ctaLabel:
             typeof record.ctaLabel === "string" ? record.ctaLabel : "Explore",
+          ctaHref: typeof record.ctaHref === "string" ? record.ctaHref : undefined,
           eyebrow,
           title,
           type: "productPreview" as const,
@@ -178,6 +197,7 @@ function mapBlocks(blocks: unknown): HomeBlock[] {
         return {
           anchorId,
           body: typeof record.body === "string" ? record.body : "",
+          ctaHref: typeof record.ctaHref === "string" ? record.ctaHref : undefined,
           eyebrow,
           note: typeof record.note === "string" ? record.note : "",
           submitLabel:
@@ -243,6 +263,14 @@ export const getSiteSettings = cache(async function getSiteSettings(
         typeof settings.footerText === "string"
           ? settings.footerText
           : fallbackSiteSettings[locale].footerText,
+      headerCtaHref:
+        typeof settings.headerCtaHref === "string"
+          ? settings.headerCtaHref
+          : fallbackSiteSettings[locale].headerCtaHref,
+      headerCtaLabel:
+        typeof settings.headerCtaLabel === "string"
+          ? settings.headerCtaLabel
+          : fallbackSiteSettings[locale].headerCtaLabel,
       locale,
       navigation: normalizeNavItems(settings.navigation).length
         ? normalizeNavItems(settings.navigation)
@@ -251,6 +279,9 @@ export const getSiteSettings = cache(async function getSiteSettings(
         typeof settings.phone === "string"
           ? settings.phone
           : fallbackSiteSettings[locale].phone,
+      socialLinks: normalizeSimpleLinks(settings.socialLinks).length
+        ? normalizeSimpleLinks(settings.socialLinks)
+        : fallbackSiteSettings[locale].socialLinks,
       tagline:
         typeof settings.tagline === "string"
           ? settings.tagline
@@ -306,9 +337,15 @@ export const getHomePage = cache(async function getHomePage(
         primaryLabel:
           page.hero?.primaryLabel ||
           fallbackHomePages[locale].hero.primaryLabel,
+        primaryHref:
+          page.hero?.primaryHref ||
+          fallbackHomePages[locale].hero.primaryHref,
         secondaryLabel:
           page.hero?.secondaryLabel ||
           fallbackHomePages[locale].hero.secondaryLabel,
+        secondaryHref:
+          page.hero?.secondaryHref ||
+          fallbackHomePages[locale].hero.secondaryHref,
       },
       locale,
       seo: {

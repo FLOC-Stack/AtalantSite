@@ -215,7 +215,9 @@ export interface Page {
     headline: string;
     body: string;
     primaryLabel: string;
+    primaryHref?: string | null;
     secondaryLabel: string;
+    secondaryHref?: string | null;
   };
   layoutBlocks?:
     | (
@@ -224,6 +226,8 @@ export interface Page {
             eyebrow: string;
             title: string;
             body: string;
+            ctaLabel?: string | null;
+            ctaHref?: string | null;
             stats?:
               | {
                   label: string;
@@ -240,6 +244,8 @@ export interface Page {
             eyebrow: string;
             title: string;
             body: string;
+            ctaLabel?: string | null;
+            ctaHref?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'section';
@@ -250,6 +256,7 @@ export interface Page {
             title: string;
             body: string;
             ctaLabel: string;
+            ctaHref?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'productPreview';
@@ -261,6 +268,7 @@ export interface Page {
             body: string;
             note: string;
             submitLabel: string;
+            ctaHref?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'contact';
@@ -561,7 +569,9 @@ export interface PagesSelect<T extends boolean = true> {
         headline?: T;
         body?: T;
         primaryLabel?: T;
+        primaryHref?: T;
         secondaryLabel?: T;
+        secondaryHref?: T;
       };
   layoutBlocks?:
     | T
@@ -573,6 +583,8 @@ export interface PagesSelect<T extends boolean = true> {
               eyebrow?: T;
               title?: T;
               body?: T;
+              ctaLabel?: T;
+              ctaHref?: T;
               stats?:
                 | T
                 | {
@@ -590,6 +602,8 @@ export interface PagesSelect<T extends boolean = true> {
               eyebrow?: T;
               title?: T;
               body?: T;
+              ctaLabel?: T;
+              ctaHref?: T;
               id?: T;
               blockName?: T;
             };
@@ -601,6 +615,7 @@ export interface PagesSelect<T extends boolean = true> {
               title?: T;
               body?: T;
               ctaLabel?: T;
+              ctaHref?: T;
               id?: T;
               blockName?: T;
             };
@@ -613,6 +628,7 @@ export interface PagesSelect<T extends boolean = true> {
               body?: T;
               note?: T;
               submitLabel?: T;
+              ctaHref?: T;
               id?: T;
               blockName?: T;
             };
@@ -781,6 +797,8 @@ export interface SiteSetting {
   phone: string;
   address: string;
   footerText: string;
+  headerCtaLabel?: string | null;
+  headerCtaHref?: string | null;
   defaultSeo: {
     title: string;
     description: string;
@@ -803,6 +821,13 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  socialLinks?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -817,6 +842,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   phone?: T;
   address?: T;
   footerText?: T;
+  headerCtaLabel?: T;
+  headerCtaHref?: T;
   defaultSeo?:
     | T
     | {
@@ -838,6 +865,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         label?: T;
         kind?: T;
         sectionId?: T;
+        href?: T;
+        id?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        label?: T;
         href?: T;
         id?: T;
       };

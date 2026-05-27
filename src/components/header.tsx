@@ -193,7 +193,7 @@ export function Header({
       )
     : buildFallbackNav(locale);
   const resolvedCtaLabel = ctaLabel ?? fallbackStrings[locale].contact;
-  const resolvedCtaHref = ctaHref ?? buildSectionPath(locale, "contacto");
+  const resolvedCtaHref = ctaHref ?? buildSectionPath(locale, "contact");
 
   // Scroll listener con requestAnimationFrame: el handler solo corre una
   // vez por frame aunque el evento dispare 100+ veces por segundo.

@@ -22,6 +22,7 @@ type Props = {
   body?: string;
   /** Etiqueta del CTA primary que enlaza a la página interna */
   ctaLabel?: string;
+  ctaHref?: string;
   quote?: string;
   quoteLabel?: string;
   principlesLabel?: string;
@@ -74,13 +75,14 @@ export function HomeFinancing({
   title = FALLBACK_TITLE,
   body = FALLBACK_BODY,
   ctaLabel = "Descubre cómo",
+  ctaHref,
   quote = FALLBACK_QUOTE,
   quoteLabel = "PRINCIPIOS DE TRABAJO — ATALANT",
   principlesLabel = "CUATRO PRINCIPIOS",
   principles = FALLBACK_PRINCIPLES,
 }: Props = {}) {
   const sectionRef = useRef<HTMLElement>(null);
-  const ctaHref = buildFinancingPath(locale);
+  const resolvedCtaHref = ctaHref ?? buildFinancingPath(locale);
 
   return (
     <section
@@ -152,7 +154,7 @@ export function HomeFinancing({
 
             <div className="mt-8">
               <Link
-                href={ctaHref}
+                href={resolvedCtaHref}
                 className="inline-flex h-12 items-center rounded bg-primary text-white transition-opacity hover:opacity-90 sm:h-14"
               >
                 <span className="border-r border-white/10 px-6 font-mono text-[10px] uppercase tracking-[2px] sm:px-10 sm:text-[11px] sm:tracking-[2.2px]">

@@ -6,14 +6,50 @@ import { SUSTAINABILITY_COPY } from "../src/components/sustainability-page";
 import type { HomeBlock } from "../src/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "../src/lib/fallback-content";
 import { locales, type AppLocale } from "../src/lib/locales";
+import {
+  buildFinancingPath,
+  buildLogisticsPath,
+  buildProductsPath,
+  buildSectionPath,
+  buildSustainabilityPath,
+} from "../src/lib/routes";
 import { productDetailData, type ProductDetailData } from "../src/lib/product-detail-data";
 import { getPayload } from "payload";
 
-function serializeBlocks(blocks: HomeBlock[]) {
+const homeSectionCtaLabels: Record<AppLocale, Record<string, string>> = {
+  en: {
+    financing: "Discover how",
+    logistics: "See bonded warehouses",
+    sustainability: "See sustainability",
+  },
+  es: {
+    financing: "Descubre cómo",
+    logistics: "Ver depósitos",
+    sustainability: "Ver sostenibilidad",
+  },
+  fr: {
+    financing: "Découvrir comment",
+    logistics: "Voir les entrepôts",
+    sustainability: "Voir la durabilité",
+  },
+  pt: {
+    financing: "Descobrir como",
+    logistics: "Ver depósitos",
+    sustainability: "Ver sustentabilidade",
+  },
+};
+
+function serializeBlocks(blocks: HomeBlock[], locale: AppLocale) {
   return blocks.map((block) => {
+    const common = {
+      anchorId: block.anchorId,
+      ctaHref: getHomeBlockHref(block, locale),
+      ctaLabel: getHomeBlockCtaLabel(block, locale),
+    };
+
     if (block.type === "stats") {
       return {
-        anchorId: block.anchorId,
+        ...common,
         blockType: "stats" as const,
         body: block.body,
         eyebrow: block.eyebrow,
@@ -27,7 +63,7 @@ function serializeBlocks(blocks: HomeBlock[]) {
 
     if (block.type === "section") {
       return {
-        anchorId: block.anchorId,
+        ...common,
         blockType: "section" as const,
         body: block.body,
         eyebrow: block.eyebrow,
@@ -37,7 +73,7 @@ function serializeBlocks(blocks: HomeBlock[]) {
 
     if (block.type === "productPreview") {
       return {
-        anchorId: block.anchorId,
+        ...common,
         blockType: "productPreview" as const,
         body: block.body,
         ctaLabel: block.ctaLabel,
@@ -47,7 +83,7 @@ function serializeBlocks(blocks: HomeBlock[]) {
     }
 
     return {
-      anchorId: block.anchorId,
+      ...common,
       blockType: "contact" as const,
       body: block.body,
       eyebrow: block.eyebrow,
@@ -56,6 +92,23 @@ function serializeBlocks(blocks: HomeBlock[]) {
       title: block.title,
     };
   });
+}
+
+function getHomeBlockCtaLabel(block: HomeBlock, locale: AppLocale) {
+  if (block.type === "productPreview") return block.ctaLabel;
+  if (block.type === "contact") return block.submitLabel;
+  if (block.type !== "section") return undefined;
+  return homeSectionCtaLabels[locale][block.anchorId];
+}
+
+function getHomeBlockHref(block: HomeBlock, locale: AppLocale) {
+  if (block.type === "productPreview") return buildProductsPath(locale);
+  if (block.type === "contact") return buildSectionPath(locale, "contact");
+  if (block.type !== "section") return undefined;
+  if (block.anchorId === "logistics") return buildLogisticsPath(locale);
+  if (block.anchorId === "financing") return buildFinancingPath(locale);
+  if (block.anchorId === "sustainability") return buildSustainabilityPath(locale);
+  return undefined;
 }
 
 function serializeProductDetail(detail: ProductDetailData | undefined) {
@@ -121,8 +174,12 @@ async function seedHomePage(locale: AppLocale) {
 
   const pageData = {
     _status: "published" as const,
-    hero: data.hero,
-    layoutBlocks: serializeBlocks(data.blocks),
+    hero: {
+      ...data.hero,
+      primaryHref: buildProductsPath(locale),
+      secondaryHref: buildSectionPath(locale, "contact"),
+    },
+    layoutBlocks: serializeBlocks(data.blocks, locale),
     pageType: "home" as const,
     seo: data.seo,
     slug: "home",
@@ -138,12 +195,12 @@ async function seedHomePage(locale: AppLocale) {
     return;
   }
 
-    await payload.create({
-      collection: "pages",
-      data: pageData,
-      draft: false,
-      locale,
-    });
+  await payload.create({
+    collection: "pages",
+    data: pageData,
+    draft: false,
+    locale,
+  });
 }
 
 const staticPages = {
@@ -213,7 +270,10 @@ async function seedStaticPages(locale: AppLocale) {
             : page.copy[locale].dataEyebrow,
         secondaryLabel: page.copy[locale].back,
       },
-      pageData: page.copy[locale],
+      pageData: {
+        ...page.copy[locale],
+        backHref: `/${locale}`,
+      },
       pageType: page.pageType,
       seo: page.seo,
       slug,

@@ -39,6 +39,8 @@ export type LogisticaCopy = {
   process: Array<{ roman: string; title: string; body: string }>;
   ctaTitle: string;
   ctaAction: string;
+  ctaHref?: string;
+  backHref?: string;
   ctaFootnote: string;
   phone: string;
   hubs: NetworkHub[];
@@ -116,6 +118,7 @@ const COPY_ES: LogisticaCopy = {
   ],
   ctaTitle: "¿Ruta específica? Lo resolvemos.",
   ctaAction: "Solicitar condiciones  →",
+  ctaHref: "mailto:logistica@atalant.com?subject=Consulta%20ruta%20DA",
   ctaFootnote: "© MMXXVI ATALANT  /  LG",
   phone: "+34 965 661 828",
   hubs: [
@@ -147,7 +150,7 @@ function renderMultiline(text: string) {
 
 export function LogisticaPage({ locale, copy: pageCopy }: Props) {
   const copy = pageCopy ?? LOGISTICA_COPY[locale];
-  const homeHref = `/${locale}`;
+  const homeHref = copy.backHref ?? `/${locale}`;
 
   return (
     <main className="relative bg-background text-foreground">
@@ -345,7 +348,7 @@ export function LogisticaPage({ locale, copy: pageCopy }: Props) {
           {copy.ctaTitle}
         </h2>
         <Link
-          href={`mailto:logistica@atalant.com?subject=${encodeURIComponent("Consulta ruta DA")}`}
+          href={copy.ctaHref ?? `mailto:logistica@atalant.com?subject=${encodeURIComponent("Consulta ruta DA")}`}
           className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
         >
           <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">

@@ -11,6 +11,8 @@ export type SustainabilityCopy = {
   back: string;
   breadcrumb: string;
   ctaAction: string;
+  ctaHref?: string;
+  backHref?: string;
   ctaFootnote: string;
   ctaTitle: string;
   heroBody: string;
@@ -42,6 +44,7 @@ const COPY_ES: SustainabilityCopy = {
   back: "← VOLVER",
   breadcrumb: "SOSTENIBILIDAD  /  OPERACIÓN INDUSTRIAL",
   ctaAction: "Hablar con Atalant  →",
+  ctaHref: "mailto:info@atalant.com?subject=Sostenibilidad%20Atalant",
   ctaFootnote: "© MMXXVI ATALANT  /  SOST",
   ctaTitle: "La sostenibilidad se sostiene cuando mejora la operación.",
   heroBody:
@@ -126,7 +129,7 @@ function renderMultiline(text: string) {
 
 export function SustainabilityPage({ locale, copy: pageCopy }: Props) {
   const copy = pageCopy ?? SUSTAINABILITY_COPY[locale];
-  const homeHref = `/${locale}`;
+  const homeHref = copy.backHref ?? `/${locale}`;
 
   return (
     <main className="relative bg-background text-foreground">
@@ -313,7 +316,7 @@ export function SustainabilityPage({ locale, copy: pageCopy }: Props) {
           {copy.ctaTitle}
         </h2>
         <Link
-          href={`mailto:info@atalant.com?subject=${encodeURIComponent("Sostenibilidad Atalant")}`}
+          href={copy.ctaHref ?? `mailto:info@atalant.com?subject=${encodeURIComponent("Sostenibilidad Atalant")}`}
           className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
         >
           <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">

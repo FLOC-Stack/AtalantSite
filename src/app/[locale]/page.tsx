@@ -7,6 +7,7 @@ import { HomeNews } from "@/components/home-news";
 import { AtalantGlobe } from "@/components/atalant-globe";
 import { FullpageScroll } from "@/components/fullpage-scroll";
 import { getHomePage } from "@/lib/payload-data";
+import type { HomeBlock, ProductPreviewBlock, SectionBlock, StatsBlock } from "@/lib/content-types";
 import { isLocale, type AppLocale } from "@/lib/locales";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +17,18 @@ type Props = {
     locale: string;
   }>;
 };
+
+function isStatsBlock(block: HomeBlock): block is StatsBlock {
+  return block.type === "stats";
+}
+
+function isSectionBlock(block: HomeBlock): block is SectionBlock {
+  return block.type === "section";
+}
+
+function isProductPreviewBlock(block: HomeBlock): block is ProductPreviewBlock {
+  return block.type === "productPreview";
+}
 
 export default async function LocaleHomePage({ params }: Props) {
   const { locale } = await params;
@@ -29,9 +42,19 @@ export default async function LocaleHomePage({ params }: Props) {
 
   let heroProps;
   let statsProps;
+  let productsBlock;
+  let logisticsBlock;
+  let financingBlock;
   try {
     const page = await getHomePage(typedLocale);
-    const statsBlock = page.blocks.find((block) => block.type === "stats");
+    const statsBlock = page.blocks.find(isStatsBlock);
+    productsBlock = page.blocks.find(isProductPreviewBlock);
+    logisticsBlock = page.blocks.find(
+      (block): block is SectionBlock => isSectionBlock(block) && block.anchorId === "logistics",
+    );
+    financingBlock = page.blocks.find(
+      (block): block is SectionBlock => isSectionBlock(block) && block.anchorId === "financing",
+    );
     heroProps = page.hero;
     statsProps = statsBlock?.stats;
   } catch {
@@ -40,17 +63,34 @@ export default async function LocaleHomePage({ params }: Props) {
 
   return (
     <FullpageScroll>
-      <Hero hero={heroProps} stats={statsProps} primaryHref={productsHref} />
+      <Hero
+        hero={heroProps}
+        stats={statsProps}
+        primaryHref={heroProps?.primaryHref ?? productsHref}
+        secondaryHref={heroProps?.secondaryHref ?? "#contact"}
+      />
       <HomeProductsIntro
         locale={typedLocale}
-        primaryCtaHref={productsHref}
+        title={productsBlock?.title}
+        body={productsBlock?.body}
+        primaryCtaLabel={productsBlock?.ctaLabel}
+        primaryCtaHref={productsBlock?.ctaHref ?? productsHref}
         videoSrc="/video-morp-atalant.mp4"
       />
       <HomeLogistics
         background={<AtalantGlobe style="dotted" />}
-        ctaHref={`/${typedLocale}/logistica`}
+        title={logisticsBlock?.title}
+        body={logisticsBlock?.body}
+        ctaLabel={logisticsBlock?.ctaLabel}
+        ctaHref={logisticsBlock?.ctaHref ?? `/${typedLocale}/logistica`}
       />
-      <HomeFinancing locale={typedLocale} />
+      <HomeFinancing
+        locale={typedLocale}
+        title={financingBlock?.title}
+        body={financingBlock?.body}
+        ctaLabel={financingBlock?.ctaLabel}
+        ctaHref={financingBlock?.ctaHref}
+      />
       <HomeNews />
     </FullpageScroll>
   );

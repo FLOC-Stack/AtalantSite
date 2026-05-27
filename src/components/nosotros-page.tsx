@@ -45,6 +45,8 @@ export type NosotrosCopy = {
   closingBody: string;
   ctaTitle: string;
   ctaAction: string;
+  ctaHref?: string;
+  backHref?: string;
   ctaFootnote: string;
   phone: string;
 };
@@ -141,6 +143,7 @@ const COPY_ES: NosotrosCopy = {
 
   ctaTitle: "Hablemos de tu cadena\nde suministro.",
   ctaAction: "Escribir al equipo  →",
+  ctaHref: "mailto:hola@atalant.com?subject=Contacto%20Atalant",
   ctaFootnote: "© MMXXVI ATALANT  /  NS",
   phone: "+34 965 661 828",
 };
@@ -162,7 +165,7 @@ function renderMultiline(text: string) {
 
 export function NosotrosPage({ locale, copy: pageCopy }: Props) {
   const copy = pageCopy ?? NOSOTROS_COPY[locale];
-  const homeHref = `/${locale}`;
+  const homeHref = copy.backHref ?? `/${locale}`;
 
   return (
     <main className="relative bg-background text-foreground">
@@ -344,7 +347,7 @@ export function NosotrosPage({ locale, copy: pageCopy }: Props) {
           {renderMultiline(copy.ctaTitle)}
         </h2>
         <Link
-          href={`mailto:hola@atalant.com?subject=${encodeURIComponent("Contacto Atalant")}`}
+          href={copy.ctaHref ?? `mailto:hola@atalant.com?subject=${encodeURIComponent("Contacto Atalant")}`}
           className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
         >
           <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">

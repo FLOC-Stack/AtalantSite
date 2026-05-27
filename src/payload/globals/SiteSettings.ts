@@ -12,6 +12,8 @@ export const SiteSettings: GlobalConfig = {
     { name: "phone", required: true, type: "text" },
     { localized: true, name: "address", required: true, type: "text" },
     { localized: true, name: "footerText", required: true, type: "textarea" },
+    { localized: true, name: "headerCtaLabel", type: "text" },
+    { localized: true, name: "headerCtaHref", type: "text" },
     {
       fields: [
         { localized: true, name: "title", required: true, type: "text" },
@@ -22,7 +24,7 @@ export const SiteSettings: GlobalConfig = {
     },
     {
       fields: [
-        { localized: true, name: "label", required: true, type: "text" },
+        { name: "label", required: true, type: "text" },
         {
           defaultValue: "section",
           name: "kind",
@@ -37,12 +39,13 @@ export const SiteSettings: GlobalConfig = {
         { name: "sectionId", type: "text" },
         { name: "href", type: "text" },
       ],
+      localized: true,
       name: "navigation",
       type: "array",
     },
     {
       fields: [
-        { localized: true, name: "label", required: true, type: "text" },
+        { name: "label", required: true, type: "text" },
         {
           defaultValue: "section",
           name: "kind",
@@ -57,7 +60,17 @@ export const SiteSettings: GlobalConfig = {
         { name: "sectionId", type: "text" },
         { name: "href", type: "text" },
       ],
+      localized: true,
       name: "footerLinks",
+      type: "array",
+    },
+    {
+      fields: [
+        { name: "label", required: true, type: "text" },
+        { name: "href", required: true, type: "text" },
+      ],
+      localized: true,
+      name: "socialLinks",
       type: "array",
     },
   ],
