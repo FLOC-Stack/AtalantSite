@@ -42,6 +42,8 @@ export type LogisticaCopy = {
   ctaHref?: string;
   backHref?: string;
   ctaFootnote: string;
+  heroVideoSrc?: string;
+  heroVideoPoster?: string;
   phone: string;
   hubs: NetworkHub[];
 };
@@ -202,7 +204,8 @@ export function LogisticaPage({ locale, copy: pageCopy }: Props) {
         <div className="mt-14 aspect-[16/9] w-full overflow-hidden bg-primary sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
           <video
             className="h-full w-full object-cover"
-            src="/Tanker%20Truck%20Aesthetic.mp4"
+            src={copy.heroVideoSrc ?? "/Tanker%20Truck%20Aesthetic.mp4"}
+            poster={copy.heroVideoPoster}
             autoPlay
             muted
             loop

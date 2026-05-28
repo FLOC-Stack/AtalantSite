@@ -7,7 +7,13 @@ import { HomeNews } from "@/components/home-news";
 import { AtalantGlobe } from "@/components/atalant-globe";
 import { FullpageScroll } from "@/components/fullpage-scroll";
 import { getHomePage } from "@/lib/payload-data";
-import type { HomeBlock, ProductPreviewBlock, SectionBlock, StatsBlock } from "@/lib/content-types";
+import type {
+  HomeBlock,
+  NewsBlock,
+  ProductPreviewBlock,
+  SectionBlock,
+  StatsBlock,
+} from "@/lib/content-types";
 import { isLocale, type AppLocale } from "@/lib/locales";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +36,10 @@ function isProductPreviewBlock(block: HomeBlock): block is ProductPreviewBlock {
   return block.type === "productPreview";
 }
 
+function isNewsBlock(block: HomeBlock): block is NewsBlock {
+  return block.type === "news";
+}
+
 export default async function LocaleHomePage({ params }: Props) {
   const { locale } = await params;
 
@@ -45,10 +55,12 @@ export default async function LocaleHomePage({ params }: Props) {
   let productsBlock;
   let logisticsBlock;
   let financingBlock;
+  let newsBlock;
   try {
     const page = await getHomePage(typedLocale);
     const statsBlock = page.blocks.find(isStatsBlock);
     productsBlock = page.blocks.find(isProductPreviewBlock);
+    newsBlock = page.blocks.find(isNewsBlock);
     logisticsBlock = page.blocks.find(
       (block): block is SectionBlock => isSectionBlock(block) && block.anchorId === "logistics",
     );
@@ -75,7 +87,8 @@ export default async function LocaleHomePage({ params }: Props) {
         body={productsBlock?.body}
         primaryCtaLabel={productsBlock?.ctaLabel}
         primaryCtaHref={productsBlock?.ctaHref ?? productsHref}
-        videoSrc="/video-morp-atalant.mp4"
+        videoSrc={productsBlock?.videoSrc ?? "/video-morp-atalant.mp4"}
+        videoPoster={productsBlock?.videoPoster}
       />
       <HomeLogistics
         background={<AtalantGlobe style="dotted" />}
@@ -91,7 +104,13 @@ export default async function LocaleHomePage({ params }: Props) {
         ctaLabel={financingBlock?.ctaLabel}
         ctaHref={financingBlock?.ctaHref}
       />
-      <HomeNews />
+      <HomeNews
+        title={newsBlock?.title}
+        body={newsBlock?.body}
+        sectionLabel={newsBlock?.sectionLabel}
+        ctaLabel={newsBlock?.ctaLabel}
+        items={newsBlock?.items}
+      />
     </FullpageScroll>
   );
 }

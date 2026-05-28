@@ -219,6 +219,16 @@ export interface Page {
     secondaryLabel: string;
     secondaryHref?: string | null;
   };
+  media?: {
+    homeProductsVideo?: (number | null) | Media;
+    logisticaHeroVideo?: (number | null) | Media;
+    sustainabilitySystemsVideo?: (number | null) | Media;
+    nosotrosHeroImage?: (number | null) | Media;
+    nosotrosChapter1Image?: (number | null) | Media;
+    nosotrosChapter2Image?: (number | null) | Media;
+    nosotrosChapter3Image?: (number | null) | Media;
+    financiacionHeroImage?: (number | null) | Media;
+  };
   layoutBlocks?:
     | (
         | {
@@ -260,6 +270,28 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'productPreview';
+          }
+        | {
+            anchorId: string;
+            eyebrow: string;
+            title: string;
+            body: string;
+            sectionLabel?: string | null;
+            ctaLabel: string;
+            items?:
+              | {
+                  date: string;
+                  title: string;
+                  excerpt: string;
+                  href: string;
+                  image?: (number | null) | Media;
+                  imageAlt?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'news';
           }
         | {
             anchorId: string;
@@ -573,6 +605,18 @@ export interface PagesSelect<T extends boolean = true> {
         secondaryLabel?: T;
         secondaryHref?: T;
       };
+  media?:
+    | T
+    | {
+        homeProductsVideo?: T;
+        logisticaHeroVideo?: T;
+        sustainabilitySystemsVideo?: T;
+        nosotrosHeroImage?: T;
+        nosotrosChapter1Image?: T;
+        nosotrosChapter2Image?: T;
+        nosotrosChapter3Image?: T;
+        financiacionHeroImage?: T;
+      };
   layoutBlocks?:
     | T
     | {
@@ -616,6 +660,29 @@ export interface PagesSelect<T extends boolean = true> {
               body?: T;
               ctaLabel?: T;
               ctaHref?: T;
+              id?: T;
+              blockName?: T;
+            };
+        news?:
+          | T
+          | {
+              anchorId?: T;
+              eyebrow?: T;
+              title?: T;
+              body?: T;
+              sectionLabel?: T;
+              ctaLabel?: T;
+              items?:
+                | T
+                | {
+                    date?: T;
+                    title?: T;
+                    excerpt?: T;
+                    href?: T;
+                    image?: T;
+                    imageAlt?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };

@@ -24,6 +24,8 @@ export type NosotrosCopy = {
   monogram: string;
   heroTitle: string;
   heroBody: string;
+  heroImageSrc?: string;
+  heroImageAlt?: string;
   metaLabels: {
     experiencia: string;
     sede: string;
@@ -228,8 +230,8 @@ export function NosotrosPage({ locale, copy: pageCopy }: Props) {
         {/* ======= Imagen hero (sobre la retícula) ======= */}
         <div className="relative z-10 mt-14 aspect-[16/9] w-full overflow-hidden bg-foreground/5 sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
           <Image
-            src="/imgsrc/about/atalant-about-hero.webp"
-            alt="Equipo Atalant en planta de polímeros"
+            src={copy.heroImageSrc ?? "/imgsrc/about/atalant-about-hero.webp"}
+            alt={copy.heroImageAlt ?? "Equipo Atalant en planta de polímeros"}
             fill
             priority
             sizes="100vw"

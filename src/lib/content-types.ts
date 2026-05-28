@@ -73,6 +73,26 @@ export type ProductPreviewBlock = {
   body: string;
   ctaLabel: string;
   ctaHref?: string;
+  videoSrc?: string;
+  videoPoster?: string;
+};
+
+export type NewsBlock = {
+  anchorId: string;
+  type: "news";
+  eyebrow: string;
+  title: string;
+  body: string;
+  sectionLabel?: string;
+  ctaLabel: string;
+  items: Array<{
+    date: string;
+    title: string;
+    excerpt: string;
+    href: string;
+    image?: string;
+    imageAlt?: string;
+  }>;
 };
 
 export type ContactBlock = {
@@ -86,7 +106,12 @@ export type ContactBlock = {
   ctaHref?: string;
 };
 
-export type HomeBlock = StatsBlock | SectionBlock | ProductPreviewBlock | ContactBlock;
+export type HomeBlock =
+  | StatsBlock
+  | SectionBlock
+  | ProductPreviewBlock
+  | NewsBlock
+  | ContactBlock;
 
 export type HomePageData = {
   locale: AppLocale;

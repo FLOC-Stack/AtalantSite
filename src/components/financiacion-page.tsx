@@ -34,6 +34,8 @@ export type FinanciacionCopy = {
   monogram: string;
   heroTitle: string;
   heroBody: string;
+  heroImageSrc?: string;
+  heroImageAlt?: string;
   metaLabels: {
     programa: string;
     modelo: string;
@@ -176,8 +178,8 @@ export function FinanciacionPage({ locale, copy: pageCopy }: Props) {
         {/* ======= Imagen hero ======= */}
         <div className="relative mt-14 aspect-[16/9] w-full overflow-hidden bg-primary sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
           <Image
-            src="/imgsrc/financing/atalant-bg-financiacion.webp"
-            alt="Equipo de Atalant trabajando con clientes"
+            src={copy.heroImageSrc ?? "/imgsrc/financing/atalant-bg-financiacion.webp"}
+            alt={copy.heroImageAlt ?? "Equipo de Atalant trabajando con clientes"}
             fill
             priority
             sizes="100vw"

@@ -35,6 +35,8 @@ export type SustainabilityCopy = {
     label: string;
     value: string;
   }>;
+  systemsVideoSrc?: string;
+  systemsVideoPoster?: string;
   systemsEyebrow: string;
   systemsTitle: string;
   systemsBody: string;
@@ -261,7 +263,8 @@ export function SustainabilityPage({ locale, copy: pageCopy }: Props) {
           <div className="relative min-h-[360px] overflow-hidden bg-background">
             <video
               className="h-full w-full object-cover"
-              src="/Truck%20Coastal%20Cinematic.mp4"
+              src={copy.systemsVideoSrc ?? "/Truck%20Coastal%20Cinematic.mp4"}
+              poster={copy.systemsVideoPoster}
               autoPlay
               muted
               loop

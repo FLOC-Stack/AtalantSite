@@ -11,6 +11,8 @@ import { SUSTAINABILITY_COPY } from "@/components/sustainability-page";
 import type {
   HomeBlock,
   HomePageData,
+  NewsBlock,
+  ProductPreviewBlock,
   ProductFamilyDetailData,
   ProductFamilyData,
   ProductFamilyMedia,
@@ -32,6 +34,7 @@ type PageDoc = {
     secondaryHref?: string | null;
   };
   layoutBlocks?: Array<Record<string, unknown>>;
+  media?: Record<string, unknown>;
   pageData?: unknown;
   seo?: {
     description?: string | null;
@@ -72,6 +75,16 @@ function hasPayloadDatabase() {
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : null;
+}
+
+function mapMediaUrl(value: unknown): string | undefined {
+  const record = asRecord(value);
+  return typeof record?.url === "string" ? record.url : undefined;
+}
+
+function mapMediaAlt(value: unknown): string | undefined {
+  const record = asRecord(value);
+  return typeof record?.alt === "string" ? record.alt : undefined;
 }
 
 function normalizeNavItems(items: unknown): SiteSettingsData["navigation"] {
@@ -190,6 +203,50 @@ function mapBlocks(blocks: unknown): HomeBlock[] {
           eyebrow,
           title,
           type: "productPreview" as const,
+          videoSrc: mapMediaUrl(record.video),
+        };
+      }
+
+      if (blockType === "news") {
+        const items = Array.isArray(record.items)
+          ? record.items
+              .map((entry) => {
+                const item = asRecord(entry);
+                if (
+                  typeof item?.date === "string" &&
+                  typeof item.title === "string" &&
+                  typeof item.excerpt === "string" &&
+                  typeof item.href === "string"
+                ) {
+                  return {
+                    date: item.date,
+                    excerpt: item.excerpt,
+                    href: item.href,
+                    image: mapMediaUrl(item.image),
+                    imageAlt:
+                      typeof item.imageAlt === "string"
+                        ? item.imageAlt
+                        : mapMediaAlt(item.image),
+                    title: item.title,
+                  };
+                }
+
+                return null;
+              })
+              .filter(Boolean)
+          : [];
+
+        return {
+          anchorId,
+          body: typeof record.body === "string" ? record.body : "",
+          ctaLabel:
+            typeof record.ctaLabel === "string" ? record.ctaLabel : "Leer noticia",
+          eyebrow,
+          items: items as NewsBlock["items"],
+          sectionLabel:
+            typeof record.sectionLabel === "string" ? record.sectionLabel : undefined,
+          title,
+          type: "news" as const,
         };
       }
 
@@ -212,6 +269,19 @@ function mapBlocks(blocks: unknown): HomeBlock[] {
       return null;
     })
     .filter(Boolean) as HomeBlock[];
+}
+
+function applyHomeMedia(blocks: HomeBlock[], media: Record<string, unknown> | null): HomeBlock[] {
+  const homeProductsVideo = mapMediaUrl(media?.homeProductsVideo);
+  if (!homeProductsVideo) return blocks;
+
+  return blocks.map((block) => {
+    if (block.type !== "productPreview") return block;
+    return {
+      ...block,
+      videoSrc: block.videoSrc ?? homeProductsVideo,
+    } satisfies ProductPreviewBlock;
+  });
 }
 
 const getPayloadClient = cache(async function getPayloadClient() {
@@ -303,6 +373,7 @@ export const getHomePage = cache(async function getHomePage(
     const payload = await getPayloadClient();
     const result = await payload.find({
       collection: "pages",
+      depth: 1,
       draft: false,
       limit: 1,
       locale,
@@ -320,10 +391,13 @@ export const getHomePage = cache(async function getHomePage(
       return fallbackHomePages[locale];
     }
 
+    const mappedBlocks = mapBlocks(page.layoutBlocks);
+    const blocks = mappedBlocks.length
+      ? applyHomeMedia(mappedBlocks, asRecord(page.media))
+      : fallbackHomePages[locale].blocks;
+
     return {
-      blocks: mapBlocks(page.layoutBlocks).length
-        ? mapBlocks(page.layoutBlocks)
-        : fallbackHomePages[locale].blocks,
+      blocks,
       hero: {
         body:
           page.hero?.body ||
@@ -373,6 +447,7 @@ export const getStaticPageCopy = cache(async function getStaticPageCopy<
     const payload = await getPayloadClient();
     const result = await payload.find({
       collection: "pages",
+      depth: 1,
       draft: false,
       limit: 1,
       locale,
@@ -386,14 +461,74 @@ export const getStaticPageCopy = cache(async function getStaticPageCopy<
 
     const page = result.docs[0] as PageDoc | undefined;
     const pageData = asRecord(page?.pageData);
-
-    return pageData
+    const baseCopy = pageData
       ? ({ ...fallback, ...pageData } as StaticPageCopyMap[Slug])
       : fallback;
+    const mediaOverrides = getStaticPageMediaOverrides(slug, asRecord(page?.media), baseCopy);
+
+    return { ...baseCopy, ...mediaOverrides } as StaticPageCopyMap[Slug];
   } catch {
     return fallback;
   }
 });
+
+function getStaticPageMediaOverrides<Slug extends StaticPageSlug>(
+  slug: Slug,
+  media: Record<string, unknown> | null,
+  fallback: StaticPageCopyMap[Slug],
+): Record<string, unknown> {
+  if (!media) return {};
+
+  if (slug === "logistica") {
+    const heroVideoSrc = mapMediaUrl(media.logisticaHeroVideo);
+    return heroVideoSrc ? { heroVideoSrc } : {};
+  }
+
+  if (slug === "sostenibilidad") {
+    const systemsVideoSrc = mapMediaUrl(media.sustainabilitySystemsVideo);
+    return systemsVideoSrc ? { systemsVideoSrc } : {};
+  }
+
+  if (slug === "financiacion") {
+    const heroImageSrc = mapMediaUrl(media.financiacionHeroImage);
+    const heroImageAlt = mapMediaAlt(media.financiacionHeroImage);
+    return heroImageSrc ? { heroImageAlt, heroImageSrc } : {};
+  }
+
+  if (slug === "nosotros") {
+    const chapterMedia = [
+      media.nosotrosChapter1Image,
+      media.nosotrosChapter2Image,
+      media.nosotrosChapter3Image,
+    ];
+    const chapters =
+      "chapters" in fallback && Array.isArray(fallback.chapters)
+        ? fallback.chapters.map((chapter, index) => {
+            const imageSrc = mapMediaUrl(chapterMedia[index]);
+            const imageAlt = mapMediaAlt(chapterMedia[index]);
+            return imageSrc
+              ? {
+                  ...chapter,
+                  image: {
+                    ...chapter.image,
+                    alt: imageAlt ?? chapter.image.alt,
+                    src: imageSrc,
+                  },
+                }
+              : chapter;
+          })
+        : undefined;
+    const heroImageSrc = mapMediaUrl(media.nosotrosHeroImage);
+    const heroImageAlt = mapMediaAlt(media.nosotrosHeroImage);
+
+    return {
+      ...(chapters ? { chapters } : {}),
+      ...(heroImageSrc ? { heroImageAlt, heroImageSrc } : {}),
+    };
+  }
+
+  return {};
+}
 
 function mapHeroMedia(value: unknown): ProductFamilyMedia | undefined {
   const record = asRecord(value);

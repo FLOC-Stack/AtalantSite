@@ -30,6 +30,13 @@ const textarea = (name: string, label: string, required = false) => ({
   label,
 });
 
+const mediaRelationship = (name: string, label: string) => ({
+  name,
+  label,
+  relationTo: "media" as const,
+  type: "relationship" as const,
+});
+
 export const Pages: CollectionConfig = {
   slug: "pages",
   access: {
@@ -70,6 +77,20 @@ export const Pages: CollectionConfig = {
         localizedText("secondaryHref", "Secondary URL"),
       ],
       name: "hero",
+      type: "group",
+    },
+    {
+      fields: [
+        mediaRelationship("homeProductsVideo", "Home products video"),
+        mediaRelationship("logisticaHeroVideo", "Logistica hero video"),
+        mediaRelationship("sustainabilitySystemsVideo", "Sustainability systems video"),
+        mediaRelationship("nosotrosHeroImage", "Nosotros hero image"),
+        mediaRelationship("nosotrosChapter1Image", "Nosotros chapter 1 image"),
+        mediaRelationship("nosotrosChapter2Image", "Nosotros chapter 2 image"),
+        mediaRelationship("nosotrosChapter3Image", "Nosotros chapter 3 image"),
+        mediaRelationship("financiacionHeroImage", "Financiacion hero image"),
+      ],
+      name: "media",
       type: "group",
     },
     {
@@ -115,6 +136,30 @@ export const Pages: CollectionConfig = {
             text("ctaHref", "CTA URL"),
           ],
           slug: "productPreview",
+        },
+        {
+          fields: [
+            { name: "anchorId", required: true, type: "text" },
+            text("eyebrow", "Eyebrow", true),
+            text("title", "Title", true),
+            textarea("body", "Body", true),
+            text("sectionLabel", "Section label"),
+            text("ctaLabel", "CTA label", true),
+            {
+              fields: [
+                text("date", "Date", true),
+                text("title", "Title", true),
+                textarea("excerpt", "Excerpt", true),
+                text("href", "URL", true),
+                mediaRelationship("image", "Image"),
+                text("imageAlt", "Image alt"),
+              ],
+              minRows: 1,
+              name: "items",
+              type: "array",
+            },
+          ],
+          slug: "news",
         },
         {
           fields: [

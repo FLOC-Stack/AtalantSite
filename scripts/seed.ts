@@ -3,7 +3,7 @@ import { FINANCIACION_COPY } from "../src/components/financiacion-page";
 import { LOGISTICA_COPY } from "../src/components/logistica-page";
 import { NOSOTROS_COPY } from "../src/components/nosotros-page";
 import { SUSTAINABILITY_COPY } from "../src/components/sustainability-page";
-import type { HomeBlock } from "../src/lib/content-types";
+import type { HomeBlock, NewsBlock } from "../src/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "../src/lib/fallback-content";
 import { locales, type AppLocale } from "../src/lib/locales";
 import {
@@ -49,6 +49,120 @@ const productHeroMediaByCode: Record<string, string> = {
   recycled: "3d-product-RE.webp",
 };
 
+const staticPageMediaBySlug: Record<string, Record<string, string>> = {
+  financiacion: {
+    financiacionHeroImage: "atalant-bg-financiacion.webp",
+  },
+  logistica: {
+    logisticaHeroVideo: "Tanker Truck Aesthetic.mp4",
+  },
+  nosotros: {
+    nosotrosChapter1Image: "atalant-about-1.webp",
+    nosotrosChapter2Image: "atalant-about-2.webp",
+    nosotrosChapter3Image: "atalant-about-3-v2.webp",
+    nosotrosHeroImage: "atalant-about-hero.webp",
+  },
+  sostenibilidad: {
+    sustainabilitySystemsVideo: "Truck Coastal Cinematic.mp4",
+  },
+};
+
+const homeNewsBlock: Omit<NewsBlock, "type"> = {
+  anchorId: "news",
+  body:
+    "Comunicaciones recientes, hitos y notas de prensa. Lo que cuenta y lo que se mueve en Atalant.",
+  ctaLabel: "Leer noticia",
+  eyebrow: "Comunicación",
+  items: [
+    {
+      date: "15 ABR 2026",
+      excerpt:
+        "Ampliamos capacidad operativa y reducimos los tiempos de entrega en el norte de Europa.",
+      href: "#",
+      imageAlt: "Polímeros Atalant",
+      title: "Nuevo hub logístico en Países Bajos",
+    },
+    {
+      date: "02 ABR 2026",
+      excerpt:
+        "Nuestra línea de reciclados consolida su trazabilidad y calidad bajo estándar europeo.",
+      href: "#",
+      imageAlt: "Reciclados Greenlant Atalant",
+      title: "Greenlant alcanza certificación EuCertPlast",
+    },
+    {
+      date: "20 MAR 2026",
+      excerpt:
+        "Reforzamos la oferta de polímeros técnicos con un nuevo contrato de suministro estable.",
+      href: "#",
+      imageAlt: "Polímeros técnicos Atalant",
+      title: "Acuerdo con productor europeo de PP técnico",
+    },
+  ],
+  sectionLabel: "ÚLTIMAS NOTICIAS",
+  title: "Últimas\nnovedades.",
+};
+
+const homeNewsImageFilenames = [
+  "atalant-post-1.webp",
+  "atalant-post-2.webp",
+  "atalant-post-3.webp",
+];
+
+function compactMediaFields(
+  fields: Record<string, number | undefined>,
+): Record<string, number> {
+  return Object.fromEntries(
+    Object.entries(fields).filter((entry): entry is [string, number] =>
+      entry[1] !== undefined,
+    ),
+  );
+}
+
+async function getMediaByFilename(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const mediaResult = await payload.find({
+    collection: "media",
+    limit: 100,
+    pagination: false,
+  });
+
+  return new Map(mediaResult.docs.map((media) => [media.filename, media.id]));
+}
+
+function getStaticPageMedia(slug: string, mediaByFilename: Map<string | null | undefined, number>) {
+  const mediaFields = staticPageMediaBySlug[slug];
+  if (!mediaFields) return {};
+
+  return compactMediaFields(
+    Object.fromEntries(
+      Object.entries(mediaFields).map(([field, filename]) => [
+        field,
+        mediaByFilename.get(filename),
+      ]),
+    ),
+  );
+}
+
+function serializeNewsBlock(mediaByFilename: Map<string | null | undefined, number>) {
+  return {
+    anchorId: homeNewsBlock.anchorId,
+    blockType: "news" as const,
+    body: homeNewsBlock.body,
+    ctaLabel: homeNewsBlock.ctaLabel,
+    eyebrow: homeNewsBlock.eyebrow,
+    items: homeNewsBlock.items.map((item, index) => ({
+      date: item.date,
+      excerpt: item.excerpt,
+      href: item.href,
+      image: mediaByFilename.get(homeNewsImageFilenames[index]),
+      imageAlt: item.imageAlt,
+      title: item.title,
+    })),
+    sectionLabel: homeNewsBlock.sectionLabel,
+    title: homeNewsBlock.title,
+  };
+}
+
 function serializeBlocks(blocks: HomeBlock[], locale: AppLocale) {
   return blocks.map((block) => {
     const common = {
@@ -88,6 +202,25 @@ function serializeBlocks(blocks: HomeBlock[], locale: AppLocale) {
         body: block.body,
         ctaLabel: block.ctaLabel,
         eyebrow: block.eyebrow,
+        title: block.title,
+      };
+    }
+
+    if (block.type === "news") {
+      return {
+        ...common,
+        blockType: "news" as const,
+        body: block.body,
+        ctaLabel: block.ctaLabel,
+        eyebrow: block.eyebrow,
+        items: block.items.map((item) => ({
+          date: item.date,
+          excerpt: item.excerpt,
+          href: item.href,
+          imageAlt: item.imageAlt,
+          title: item.title,
+        })),
+        sectionLabel: block.sectionLabel,
         title: block.title,
       };
     }
@@ -169,6 +302,7 @@ async function seedSiteSettings(locale: AppLocale) {
 async function seedHomePage(locale: AppLocale) {
   const payload = await getPayload({ config });
   const data = fallbackHomePages[locale];
+  const mediaByFilename = await getMediaByFilename(payload);
 
   const existing = await payload.find({
     collection: "pages",
@@ -189,7 +323,13 @@ async function seedHomePage(locale: AppLocale) {
       primaryHref: buildProductsPath(locale),
       secondaryHref: buildSectionPath(locale, "contact"),
     },
-    layoutBlocks: serializeBlocks(data.blocks, locale),
+    layoutBlocks: [
+      ...serializeBlocks(data.blocks, locale),
+      serializeNewsBlock(mediaByFilename),
+    ],
+    media: compactMediaFields({
+      homeProductsVideo: mediaByFilename.get("video-morp-atalant.mp4"),
+    }),
     pageType: "home" as const,
     seo: data.seo,
     slug: "home",
@@ -254,6 +394,7 @@ const staticPages = {
 
 async function seedStaticPages(locale: AppLocale) {
   const payload = await getPayload({ config });
+  const mediaByFilename = await getMediaByFilename(payload);
 
   for (const [slug, page] of Object.entries(staticPages)) {
     const existing = await payload.find({
@@ -285,6 +426,7 @@ async function seedStaticPages(locale: AppLocale) {
         backHref: `/${locale}`,
       },
       pageType: page.pageType,
+      media: getStaticPageMedia(slug, mediaByFilename),
       seo: page.seo,
       slug,
     };
@@ -311,14 +453,7 @@ async function seedStaticPages(locale: AppLocale) {
 
 async function seedFamilies(locale: AppLocale) {
   const payload = await getPayload({ config });
-  const mediaResult = await payload.find({
-    collection: "media",
-    limit: 100,
-    pagination: false,
-  });
-  const mediaByFilename = new Map(
-    mediaResult.docs.map((media) => [media.filename, media.id]),
-  );
+  const mediaByFilename = await getMediaByFilename(payload);
 
   for (const family of fallbackFamilies[locale]) {
     const existing = await payload.find({
