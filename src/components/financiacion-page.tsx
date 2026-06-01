@@ -6,13 +6,14 @@ import { ParticleOcean } from "@/components/particle-ocean";
 
 type Props = {
   locale: AppLocale;
+  copy?: FinanciacionCopy;
 };
 
 // === i18n preparado ===
 // Estructura tipada por locale, igual que en logistica-page.tsx y
 // nosotros-page.tsx. Por ahora solo `es` está traducido; el resto cae
 // al fallback español.
-type DataModule = {
+export type DataModule = {
   /** Valor numérico final del contador (anima 0 → to) */
   to: number;
   /** Sufijo estático que acompaña a la cifra (ej. "%", "M€") */
@@ -27,12 +28,14 @@ type DataModule = {
   body: string;
 };
 
-type FinanciacionCopy = {
+export type FinanciacionCopy = {
   breadcrumb: string;
   back: string;
   monogram: string;
   heroTitle: string;
   heroBody: string;
+  heroImageSrc?: string;
+  heroImageAlt?: string;
   metaLabels: {
     programa: string;
     modelo: string;
@@ -47,6 +50,7 @@ type FinanciacionCopy = {
   };
   dataEyebrow: string;
   dataTitle: string;
+  backHref?: string;
   modules: DataModule[];
 };
 
@@ -106,7 +110,7 @@ const COPY_ES: FinanciacionCopy = {
   ],
 };
 
-const COPY: Record<AppLocale, FinanciacionCopy> = {
+export const FINANCIACION_COPY: Record<AppLocale, FinanciacionCopy> = {
   es: COPY_ES,
   en: COPY_ES,
   pt: COPY_ES,
@@ -121,9 +125,9 @@ function renderMultiline(text: string) {
   ));
 }
 
-export function FinanciacionPage({ locale }: Props) {
-  const copy = COPY[locale];
-  const homeHref = `/${locale}`;
+export function FinanciacionPage({ locale, copy: pageCopy }: Props) {
+  const copy = pageCopy ?? FINANCIACION_COPY[locale];
+  const homeHref = copy.backHref ?? `/${locale}`;
 
   return (
     <main className="relative bg-background text-foreground">
@@ -174,8 +178,8 @@ export function FinanciacionPage({ locale }: Props) {
         {/* ======= Imagen hero ======= */}
         <div className="relative mt-14 aspect-[16/9] w-full overflow-hidden bg-primary sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
           <Image
-            src="/imgsrc/financing/atalant-bg-financiacion.webp"
-            alt="Equipo de Atalant trabajando con clientes"
+            src={copy.heroImageSrc ?? "/imgsrc/financing/atalant-bg-financiacion.webp"}
+            alt={copy.heroImageAlt ?? "Equipo de Atalant trabajando con clientes"}
             fill
             priority
             sizes="100vw"

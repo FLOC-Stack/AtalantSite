@@ -6,23 +6,26 @@ import { NosotrosGrid } from "@/components/nosotros-grid";
 
 type Props = {
   locale: AppLocale;
+  copy?: NosotrosCopy;
 };
 
 // === i18n preparado ===
 // Estructura tipada por locale, igual que en logistica-page.tsx.
 // Por ahora solo `es` está traducido; el resto cae al fallback.
-type ValueCard = {
+export type ValueCard = {
   number: string;
   title: string;
   body: string;
 };
 
-type NosotrosCopy = {
+export type NosotrosCopy = {
   breadcrumb: string;
   back: string;
   monogram: string;
   heroTitle: string;
   heroBody: string;
+  heroImageSrc?: string;
+  heroImageAlt?: string;
   metaLabels: {
     experiencia: string;
     sede: string;
@@ -44,6 +47,8 @@ type NosotrosCopy = {
   closingBody: string;
   ctaTitle: string;
   ctaAction: string;
+  ctaHref?: string;
+  backHref?: string;
   ctaFootnote: string;
   phone: string;
 };
@@ -140,11 +145,12 @@ const COPY_ES: NosotrosCopy = {
 
   ctaTitle: "Hablemos de tu cadena\nde suministro.",
   ctaAction: "Escribir al equipo  →",
+  ctaHref: "mailto:hola@atalant.com?subject=Contacto%20Atalant",
   ctaFootnote: "© MMXXVI ATALANT  /  NS",
   phone: "+34 965 661 828",
 };
 
-const COPY: Record<AppLocale, NosotrosCopy> = {
+export const NOSOTROS_COPY: Record<AppLocale, NosotrosCopy> = {
   es: COPY_ES,
   en: COPY_ES,
   pt: COPY_ES,
@@ -159,9 +165,9 @@ function renderMultiline(text: string) {
   ));
 }
 
-export function NosotrosPage({ locale }: Props) {
-  const copy = COPY[locale];
-  const homeHref = `/${locale}`;
+export function NosotrosPage({ locale, copy: pageCopy }: Props) {
+  const copy = pageCopy ?? NOSOTROS_COPY[locale];
+  const homeHref = copy.backHref ?? `/${locale}`;
 
   return (
     <main className="relative bg-background text-foreground">
@@ -224,8 +230,8 @@ export function NosotrosPage({ locale }: Props) {
         {/* ======= Imagen hero (sobre la retícula) ======= */}
         <div className="relative z-10 mt-14 aspect-[16/9] w-full overflow-hidden bg-foreground/5 sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
           <Image
-            src="/imgsrc/about/atalant-about-hero.webp"
-            alt="Equipo Atalant en planta de polímeros"
+            src={copy.heroImageSrc ?? "/imgsrc/about/atalant-about-hero.webp"}
+            alt={copy.heroImageAlt ?? "Equipo Atalant en planta de polímeros"}
             fill
             priority
             sizes="100vw"
@@ -343,7 +349,7 @@ export function NosotrosPage({ locale }: Props) {
           {renderMultiline(copy.ctaTitle)}
         </h2>
         <Link
-          href={`mailto:hola@atalant.com?subject=${encodeURIComponent("Contacto Atalant")}`}
+          href={copy.ctaHref ?? `mailto:hola@atalant.com?subject=${encodeURIComponent("Contacto Atalant")}`}
           className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
         >
           <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">

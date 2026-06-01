@@ -4,12 +4,13 @@ import { NetworkTimeline, type NetworkHub } from "@/components/network-timeline"
 
 type Props = {
   locale: AppLocale;
+  copy?: LogisticaCopy;
 };
 
 // === i18n preparado ===
 // Los textos quedan tipados por locale para cuando llegue la traducción.
 // Por ahora solo `es` está traducido; el resto cae al fallback.
-type LogisticaCopy = {
+export type LogisticaCopy = {
   breadcrumb: string;
   back: string;
   monogram: string;
@@ -38,7 +39,11 @@ type LogisticaCopy = {
   process: Array<{ roman: string; title: string; body: string }>;
   ctaTitle: string;
   ctaAction: string;
+  ctaHref?: string;
+  backHref?: string;
   ctaFootnote: string;
+  heroVideoSrc?: string;
+  heroVideoPoster?: string;
   phone: string;
   hubs: NetworkHub[];
 };
@@ -115,6 +120,7 @@ const COPY_ES: LogisticaCopy = {
   ],
   ctaTitle: "¿Ruta específica? Lo resolvemos.",
   ctaAction: "Solicitar condiciones  →",
+  ctaHref: "mailto:logistica@atalant.com?subject=Consulta%20ruta%20DA",
   ctaFootnote: "© MMXXVI ATALANT  /  LG",
   phone: "+34 965 661 828",
   hubs: [
@@ -129,7 +135,7 @@ const COPY_ES: LogisticaCopy = {
   ],
 };
 
-const COPY: Record<AppLocale, LogisticaCopy> = {
+export const LOGISTICA_COPY: Record<AppLocale, LogisticaCopy> = {
   es: COPY_ES,
   en: COPY_ES,
   pt: COPY_ES,
@@ -144,9 +150,9 @@ function renderMultiline(text: string) {
   ));
 }
 
-export function LogisticaPage({ locale }: Props) {
-  const copy = COPY[locale];
-  const homeHref = `/${locale}`;
+export function LogisticaPage({ locale, copy: pageCopy }: Props) {
+  const copy = pageCopy ?? LOGISTICA_COPY[locale];
+  const homeHref = copy.backHref ?? `/${locale}`;
 
   return (
     <main className="relative bg-background text-foreground">
@@ -198,7 +204,8 @@ export function LogisticaPage({ locale }: Props) {
         <div className="mt-14 aspect-[16/9] w-full overflow-hidden bg-primary sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
           <video
             className="h-full w-full object-cover"
-            src="/Tanker%20Truck%20Aesthetic.mp4"
+            src={copy.heroVideoSrc ?? "/Tanker%20Truck%20Aesthetic.mp4"}
+            poster={copy.heroVideoPoster}
             autoPlay
             muted
             loop
@@ -344,7 +351,7 @@ export function LogisticaPage({ locale }: Props) {
           {copy.ctaTitle}
         </h2>
         <Link
-          href={`mailto:logistica@atalant.com?subject=${encodeURIComponent("Consulta ruta DA")}`}
+          href={copy.ctaHref ?? `mailto:logistica@atalant.com?subject=${encodeURIComponent("Consulta ruta DA")}`}
           className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
         >
           <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">

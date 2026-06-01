@@ -4,12 +4,15 @@ import { SustainabilityParticles } from "@/components/sustainability-particles";
 
 type Props = {
   locale: AppLocale;
+  copy?: SustainabilityCopy;
 };
 
-type SustainabilityCopy = {
+export type SustainabilityCopy = {
   back: string;
   breadcrumb: string;
   ctaAction: string;
+  ctaHref?: string;
+  backHref?: string;
   ctaFootnote: string;
   ctaTitle: string;
   heroBody: string;
@@ -32,6 +35,8 @@ type SustainabilityCopy = {
     label: string;
     value: string;
   }>;
+  systemsVideoSrc?: string;
+  systemsVideoPoster?: string;
   systemsEyebrow: string;
   systemsTitle: string;
   systemsBody: string;
@@ -41,6 +46,7 @@ const COPY_ES: SustainabilityCopy = {
   back: "← VOLVER",
   breadcrumb: "SOSTENIBILIDAD  /  OPERACIÓN INDUSTRIAL",
   ctaAction: "Hablar con Atalant  →",
+  ctaHref: "mailto:info@atalant.com?subject=Sostenibilidad%20Atalant",
   ctaFootnote: "© MMXXVI ATALANT  /  SOST",
   ctaTitle: "La sostenibilidad se sostiene cuando mejora la operación.",
   heroBody:
@@ -108,7 +114,7 @@ const COPY_ES: SustainabilityCopy = {
     "La gestión ambiental se conecta con compras, almacenaje, transporte, energía e I+D. Esa integración permite avanzar en reducción de impacto sin perder capacidades industriales ni velocidad de respuesta.",
 };
 
-const COPY: Record<AppLocale, SustainabilityCopy> = {
+export const SUSTAINABILITY_COPY: Record<AppLocale, SustainabilityCopy> = {
   es: COPY_ES,
   en: COPY_ES,
   pt: COPY_ES,
@@ -123,9 +129,9 @@ function renderMultiline(text: string) {
   ));
 }
 
-export function SustainabilityPage({ locale }: Props) {
-  const copy = COPY[locale];
-  const homeHref = `/${locale}`;
+export function SustainabilityPage({ locale, copy: pageCopy }: Props) {
+  const copy = pageCopy ?? SUSTAINABILITY_COPY[locale];
+  const homeHref = copy.backHref ?? `/${locale}`;
 
   return (
     <main className="relative bg-background text-foreground">
@@ -257,7 +263,8 @@ export function SustainabilityPage({ locale }: Props) {
           <div className="relative min-h-[360px] overflow-hidden bg-background">
             <video
               className="h-full w-full object-cover"
-              src="/Truck%20Coastal%20Cinematic.mp4"
+              src={copy.systemsVideoSrc ?? "/Truck%20Coastal%20Cinematic.mp4"}
+              poster={copy.systemsVideoPoster}
               autoPlay
               muted
               loop
@@ -312,7 +319,7 @@ export function SustainabilityPage({ locale }: Props) {
           {copy.ctaTitle}
         </h2>
         <Link
-          href={`mailto:info@atalant.com?subject=${encodeURIComponent("Sostenibilidad Atalant")}`}
+          href={copy.ctaHref ?? `mailto:info@atalant.com?subject=${encodeURIComponent("Sostenibilidad Atalant")}`}
           className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
         >
           <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">
