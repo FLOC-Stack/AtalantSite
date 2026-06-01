@@ -598,7 +598,7 @@ function getStaticPageMediaOverrides<Slug extends StaticPageSlug>(
 function mapHeroMedia(value: unknown): ProductFamilyMedia | undefined {
   const record = asRecord(value);
   if (!record) return undefined;
-  const url = typeof record.url === "string" ? record.url : null;
+  const url = mapMediaUrl(record);
   if (!url) return undefined;
   const mimeType = typeof record.mimeType === "string" ? record.mimeType : "";
   const kind: ProductFamilyMedia["kind"] = mimeType.startsWith("video/")
