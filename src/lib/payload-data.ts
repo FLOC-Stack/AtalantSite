@@ -78,6 +78,16 @@ function isProductionBuild() {
   return process.env.NEXT_PHASE === "phase-production-build";
 }
 
+const warnedPayloadFallbacks = new Set<string>();
+
+function warnPayloadFallback(key: string, reason: unknown) {
+  if (warnedPayloadFallbacks.has(key)) return;
+  warnedPayloadFallbacks.add(key);
+
+  const message = reason instanceof Error ? reason.message : String(reason);
+  console.warn(`[payload-data] fallback for ${key}: ${message}`);
+}
+
 function asRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : null;
 }
@@ -336,6 +346,7 @@ export const getSiteSettings = cache(async function getSiteSettings(
   locale: AppLocale,
 ): Promise<SiteSettingsData> {
   if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`siteSettings:${locale}`, "DATABASE_URL unavailable or production build");
     return fallbackSiteSettings[locale];
   }
 
@@ -347,6 +358,7 @@ export const getSiteSettings = cache(async function getSiteSettings(
     });
 
     if (!settings?.brandName) {
+      warnPayloadFallback(`siteSettings:${locale}`, "missing brandName");
       return fallbackSiteSettings[locale];
     }
 
@@ -401,7 +413,8 @@ export const getSiteSettings = cache(async function getSiteSettings(
           ? settings.tagline
           : fallbackSiteSettings[locale].tagline,
     };
-  } catch {
+  } catch (error) {
+    warnPayloadFallback(`siteSettings:${locale}`, error);
     return fallbackSiteSettings[locale];
   }
 });
@@ -410,6 +423,7 @@ export const getHomePage = cache(async function getHomePage(
   locale: AppLocale,
 ): Promise<HomePageData> {
   if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`home:${locale}`, "DATABASE_URL unavailable or production build");
     return fallbackHomePages[locale];
   }
 
@@ -432,6 +446,7 @@ export const getHomePage = cache(async function getHomePage(
     const page = result.docs[0] as PageDoc | undefined;
 
     if (!page?.hero?.headline) {
+      warnPayloadFallback(`home:${locale}`, "missing published home hero headline");
       return fallbackHomePages[locale];
     }
 
@@ -475,7 +490,8 @@ export const getHomePage = cache(async function getHomePage(
         title: page.seo?.title || fallbackHomePages[locale].seo.title,
       },
     };
-  } catch {
+  } catch (error) {
+    warnPayloadFallback(`home:${locale}`, error);
     return fallbackHomePages[locale];
   }
 });
@@ -486,6 +502,7 @@ export const getStaticPageCopy = cache(async function getStaticPageCopy<
   const fallback = staticPageFallbacks[slug][locale];
 
   if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`${slug}:${locale}`, "DATABASE_URL unavailable or production build");
     const ctaHref = (fallback as { ctaHref?: unknown }).ctaHref;
     return {
       ...fallback,
@@ -526,7 +543,8 @@ export const getStaticPageCopy = cache(async function getStaticPageCopy<
         ? { ctaHref: normalizeContactHref(ctaHref, locale) }
         : {}),
     } as StaticPageCopyMap[Slug];
-  } catch {
+  } catch (error) {
+    warnPayloadFallback(`${slug}:${locale}`, error);
     const ctaHref = (fallback as { ctaHref?: unknown }).ctaHref;
     return {
       ...fallback,
@@ -754,6 +772,7 @@ export const getProductFamilies = cache(async function getProductFamilies(
   locale: AppLocale,
 ): Promise<ProductFamilyData[]> {
   if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`productFamilies:${locale}`, "DATABASE_URL unavailable or production build");
     return fallbackFamilies[locale];
   }
 
@@ -774,6 +793,7 @@ export const getProductFamilies = cache(async function getProductFamilies(
       .filter(Boolean) as ProductFamilyData[];
 
     if (!docs.length) {
+      warnPayloadFallback(`productFamilies:${locale}`, "no published product families");
       return fallbackFamilies[locale];
     }
 
@@ -786,7 +806,8 @@ export const getProductFamilies = cache(async function getProductFamilies(
     );
 
     return [...orderedKnownFamilies, ...extraFamilies];
-  } catch {
+  } catch (error) {
+    warnPayloadFallback(`productFamilies:${locale}`, error);
     return fallbackFamilies[locale];
   }
 });
@@ -796,6 +817,7 @@ export const getProductFamilyBySlug = cache(async function getProductFamilyBySlu
   slug: string,
 ): Promise<ProductFamilyData | null> {
   if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`productFamily:${locale}:${slug}`, "DATABASE_URL unavailable or production build");
     return fallbackFamilies[locale].find((family) => family.slug === slug) ?? null;
   }
 
@@ -817,11 +839,13 @@ export const getProductFamilyBySlug = cache(async function getProductFamilyBySlu
 
     const doc = result.docs[0];
     if (!doc) {
+      warnPayloadFallback(`productFamily:${locale}:${slug}`, "missing published product family");
       return fallbackFamilies[locale].find((family) => family.slug === slug) ?? null;
     }
 
     return mapFamily(locale, doc as unknown as Record<string, unknown>);
-  } catch {
+  } catch (error) {
+    warnPayloadFallback(`productFamily:${locale}:${slug}`, error);
     return fallbackFamilies[locale].find((family) => family.slug === slug) ?? null;
   }
 });
@@ -830,6 +854,7 @@ export const getPublishedFamilySitemapEntries = cache(async function getPublishe
   locale: AppLocale,
 ): Promise<ProductFamilySitemapEntry[]> {
   if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`sitemapFamilies:${locale}`, "DATABASE_URL unavailable or production build");
     return fallbackFamilies[locale].map((family) => ({
       slug: family.slug,
       updatedAt: new Date(),
@@ -863,7 +888,8 @@ export const getPublishedFamilySitemapEntries = cache(async function getPublishe
         };
       })
       .filter(Boolean) as ProductFamilySitemapEntry[];
-  } catch {
+  } catch (error) {
+    warnPayloadFallback(`sitemapFamilies:${locale}`, error);
     return [];
   }
 });

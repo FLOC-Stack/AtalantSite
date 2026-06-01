@@ -18,9 +18,11 @@ Corporate site and catalog for Atalant built with Next.js 16, React 19, Tailwind
   - `/admin`
   - `/api/*`
 - Contact form that stores leads in Payload.
-- Local media storage under `public/media`.
+- Payload Media backed by Vercel Blob in deployed environments.
 
-The public site can render from Payload data or fall back to local seed content if the CMS is not available yet.
+Payload is the runtime source of truth for public content. The public site keeps
+local fallback content only as an emergency safety net when the CMS is
+unavailable.
 
 ## Environment
 
@@ -31,6 +33,7 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/atalant
 PAYLOAD_SECRET=replace-me
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 PAYLOAD_AUTO_PUSH=true
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_token
 SEED_SECRET=optional-local-seed-secret
 ```
 
@@ -40,7 +43,7 @@ Notes:
 - `PAYLOAD_SECRET` is required in real environments.
 - `PAYLOAD_AUTO_PUSH=true` is the simplest local bootstrap path and lets Payload create or update the schema automatically.
 - For stricter environments, turn `PAYLOAD_AUTO_PUSH` off and manage schema changes deliberately.
-- Media storage is local. Production deploys need persistent disk or this should be swapped later to object storage.
+- `BLOB_READ_WRITE_TOKEN` is required in production and preview so Payload Media persists through Vercel Blob.
 
 ### Contact form email (Resend)
 
@@ -122,11 +125,19 @@ npm run seed
 
 For the first local bootstrap, keep `PAYLOAD_AUTO_PUSH=true` so the schema exists before seeding.
 
-The seed creates or updates:
+The seed creates or updates critical media, then the canonical localized content:
 
 - `siteSettings`
 - localized `pages` entry for the home page
+- localized static pages
 - localized `productFamilies`
+
+If production has stale Payload media records whose `/api/media/file/*` URLs 404,
+re-upload critical media and reseed relations:
+
+```bash
+npm run media:sync
+```
 
 ## Quality checks
 
@@ -141,6 +152,22 @@ Run production build:
 ```bash
 npm run build
 ```
+
+Audit the deployed CMS state:
+
+```bash
+npm run cms:check
+```
+
+Check multiple deployments, for example production and preview:
+
+```bash
+npm run cms:check -- https://atalant-site.vercel.app https://your-preview-url.vercel.app
+```
+
+The CMS check validates localized settings, required pages, product families and
+every referenced Payload media URL. It should pass before sending a deployment
+to the client.
 
 ## Content model
 
@@ -164,6 +191,10 @@ npm run build
 ## Deployment notes
 
 - This app expects Postgres and a valid `DATABASE_URL`.
-- Payload uploads write to `public/media`, so production needs persistent storage.
+- Production and preview must both define `DATABASE_URL`, `PAYLOAD_SECRET`,
+  `BLOB_READ_WRITE_TOKEN`, `NEXT_PUBLIC_SERVER_URL`, and the contact email
+  variables relevant to the environment.
+- Payload Media uses Vercel Blob in deployed environments. Broken
+  `/api/media/file/*` URLs mean Blob/media records need to be re-synced.
 - The public routes are locale-prefixed by design and `/` redirects to `/es`.
 - SEO support includes localized metadata, `robots.txt`, and `sitemap.xml`.

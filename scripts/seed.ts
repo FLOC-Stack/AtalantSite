@@ -1,4 +1,3 @@
-import config from "../src/payload.config";
 import { FINANCIACION_COPY } from "../src/components/financiacion-page";
 import { LOGISTICA_COPY } from "../src/components/logistica-page";
 import { NOSOTROS_COPY } from "../src/components/nosotros-page";
@@ -14,7 +13,26 @@ import {
   buildSustainabilityPath,
 } from "../src/lib/routes";
 import { productDetailData, type ProductDetailData } from "../src/lib/product-detail-data";
+import nextEnv from "@next/env";
+import fs from "node:fs";
+import path from "node:path";
 import { getPayload } from "payload";
+
+type SeedPayload = Awaited<ReturnType<typeof getPayload>>;
+
+let payloadClientPromise: Promise<SeedPayload> | undefined;
+
+async function getSeedPayload() {
+  if (!payloadClientPromise) {
+    loadEnvConfig(process.cwd());
+    const { default: config } = await import("../src/payload.config");
+    payloadClientPromise = getPayload({ config });
+  }
+
+  return payloadClientPromise;
+}
+
+const { loadEnvConfig } = nextEnv;
 
 const homeSectionCtaLabels: Record<AppLocale, Record<string, string>> = {
   en: {
@@ -109,6 +127,43 @@ const homeNewsImageFilenames = [
   "atalant-post-3.webp",
 ];
 
+const criticalMediaAssets = [
+  ...Object.values(productHeroMediaByCode).map((filename) => ({
+    alt: filename.replace(/\.webp$/i, "").replace(/-/g, " "),
+    filename,
+    path: `public/imgsrc/products/${filename}`,
+  })),
+  ...Object.values(staticPageMediaBySlug).flatMap((fields) =>
+    Object.values(fields).map((filename) => ({
+      alt: filename.replace(/\.[^.]+$/i, "").replace(/-/g, " "),
+      filename,
+      path: resolvePublicMediaPath(filename),
+    })),
+  ),
+  ...homeNewsImageFilenames.map((filename) => ({
+    alt: filename.replace(/\.webp$/i, "").replace(/-/g, " "),
+    filename,
+    path: `public/imgsrc/${filename}`,
+  })),
+  {
+    alt: "video morp atalant",
+    filename: "video-morp-atalant.mp4",
+    path: "public/video-morp-atalant.mp4",
+  },
+] as const;
+
+function resolvePublicMediaPath(filename: string) {
+  const candidates = [
+    `public/${filename}`,
+    `public/imgsrc/${filename}`,
+    `public/imgsrc/about/${filename}`,
+    `public/imgsrc/financing/${filename}`,
+    `public/imgsrc/products/${filename}`,
+  ];
+
+  return candidates.find((candidate) => fs.existsSync(path.resolve(candidate))) ?? candidates[0];
+}
+
 function compactMediaFields(
   fields: Record<string, number | undefined>,
 ): Record<string, number> {
@@ -119,14 +174,50 @@ function compactMediaFields(
   );
 }
 
-async function getMediaByFilename(payload: Awaited<ReturnType<typeof getPayload>>) {
+async function getMediaByFilename(payload: SeedPayload) {
   const mediaResult = await payload.find({
     collection: "media",
     limit: 100,
     pagination: false,
+    sort: "-updatedAt",
   });
 
-  return new Map(mediaResult.docs.map((media) => [media.filename, media.id]));
+  const mediaByFilename = new Map<string | null | undefined, number>();
+  for (const media of mediaResult.docs) {
+    if (!mediaByFilename.has(media.filename)) {
+      mediaByFilename.set(media.filename, media.id);
+    }
+  }
+
+  return mediaByFilename;
+}
+
+async function ensureCriticalMedia(payload: SeedPayload) {
+  const shouldReupload = process.env.REUPLOAD_CRITICAL_MEDIA === "true";
+  const mediaByFilename = await getMediaByFilename(payload);
+
+  for (const asset of criticalMediaAssets) {
+    const absolutePath = path.resolve(asset.path);
+    if (!fs.existsSync(absolutePath)) {
+      throw new Error(`Critical media asset is missing on disk: ${asset.path}`);
+    }
+
+    if (mediaByFilename.has(asset.filename) && !shouldReupload) {
+      continue;
+    }
+
+    await payload.create({
+      collection: "media",
+      data: {
+        alt: asset.alt,
+      },
+      filePath: absolutePath,
+    });
+
+    console.log(
+      `${shouldReupload ? "Re-uploaded" : "Uploaded"} media: ${asset.filename}`,
+    );
+  }
 }
 
 function getStaticPageMedia(slug: string, mediaByFilename: Map<string | null | undefined, number>) {
@@ -289,7 +380,7 @@ function serializeProductDetail(detail: ProductDetailData | undefined) {
 }
 
 async function seedSiteSettings(locale: AppLocale) {
-  const payload = await getPayload({ config });
+  const payload = await getSeedPayload();
   const data = fallbackSiteSettings[locale];
 
   await payload.updateGlobal({
@@ -300,7 +391,7 @@ async function seedSiteSettings(locale: AppLocale) {
 }
 
 async function seedHomePage(locale: AppLocale) {
-  const payload = await getPayload({ config });
+  const payload = await getSeedPayload();
   const data = fallbackHomePages[locale];
   const mediaByFilename = await getMediaByFilename(payload);
 
@@ -393,7 +484,7 @@ const staticPages = {
 } as const;
 
 async function seedStaticPages(locale: AppLocale) {
-  const payload = await getPayload({ config });
+  const payload = await getSeedPayload();
   const mediaByFilename = await getMediaByFilename(payload);
 
   for (const [slug, page] of Object.entries(staticPages)) {
@@ -452,7 +543,7 @@ async function seedStaticPages(locale: AppLocale) {
 }
 
 async function seedFamilies(locale: AppLocale) {
-  const payload = await getPayload({ config });
+  const payload = await getSeedPayload();
   const mediaByFilename = await getMediaByFilename(payload);
 
   for (const family of fallbackFamilies[locale]) {
@@ -505,6 +596,9 @@ async function seedFamilies(locale: AppLocale) {
 }
 
 async function run() {
+  const payload = await getSeedPayload();
+  await ensureCriticalMedia(payload);
+
   for (const locale of locales) {
     await seedSiteSettings(locale);
     await seedHomePage(locale);

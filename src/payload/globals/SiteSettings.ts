@@ -8,7 +8,7 @@ export const SiteSettings: GlobalConfig = {
   fields: [
     { name: "brandName", required: true, type: "text" },
     { localized: true, name: "tagline", required: true, type: "text" },
-    { name: "contactEmail", required: true, type: "email" },
+    { localized: true, name: "contactEmail", required: true, type: "email" },
     { name: "phone", required: true, type: "text" },
     { localized: true, name: "address", required: true, type: "text" },
     { localized: true, name: "footerText", required: true, type: "textarea" },

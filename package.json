@@ -12,7 +12,9 @@
     "payload": "payload",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "media:sync": "REUPLOAD_CRITICAL_MEDIA=true tsx scripts/seed.ts",
+    "cms:check": "tsx scripts/cms-check.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
