@@ -71,7 +71,11 @@ type ProductFamilySitemapEntry = {
 };
 
 function hasPayloadDatabase() {
-  return Boolean(process.env.DATABASE_URL);
+  return Boolean(process.env.DATABASE_URL) && !isProductionBuild();
+}
+
+function isProductionBuild() {
+  return process.env.NEXT_PHASE === "phase-production-build";
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -826,7 +830,10 @@ export const getPublishedFamilySitemapEntries = cache(async function getPublishe
   locale: AppLocale,
 ): Promise<ProductFamilySitemapEntry[]> {
   if (!hasPayloadDatabase()) {
-    return [];
+    return fallbackFamilies[locale].map((family) => ({
+      slug: family.slug,
+      updatedAt: new Date(),
+    }));
   }
 
   try {
