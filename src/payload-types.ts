@@ -365,9 +365,12 @@ export interface ProductFamily {
 export interface LeadSubmission {
   id: number;
   name: string;
-  company?: string | null;
+  role?: string | null;
+  phone?: string | null;
   email: string;
+  company?: string | null;
   country?: string | null;
+  topic?: ('sales' | 'products' | 'logistics' | 'financing' | 'sustainability' | 'press' | 'other') | null;
   message: string;
   locale: string;
   sourcePath: string;
@@ -705,9 +708,12 @@ export interface ProductFamiliesSelect<T extends boolean = true> {
  */
 export interface LeadSubmissionsSelect<T extends boolean = true> {
   name?: T;
-  company?: T;
+  role?: T;
+  phone?: T;
   email?: T;
+  company?: T;
   country?: T;
+  topic?: T;
   message?: T;
   locale?: T;
   sourcePath?: T;

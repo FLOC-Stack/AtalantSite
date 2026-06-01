@@ -25,6 +25,10 @@ export function buildFinancingPath(locale: AppLocale) {
   return `/${locale}/financiacion`;
 }
 
+export function buildContactoPath(locale: AppLocale) {
+  return `/${locale}/contacto`;
+}
+
 export function buildPrivacyPath(locale: AppLocale) {
   return `/${locale}/privacidad`;
 }
@@ -82,6 +86,11 @@ export function switchLocalePath(pathname: string, nextLocale: AppLocale) {
 
     if (maybeSegment === "financiacion") {
       nextSegments.push("financiacion");
+      return `/${nextSegments.join("/")}`;
+    }
+
+    if (maybeSegment === "contacto") {
+      nextSegments.push("contacto");
       return `/${nextSegments.join("/")}`;
     }
 

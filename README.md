@@ -42,6 +42,45 @@ Notes:
 - For stricter environments, turn `PAYLOAD_AUTO_PUSH` off and manage schema changes deliberately.
 - Media storage is local. Production deploys need persistent disk or this should be swapped later to object storage.
 
+### Contact form email (Resend)
+
+The `/contacto` form always stores the lead in Payload (`leadSubmissions`). Email
+notifications are sent through [Resend](https://resend.com) and are **optional**:
+if `RESEND_API_KEY` or `CONTACT_EMAIL_FROM` are missing, the API skips sending and
+just persists the lead (no error).
+
+```bash
+RESEND_API_KEY=re_xxxxxxxx                       # Resend API key
+CONTACT_EMAIL_FROM=Atalant <noreply@atalant.com> # must be a verified Resend domain
+CONTACT_EMAIL_DEFAULT_TO=hi@wearefloc.com        # fallback recipient (default: hi@wearefloc.com)
+CONTACT_EMAIL_BCC=hi@wearefloc.com               # master archive BCC (default: hi@wearefloc.com)
+```
+
+On each submission the API sends:
+
+1. A **team notification** to the address resolved from the selected topic
+   (`recipientForTopic`), with `CONTACT_EMAIL_BCC` as blind copy and `Reply-To`
+   set to the visitor's email.
+2. A localized **auto-reply** to the visitor, with `Reply-To` pointing at the
+   master mailbox.
+
+Per-topic routing overrides (all optional — each falls back to
+`CONTACT_EMAIL_DEFAULT_TO`):
+
+```bash
+CONTACT_EMAIL_SALES=...
+CONTACT_EMAIL_PRODUCTS=...
+CONTACT_EMAIL_LOGISTICS=...
+CONTACT_EMAIL_FINANCING=...
+CONTACT_EMAIL_SUSTAINABILITY=...
+CONTACT_EMAIL_PRESS=...
+CONTACT_EMAIL_OTHER=...
+```
+
+> Until a domain is verified in Resend, the `onboarding@resend.dev` sender can only
+> deliver to the email registered on your Resend account. Verify a domain
+> (`wearefloc.com` / `atalant.com`) under Resend → Domains to send to any address.
+
 ## Local development
 
 Install dependencies:
