@@ -361,7 +361,11 @@ export function Header({
                 alt={brandName}
                 width={136}
                 height={40}
-                className="h-6 w-auto sm:h-7 lg:h-8"
+                className={
+                  isCompact
+                    ? "h-6 w-auto sm:h-7 lg:h-8"
+                    : "h-12 w-auto sm:h-14 lg:h-16"
+                }
                 priority
               />
             </Link>

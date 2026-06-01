@@ -43,7 +43,7 @@ export default async function ProductsIndexPage({ params }: Props) {
   const copy = catalogCopy[locale].index;
 
   return (
-    <main className="mx-auto max-w-7xl px-6 pb-24 pt-24 sm:pt-28 md:px-10 lg:px-16 lg:pt-32">
+    <main className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pt-24 md:px-10 lg:px-16 lg:pt-28">
       <div className="max-w-3xl">
         <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary-dark">
           {copy.eyebrow}
@@ -56,7 +56,7 @@ export default async function ProductsIndexPage({ params }: Props) {
         </p>
       </div>
 
-      <div className="mt-12 grid gap-6 lg:grid-cols-3">
+      <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-3">
         {families.map((family) => (
           <FamilyCard key={family.slug} family={family} />
         ))}

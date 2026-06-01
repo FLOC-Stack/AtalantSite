@@ -108,46 +108,52 @@ export function HomeNews({
           </p>
 
           <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3 lg:gap-x-10">
-            {items.map((item) => (
-              <li key={item.title} className="group flex flex-col">
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded bg-foreground/5">
-                  {item.image ? (
-                    <Image
-                      src={item.image}
-                      alt={item.imageAlt ?? item.title}
-                      fill
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
-                    />
-                  ) : (
-                    <div
-                      className="absolute inset-0 flex items-center justify-center font-mono text-[11px] uppercase tracking-[2px] text-muted-strong"
-                      aria-hidden="true"
-                    >
-                      imagen
+            {items.map((item) => {
+              const hasValidHref = item.href && item.href !== "#";
+
+              return (
+                <li key={item.title} className="group flex flex-col">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded bg-foreground/5">
+                    {item.image ? (
+                      <Image
+                        src={item.image}
+                        alt={item.imageAlt ?? item.title}
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+                      />
+                    ) : (
+                      <div
+                        className="absolute inset-0 flex items-center justify-center font-mono text-[11px] uppercase tracking-[2px] text-muted-strong"
+                        aria-hidden="true"
+                      >
+                        imagen
+                      </div>
+                    )}
+                  </div>
+                  <p className="mt-5 font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
+                    {item.date}
+                  </p>
+                  <h3 className="mt-3 font-sans text-[22px] leading-[1.2] tracking-[-0.4px] text-foreground">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 font-sans text-[14px] font-light leading-[20px] tracking-[-0.1px] text-muted-strong">
+                    {item.excerpt}
+                  </p>
+                  {hasValidHref ? (
+                    <div className="mt-5">
+                      <Link
+                        href={item.href}
+                        className="group inline-flex items-center gap-2 border-b border-primary-dark pb-1 font-sans text-[14px] font-medium tracking-[0.2px] text-primary-dark transition-opacity hover:opacity-70"
+                      >
+                        {ctaLabel}
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                      </Link>
                     </div>
-                  )}
-                </div>
-                <p className="mt-5 font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-                  {item.date}
-                </p>
-                <h3 className="mt-3 font-sans text-[22px] leading-[1.2] tracking-[-0.4px] text-foreground">
-                  {item.title}
-                </h3>
-                <p className="mt-3 font-sans text-[14px] font-light leading-[20px] tracking-[-0.1px] text-muted-strong">
-                  {item.excerpt}
-                </p>
-                <div className="mt-5">
-                  <Link
-                    href={item.href}
-                    className="group inline-flex items-center gap-2 border-b border-primary-dark pb-1 font-sans text-[14px] font-medium tracking-[0.2px] text-primary-dark transition-opacity hover:opacity-70"
-                  >
-                    {ctaLabel}
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-                  </Link>
-                </div>
-              </li>
-            ))}
+                  ) : null}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

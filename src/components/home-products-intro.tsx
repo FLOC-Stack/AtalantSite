@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export type HomeProductsIntroStat = {
   label: string;
@@ -11,8 +11,6 @@ type Props = {
   counter?: string;
   title?: string;
   body?: string;
-  ctaLabel?: string;
-  ctaHref?: string;
   primaryCtaLabel?: string;
   primaryCtaHref?: string;
   stats?: HomeProductsIntroStat[];
@@ -83,8 +81,6 @@ export function HomeProductsIntro({
   counter = "02 / 05",
   title = FALLBACK_TITLE,
   body = FALLBACK_BODY,
-  ctaLabel = "Descargar fichas técnicas",
-  ctaHref = "#",
   primaryCtaLabel = "Ver productos",
   primaryCtaHref = "#",
   stats = FALLBACK_STATS,
@@ -137,13 +133,6 @@ export function HomeProductsIntro({
             <span className="flex items-center justify-center px-4 sm:px-5">
               <ArrowRight className="h-3.5 w-3.5" />
             </span>
-          </Link>
-          <Link
-            href={ctaHref}
-            className="group inline-flex items-center gap-2 border-b border-primary-dark pb-1 font-sans text-[15px] font-medium tracking-[0.2px] text-primary-dark transition-opacity hover:opacity-70"
-          >
-            {ctaLabel}
-            <ArrowDown className="h-4 w-4 transition-transform duration-200 group-hover:translate-y-0.5" />
           </Link>
         </div>
 

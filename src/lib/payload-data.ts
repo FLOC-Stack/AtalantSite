@@ -80,6 +80,15 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 
 function mapMediaUrl(value: unknown): string | undefined {
   const record = asRecord(value);
+  const filename =
+    typeof record?.filename === "string"
+      ? record.filename
+      : typeof record?.url === "string"
+        ? record.url.split("/").pop()
+        : undefined;
+  if (filename && filename in localMediaFallbacks) {
+    return localMediaFallbacks[filename];
+  }
   return typeof record?.url === "string" ? record.url : undefined;
 }
 
@@ -90,8 +99,33 @@ function mapMediaAlt(value: unknown): string | undefined {
 
 function normalizeContactHref(href: string | undefined, locale: AppLocale) {
   if (!href) return href;
-  return href.endsWith("#contact") ? buildContactoPath(locale) : href;
+  if (href.endsWith("#contact")) return buildContactoPath(locale);
+  if (
+    href.startsWith("mailto:") &&
+    /contacto|contact|hola@atalant|info@atalant|logistica@atalant/i.test(href)
+  ) {
+    return buildContactoPath(locale);
+  }
+  return href;
 }
+
+const localMediaFallbacks: Record<string, string> = {
+  "3d-product-EVA.webp": "/imgsrc/products/3d-product-EVA.webp",
+  "3d-product-PE.webp": "/imgsrc/products/3d-product-PE.webp",
+  "3d-product-PET.webp": "/imgsrc/products/3d-product-PET.webp",
+  "3d-product-PP.webp": "/imgsrc/products/3d-product-PP.webp",
+  "3d-product-PS.webp": "/imgsrc/products/3d-product-PS.webp",
+  "3d-product-PVC.webp": "/imgsrc/products/3d-product-PVC.webp",
+  "3d-product-RE.webp": "/imgsrc/products/3d-product-RE.webp",
+  "atalant-about-1.webp": "/imgsrc/about/atalant-about-1.webp",
+  "atalant-about-2.webp": "/imgsrc/about/atalant-about-2.webp",
+  "atalant-about-3-v2.webp": "/imgsrc/about/atalant-about-3-v2.webp",
+  "atalant-about-hero.webp": "/imgsrc/about/atalant-about-hero.webp",
+  "atalant-bg-financiacion.webp": "/imgsrc/financing/atalant-bg-financiacion.webp",
+  "atalant-post-1.webp": "/imgsrc/atalant-post-1.webp",
+  "atalant-post-2.webp": "/imgsrc/atalant-post-2.webp",
+  "atalant-post-3.webp": "/imgsrc/atalant-post-3.webp",
+};
 
 function normalizeNavItems(items: unknown): SiteSettingsData["navigation"] {
   if (!Array.isArray(items)) return [];
@@ -448,7 +482,13 @@ export const getStaticPageCopy = cache(async function getStaticPageCopy<
   const fallback = staticPageFallbacks[slug][locale];
 
   if (!hasPayloadDatabase()) {
-    return fallback;
+    const ctaHref = (fallback as { ctaHref?: unknown }).ctaHref;
+    return {
+      ...fallback,
+      ...(typeof ctaHref === "string"
+        ? { ctaHref: normalizeContactHref(ctaHref, locale) }
+        : {}),
+    } as StaticPageCopyMap[Slug];
   }
 
   try {
@@ -473,10 +513,23 @@ export const getStaticPageCopy = cache(async function getStaticPageCopy<
       ? ({ ...fallback, ...pageData } as StaticPageCopyMap[Slug])
       : fallback;
     const mediaOverrides = getStaticPageMediaOverrides(slug, asRecord(page?.media), baseCopy);
+    const mergedCopy = { ...baseCopy, ...mediaOverrides } as StaticPageCopyMap[Slug];
+    const ctaHref = (mergedCopy as { ctaHref?: unknown }).ctaHref;
 
-    return { ...baseCopy, ...mediaOverrides } as StaticPageCopyMap[Slug];
+    return {
+      ...mergedCopy,
+      ...(typeof ctaHref === "string"
+        ? { ctaHref: normalizeContactHref(ctaHref, locale) }
+        : {}),
+    } as StaticPageCopyMap[Slug];
   } catch {
-    return fallback;
+    const ctaHref = (fallback as { ctaHref?: unknown }).ctaHref;
+    return {
+      ...fallback,
+      ...(typeof ctaHref === "string"
+        ? { ctaHref: normalizeContactHref(ctaHref, locale) }
+        : {}),
+    } as StaticPageCopyMap[Slug];
   }
 });
 

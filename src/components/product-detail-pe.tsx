@@ -187,12 +187,9 @@ export function ProductDetailPE({ locale }: Props) {
                 <p className="font-sans text-[13px] font-light leading-[18px] tracking-[-0.1px] text-[#6b6f82]">
                   {g.process}
                 </p>
-                <Link
-                  href="#"
-                  className="font-sans text-[13px] font-medium tracking-[0.2px] text-[#1e4bb6] transition-opacity hover:opacity-70"
-                >
-                  Ficha ↓
-                </Link>
+                <p className="font-sans text-[13px] font-medium tracking-[0.2px] text-[#1e4bb6]">
+                  Bajo petición
+                </p>
               </div>
               {/* Mobile/tablet stack */}
               <div className="grid gap-3 py-8 lg:hidden">
@@ -200,12 +197,9 @@ export function ProductDetailPE({ locale }: Props) {
                   <p className="font-sans text-[36px] font-medium leading-none tracking-[-1px] text-[#1e4bb6] sm:text-[44px]">
                     {g.code}
                   </p>
-                  <Link
-                    href="#"
-                    className="font-sans text-[13px] font-medium tracking-[0.2px] text-[#1e4bb6] transition-opacity hover:opacity-70"
-                  >
-                    Ficha ↓
-                  </Link>
+                  <p className="font-sans text-[13px] font-medium tracking-[0.2px] text-[#1e4bb6]">
+                    Bajo petición
+                  </p>
                 </div>
                 <p className="font-sans text-[22px] font-light tracking-[-0.5px] text-[#1b1c1a]">
                   {g.denomination}
@@ -252,7 +246,7 @@ export function ProductDetailPE({ locale }: Props) {
               </dl>
             </div>
             <Link
-              href="#"
+              href={buildFamilyPath(locale, "recycled")}
               className="absolute right-6 top-6 font-sans text-[15px] font-medium tracking-[0.2px] text-[#1eb686] transition-opacity hover:opacity-70 sm:right-10 lg:top-1/2 lg:-translate-y-1/2"
             >
               Ver Greenlant&nbsp;&nbsp;→
@@ -303,13 +297,6 @@ export function ProductDetailPE({ locale }: Props) {
               ¿Necesitas una ficha técnica PE?
             </h2>
             <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:gap-12 lg:absolute lg:left-0 lg:top-[140px] lg:mt-0">
-              <Link
-                href="#"
-                className="group inline-flex flex-col gap-1 font-sans text-[16px] font-medium tracking-[0.2px] text-white"
-              >
-                <span>Descargar fichas&nbsp;&nbsp;↓</span>
-                <span className="block h-px w-[170px] bg-white transition-opacity group-hover:opacity-70" />
-              </Link>
               <Link
                 href={contactHref}
                 className="group inline-flex flex-col gap-1 font-sans text-[16px] font-medium tracking-[0.2px] text-white"

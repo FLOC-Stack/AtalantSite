@@ -17,7 +17,7 @@ export type Hub = {
   since: number;
 };
 
-export type DestinationRegion = "Iberia" | "Europa" | "NAF";
+export type DestinationRegion = "Iberia" | "Europa" | "NAF" | "América" | "Asia" | "África";
 export type DestinationStatus = "active" | "legacy";
 
 export type Destination = {
@@ -68,6 +68,9 @@ export const DESTINATIONS: Destination[] = [
   { code: "NL", name: "Países Bajos", lat: 52.3676, lng: 4.9041, region: "Europa", since: 2010, status: "active" },
   { code: "MA", name: "Marruecos", lat: 33.5731, lng: -7.5898, region: "NAF", since: 2014, status: "active" },
   { code: "DZ", name: "Argelia", lat: 36.7538, lng: 3.0588, region: "NAF", since: 2014, status: "active" },
+  { code: "MX", name: "América", lat: 19.4326, lng: -99.1332, region: "América", since: 2026, status: "active" },
+  { code: "SG", name: "Asia", lat: 1.3521, lng: 103.8198, region: "Asia", since: 2026, status: "active" },
+  { code: "ZA", name: "África", lat: -33.9249, lng: 18.4241, region: "África", since: 2026, status: "active" },
 ];
 
 export function buildRoutes(
