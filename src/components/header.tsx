@@ -10,8 +10,12 @@ import { useGSAP } from "@gsap/react";
 import type { NavItem } from "@/lib/content-types";
 import { localeLabels, locales, type AppLocale } from "@/lib/locales";
 import {
+  buildAboutPath,
+  buildContactoPath,
+  buildFinancingPath,
   buildLogisticsPath,
   buildProductsPath,
+  buildSustainabilityPath,
   buildSectionPath,
   switchLocalePath,
 } from "@/lib/routes";
@@ -80,9 +84,9 @@ function buildFallbackNav(locale: AppLocale): HeaderLink[] {
   return [
     { label: t.products, href: buildProductsPath(locale) },
     { label: t.logistics, href: buildSectionPath(locale, "logistica") },
-    { label: t.financing, href: buildSectionPath(locale, "financiacion") },
-    { label: t.sustainability, href: buildSectionPath(locale, "sostenibilidad") },
-    { label: t.about, href: buildSectionPath(locale, "equipo") },
+    { label: t.financing, href: buildFinancingPath(locale) },
+    { label: t.sustainability, href: buildSustainabilityPath(locale) },
+    { label: t.about, href: buildAboutPath(locale) },
   ];
 }
 
@@ -115,10 +119,35 @@ function isContactNavItem(item: NavItem): boolean {
   );
 }
 
+// Items que apuntan al "Nosotros". Aceptamos varios sectionId y labels
+// porque la copia de Payload puede llegar como "equipo", "nosotros",
+// "about", "sobre nós", "à propos", etc.
+function isAboutNavItem(item: NavItem): boolean {
+  const sectionId = item.kind === "section" ? (item.sectionId ?? "").toLowerCase() : "";
+  const label = item.label.toLowerCase();
+  const aboutTokens = ["equipo", "nosotros", "about", "sobre", "sobre nós", "à propos", "a propos"];
+  return aboutTokens.includes(sectionId) || aboutTokens.includes(label);
+}
+
 function resolveHref(item: NavItem, locale: AppLocale): string {
   if (item.kind === "products") return buildProductsPath(locale);
   if (item.kind === "logistics") return buildLogisticsPath(locale);
   if (item.kind === "external") return item.href ?? "#";
+  if (
+    item.kind === "section" &&
+    ["sustainability", "sostenibilidad"].includes((item.sectionId ?? "").toLowerCase())
+  ) {
+    return buildSustainabilityPath(locale);
+  }
+  if (
+    item.kind === "section" &&
+    ["financing", "financiacion", "financement", "financiamento"].includes(
+      (item.sectionId ?? "").toLowerCase(),
+    )
+  ) {
+    return buildFinancingPath(locale);
+  }
+  if (isAboutNavItem(item)) return buildAboutPath(locale);
   return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
 }
 
@@ -165,7 +194,7 @@ export function Header({
       )
     : buildFallbackNav(locale);
   const resolvedCtaLabel = ctaLabel ?? fallbackStrings[locale].contact;
-  const resolvedCtaHref = ctaHref ?? buildSectionPath(locale, "contacto");
+  const resolvedCtaHref = ctaHref ?? buildContactoPath(locale);
 
   // Scroll listener con requestAnimationFrame: el handler solo corre una
   // vez por frame aunque el evento dispare 100+ veces por segundo.

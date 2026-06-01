@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { MilestoneCarousel } from "./milestone-carousel";
 
 export type LogisticsMilestone = {
   year: string;
@@ -39,7 +40,7 @@ const FALLBACK_MILESTONES: LogisticsMilestone[] = [
     label: "Origen",
     title: "Plast Alacant",
     location: "Alicante · España",
-    body: "Fundación como proveedor de PE y PP para mercado español.",
+    body: "Fundación como proveedor de PE y PP para el mercado español.",
   },
   {
     year: "2000/05",
@@ -54,14 +55,34 @@ const FALLBACK_MILESTONES: LogisticsMilestone[] = [
     title: "Depósito Aduanero",
     location: "Valencia · Alicante",
     body: "Consolidación logística. Denominación oficial obtenida.",
-    highlighted: true,
   },
   {
     year: "2010/14",
-    label: "Europa+NAF",
+    label: "Europa + NAF",
     title: "Hubs europeos",
-    location: "Italia · NL · MA · DZ",
-    body: "Hubs en Italia y Países Bajos. Exportación a Norte de África.",
+    location: "UK · FR · NL · LU · BE",
+    body: "Exportación a Brasil y resto de Sudamérica, además del Norte de África.",
+  },
+  {
+    year: "2019",
+    label: "OEA",
+    title: "Operador Económico Autorizado",
+    location: "",
+    body: "Obtención del certificado oficial.",
+  },
+  {
+    year: "2024",
+    label: "Red personal",
+    title: "Logística personal europea",
+    location: "Europa",
+    body: "Ampliación de la red de distribución a nivel europeo.",
+  },
+  {
+    year: "2026",
+    label: "Centros",
+    title: "Nuevos centros logísticos",
+    location: "",
+    body: "Diseño y construcción de centros de apoyo.",
   },
 ];
 
@@ -184,41 +205,7 @@ export function HomeLogistics({
         <div className="grow" />
 
         {/* Timeline */}
-        <div className="mt-16 lg:mt-20">
-          <div className="h-px w-full bg-foreground" aria-hidden="true" />
-          <p className="mt-4 font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-            {timelineLabel}
-          </p>
-
-          <ol className="mt-6 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 sm:gap-y-12 lg:mt-8 lg:grid-cols-4 lg:gap-x-10">
-            {milestones.map((m) => (
-              <li
-                key={m.year}
-                className="relative flex flex-col lg:border-l lg:border-foreground/15 lg:pl-6 lg:first:border-l-0 lg:first:pl-0"
-              >
-                <span
-                  className={`font-sans text-[54px] font-light leading-none tracking-[-1.5px] ${
-                    m.highlighted ? "text-primary-dark" : "text-foreground"
-                  }`}
-                >
-                  {m.year}
-                </span>
-                <span className="mt-3 font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-                  {m.label}
-                </span>
-                <p className="mt-3 font-sans text-[22px] tracking-[-0.4px] text-foreground">
-                  {m.title}
-                </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[2px] text-primary-dark">
-                  {m.location}
-                </p>
-                <p className="mt-3 max-w-[380px] font-sans text-[14px] font-light leading-[20px] tracking-[-0.1px] text-muted-strong">
-                  {m.body}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </div>
+        <MilestoneCarousel milestones={milestones} label={timelineLabel} />
       </div>
     </section>
   );

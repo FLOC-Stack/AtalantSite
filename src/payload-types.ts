@@ -209,12 +209,25 @@ export interface Media {
 export interface Page {
   id: number;
   slug: string;
+  pageType: 'home' | 'logistica' | 'nosotros' | 'sostenibilidad' | 'financiacion';
   hero: {
     eyebrow?: string | null;
     headline: string;
     body: string;
     primaryLabel: string;
+    primaryHref?: string | null;
     secondaryLabel: string;
+    secondaryHref?: string | null;
+  };
+  media?: {
+    homeProductsVideo?: (number | null) | Media;
+    logisticaHeroVideo?: (number | null) | Media;
+    sustainabilitySystemsVideo?: (number | null) | Media;
+    nosotrosHeroImage?: (number | null) | Media;
+    nosotrosChapter1Image?: (number | null) | Media;
+    nosotrosChapter2Image?: (number | null) | Media;
+    nosotrosChapter3Image?: (number | null) | Media;
+    financiacionHeroImage?: (number | null) | Media;
   };
   layoutBlocks?:
     | (
@@ -223,6 +236,8 @@ export interface Page {
             eyebrow: string;
             title: string;
             body: string;
+            ctaLabel?: string | null;
+            ctaHref?: string | null;
             stats?:
               | {
                   label: string;
@@ -239,6 +254,8 @@ export interface Page {
             eyebrow: string;
             title: string;
             body: string;
+            ctaLabel?: string | null;
+            ctaHref?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'section';
@@ -249,6 +266,7 @@ export interface Page {
             title: string;
             body: string;
             ctaLabel: string;
+            ctaHref?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'productPreview';
@@ -258,8 +276,31 @@ export interface Page {
             eyebrow: string;
             title: string;
             body: string;
+            sectionLabel?: string | null;
+            ctaLabel: string;
+            items?:
+              | {
+                  date: string;
+                  title: string;
+                  excerpt: string;
+                  href: string;
+                  image?: (number | null) | Media;
+                  imageAlt?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'news';
+          }
+        | {
+            anchorId: string;
+            eyebrow: string;
+            title: string;
+            body: string;
             note: string;
             submitLabel: string;
+            ctaHref?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'contact';
@@ -270,6 +311,18 @@ export interface Page {
     title: string;
     description: string;
   };
+  /**
+   * Structured content for non-home pages. Keep object keys intact when editing.
+   */
+  pageData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -365,9 +418,12 @@ export interface ProductFamily {
 export interface LeadSubmission {
   id: number;
   name: string;
-  company?: string | null;
+  role?: string | null;
+  phone?: string | null;
   email: string;
+  company?: string | null;
   country?: string | null;
+  topic?: ('sales' | 'products' | 'logistics' | 'financing' | 'sustainability' | 'press' | 'other') | null;
   message: string;
   locale: string;
   sourcePath: string;
@@ -540,6 +596,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface PagesSelect<T extends boolean = true> {
   slug?: T;
+  pageType?: T;
   hero?:
     | T
     | {
@@ -547,7 +604,21 @@ export interface PagesSelect<T extends boolean = true> {
         headline?: T;
         body?: T;
         primaryLabel?: T;
+        primaryHref?: T;
         secondaryLabel?: T;
+        secondaryHref?: T;
+      };
+  media?:
+    | T
+    | {
+        homeProductsVideo?: T;
+        logisticaHeroVideo?: T;
+        sustainabilitySystemsVideo?: T;
+        nosotrosHeroImage?: T;
+        nosotrosChapter1Image?: T;
+        nosotrosChapter2Image?: T;
+        nosotrosChapter3Image?: T;
+        financiacionHeroImage?: T;
       };
   layoutBlocks?:
     | T
@@ -559,6 +630,8 @@ export interface PagesSelect<T extends boolean = true> {
               eyebrow?: T;
               title?: T;
               body?: T;
+              ctaLabel?: T;
+              ctaHref?: T;
               stats?:
                 | T
                 | {
@@ -576,6 +649,8 @@ export interface PagesSelect<T extends boolean = true> {
               eyebrow?: T;
               title?: T;
               body?: T;
+              ctaLabel?: T;
+              ctaHref?: T;
               id?: T;
               blockName?: T;
             };
@@ -587,6 +662,30 @@ export interface PagesSelect<T extends boolean = true> {
               title?: T;
               body?: T;
               ctaLabel?: T;
+              ctaHref?: T;
+              id?: T;
+              blockName?: T;
+            };
+        news?:
+          | T
+          | {
+              anchorId?: T;
+              eyebrow?: T;
+              title?: T;
+              body?: T;
+              sectionLabel?: T;
+              ctaLabel?: T;
+              items?:
+                | T
+                | {
+                    date?: T;
+                    title?: T;
+                    excerpt?: T;
+                    href?: T;
+                    image?: T;
+                    imageAlt?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -599,6 +698,7 @@ export interface PagesSelect<T extends boolean = true> {
               body?: T;
               note?: T;
               submitLabel?: T;
+              ctaHref?: T;
               id?: T;
               blockName?: T;
             };
@@ -609,6 +709,7 @@ export interface PagesSelect<T extends boolean = true> {
         title?: T;
         description?: T;
       };
+  pageData?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -705,9 +806,12 @@ export interface ProductFamiliesSelect<T extends boolean = true> {
  */
 export interface LeadSubmissionsSelect<T extends boolean = true> {
   name?: T;
-  company?: T;
+  role?: T;
+  phone?: T;
   email?: T;
+  company?: T;
   country?: T;
+  topic?: T;
   message?: T;
   locale?: T;
   sourcePath?: T;
@@ -766,6 +870,8 @@ export interface SiteSetting {
   phone: string;
   address: string;
   footerText: string;
+  headerCtaLabel?: string | null;
+  headerCtaHref?: string | null;
   defaultSeo: {
     title: string;
     description: string;
@@ -788,6 +894,13 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  socialLinks?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -802,6 +915,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   phone?: T;
   address?: T;
   footerText?: T;
+  headerCtaLabel?: T;
+  headerCtaHref?: T;
   defaultSeo?:
     | T
     | {
@@ -823,6 +938,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         label?: T;
         kind?: T;
         sectionId?: T;
+        href?: T;
+        id?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        label?: T;
         href?: T;
         id?: T;
       };

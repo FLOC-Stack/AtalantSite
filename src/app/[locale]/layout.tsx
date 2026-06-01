@@ -20,22 +20,25 @@ export default async function LocaleLayout({ children, params }: Props) {
   }
 
   const typedLocale = locale as AppLocale;
-  let brandName: string | undefined;
-  let nav: Awaited<ReturnType<typeof getSiteSettings>>["navigation"] | undefined;
+  let settings: Awaited<ReturnType<typeof getSiteSettings>> | undefined;
 
   try {
-    const settings = await getSiteSettings(typedLocale);
-    brandName = settings.brandName;
-    nav = settings.navigation;
+    settings = await getSiteSettings(typedLocale);
   } catch {
-    // Payload no disponible — el Header usa sus fallbacks
+    // Payload no disponible — Header y Footer usan sus fallbacks
   }
 
   return (
     <>
-      <Header locale={typedLocale} brandName={brandName} nav={nav} />
+      <Header
+        locale={typedLocale}
+        brandName={settings?.brandName}
+        ctaHref={settings?.headerCtaHref}
+        ctaLabel={settings?.headerCtaLabel}
+        nav={settings?.navigation}
+      />
       {children}
-      <SiteFooter locale={typedLocale} />
+      <SiteFooter locale={typedLocale} settings={settings} />
     </>
   );
 }

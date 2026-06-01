@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Recycle } from "lucide-react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { ParticleMorph, type ParticleMorphHandle } from "./particle-morph";
 
@@ -39,7 +40,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Resistencia química y procesabilidad para envase, tubería y film. Grados específicos para soplado, inyección y extrusión.",
     variants: ["HDPE", "LDPE", "LLDPE"],
     href: "/es/productos/pe",
-    image: "/imgsrc/botella_detergente.jpg",
+    image: "/imgsrc/products/3d-product-PE.webp",
   },
   {
     code: "PP",
@@ -48,7 +49,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Alta rigidez, estabilidad térmica y reciclabilidad para automoción, electrodomésticos y envase rígido.",
     variants: ["Homopolímero", "Random", "Impacto"],
     href: "/es/productos/pp",
-    image: "/imgsrc/yogurt.jpg",
+    image: "/imgsrc/products/3d-product-PP.webp",
   },
   {
     code: "PVC",
@@ -57,7 +58,16 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Versatilidad rígida y flexible. Perfilería, conducciones, recubrimientos y construcción con aditivación a medida.",
     variants: ["Rígido", "Flexible", "Emulsión"],
     href: "/es/productos/pvc",
-    image: "/imgsrc/molde-construccion.jpg",
+    image: "/imgsrc/products/3d-product-PVC.webp",
+  },
+  {
+    code: "EVA",
+    name: "Etileno acetato de vinilo",
+    description:
+      "Grados con diferentes MFI y contenido de acetato de vinilo para plantillas, láminas, films, calzado, adhesivos, automoción y construcción.",
+    variants: ["Diferentes MFI", "Acetato de vinilo"],
+    href: "/es/productos/eva",
+    image: "/imgsrc/products/3d-product-EVA.webp",
   },
   {
     code: "EVA",
@@ -75,7 +85,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Transparencia y facilidad de termoconformado. Envase alimentario, electrodomésticos y aislamiento térmico.",
     variants: ["GPPS", "HIPS", "EPS"],
     href: "/es/productos/ps",
-    image: "/imgsrc/Oso%20de%20Pl%C3%A1stico.jpg",
+    image: "/imgsrc/products/3d-product-PS.webp",
   },
   {
     code: "PET",
@@ -84,7 +94,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
       "Barrera, transparencia y aptitud alimentaria. Grados soplado, inyección y fibra, incluyendo rPET certificado.",
     variants: ["Soplado", "Inyección", "Fibra", "rPET"],
     href: "/es/productos/pet",
-    video: "/imgsrc/v1.mp4",
+    image: "/imgsrc/products/3d-product-PET.webp",
   },
   {
     code: "REC",
@@ -94,7 +104,7 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
     variants: ["rPE", "rPP", "rPET"],
     href: "/es/productos/recycled",
     recycled: true,
-    image: "/imgsrc/Botella%20premium.jpg",
+    image: "/imgsrc/products/3d-product-RE.webp",
   },
 ];
 
@@ -124,15 +134,25 @@ function displayCode(code: string): string {
   return CODE_DISPLAY_OVERRIDES[code.toLowerCase()] ?? code.toUpperCase();
 }
 
-const PLACEHOLDER_IMAGE = "/imgsrc/botella_detergente.jpg";
+const PLACEHOLDER_IMAGE = "/imgsrc/botella_detergente.webp";
 
 type ProductImageRevealProps = {
   src?: string;
   videoSrc?: string;
   alt: string;
+  className?: string;
+  mediaClassName?: string;
+  animate?: boolean;
 };
 
-function ProductImageReveal({ src, videoSrc, alt }: ProductImageRevealProps) {
+function ProductImageReveal({
+  src,
+  videoSrc,
+  alt,
+  className,
+  mediaClassName = "object-cover",
+  animate = true,
+}: ProductImageRevealProps) {
   const imageSrc = src ?? PLACEHOLDER_IMAGE;
   const isVideo = Boolean(videoSrc);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -141,6 +161,11 @@ function ProductImageReveal({ src, videoSrc, alt }: ProductImageRevealProps) {
     () => {
       const root = rootRef.current;
       if (!root) return;
+
+      if (!animate) {
+        gsap.set(root, { opacity: 1, scale: 1, y: 0 });
+        return;
+      }
 
       const prefersReduced = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -206,11 +231,14 @@ function ProductImageReveal({ src, videoSrc, alt }: ProductImageRevealProps) {
   return (
     <div
       ref={rootRef}
-      className="relative h-full w-[320px] overflow-hidden rounded-3xl opacity-0 will-change-transform sm:w-[360px]"
+      className={
+        className ??
+        "relative h-full w-[320px] overflow-hidden rounded-3xl opacity-0 will-change-transform sm:w-[360px]"
+      }
     >
       {isVideo ? (
         <video
-          className="absolute inset-0 h-full w-full object-cover"
+          className={`absolute inset-0 h-full w-full ${mediaClassName}`}
           src={videoSrc}
           autoPlay
           muted
@@ -220,11 +248,16 @@ function ProductImageReveal({ src, videoSrc, alt }: ProductImageRevealProps) {
           aria-label={alt}
         />
       ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        // next/image sirve variantes en WebP al tamaño exacto del
+        // contenedor (320/360 px en este slide), evitando descargar el
+        // PNG original de 2048×2048 y el escalado por CSS — que es lo
+        // que producía el efecto aliasing/crispy en Safari.
+        <Image
           src={imageSrc}
           alt={alt}
-          className="absolute inset-0 h-full w-full object-cover"
+          fill
+          sizes="(min-width: 1024px) 360px, (min-width: 640px) 360px, 320px"
+          className={mediaClassName}
         />
       )}
     </div>
@@ -235,13 +268,17 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
   // Si el CMS devuelve items sin imagen/video, caemos al media del fallback
   // con el mismo `code` para que cada producto tenga su cover sin tener que
   // tocar Payload. Cuando el cliente suba su propio heroMedia, pisa al fallback.
+  // Indexamos por `displayCode` para que tanto si Payload devuelve el
+  // slug en minúsculas ("recycled") como si llega ya el código display
+  // ("REC"), el lookup acierte. Sin esto, el item de reciclados caía al
+  // PLACEHOLDER_IMAGE porque "RECYCLED" ≠ "REC".
   const fallbackMediaByCode = new Map(
-    FALLBACK_PRODUCTS.map((p) => [p.code.toUpperCase(), { image: p.image, video: p.video }]),
+    FALLBACK_PRODUCTS.map((p) => [displayCode(p.code), { image: p.image, video: p.video }]),
   );
   const items = (products?.length ? products.slice(0, 7) : FALLBACK_PRODUCTS).map(
     (item) => {
       if (item.image || item.video) return item;
-      const fb = fallbackMediaByCode.get(item.code.toUpperCase());
+      const fb = fallbackMediaByCode.get(displayCode(item.code));
       return fb ? { ...item, image: fb.image, video: fb.video } : item;
     },
   );
@@ -347,63 +384,74 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
           const card = (
             <Link
               href={href}
-              className="glass group relative flex w-[320px] flex-col rounded-3xl p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(30,75,182,0.15)] sm:w-[360px] sm:p-7"
+              className="glass group relative flex w-[320px] flex-col overflow-hidden rounded-3xl p-0 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(30,75,182,0.15)] sm:w-[360px] lg:p-7"
               aria-label={`${symbol} — ${product.name}`}
             >
-              {/* Top row: number/total + indicator */}
-              <div className="flex items-start justify-between">
-                <span className="font-mono text-[11px] uppercase tracking-[2px] text-muted-strong">
-                  {number} / {total}
-                </span>
-                {product.recycled ? (
-                  <Recycle className="h-4 w-4 text-primary-dark" aria-label="Reciclado" />
-                ) : (
-                  <ArrowUpRight className="h-4 w-4 text-foreground/60 transition-colors group-hover:text-primary-dark" />
-                )}
-              </div>
+              <ProductImageReveal
+                src={product.image}
+                videoSrc={product.video}
+                alt={product.name}
+                className="relative aspect-square w-full overflow-hidden rounded-t-3xl opacity-100 lg:hidden"
+                mediaClassName="object-contain"
+                animate={false}
+              />
 
-              {/* Atomic symbol */}
-              <div className="my-6 flex items-center justify-center">
-                <span
-                  className={`font-sans font-normal leading-none tracking-tight text-primary ${symbolSize}`}
-                >
-                  {symbol}
-                </span>
-              </div>
-
-              {/* Name */}
-              <p className="font-sans text-base leading-tight text-foreground sm:text-lg">
-                {product.name}
-              </p>
-
-              {/* Variants line */}
-              {variants.length > 0 ? (
-                <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[10px] uppercase tracking-[1.5px] text-muted-strong">
-                  {variants.map((variant, i) => (
-                    <span key={variant} className="whitespace-nowrap">
-                      {variant}
-                      {i < variants.length - 1 ? (
-                        <span aria-hidden="true"> ·</span>
-                      ) : null}
-                    </span>
-                  ))}
+              <div className="flex flex-col p-6 sm:p-7 lg:p-0">
+                {/* Top row: number/total + indicator */}
+                <div className="flex items-start justify-between">
+                  <span className="font-mono text-[11px] uppercase tracking-[2px] text-muted-strong">
+                    {number} / {total}
+                  </span>
+                  {product.recycled ? (
+                    <Recycle className="h-4 w-4 text-primary-dark" aria-label="Reciclado" />
+                  ) : (
+                    <ArrowUpRight className="h-4 w-4 text-foreground/60 transition-colors group-hover:text-primary-dark" />
+                  )}
                 </div>
-              ) : null}
 
-              {/* Divider */}
-              <div className="mt-5 h-px w-full bg-foreground/10" />
+                {/* Atomic symbol */}
+                <div className="my-6 flex items-center justify-center">
+                  <span
+                    className={`font-sans font-normal leading-none tracking-tight text-primary ${symbolSize}`}
+                  >
+                    {symbol}
+                  </span>
+                </div>
 
-              {/* Description */}
-              <p className="mt-4 font-sans text-[13px] leading-snug text-body sm:text-sm">
-                {product.description}
-              </p>
+                {/* Name */}
+                <p className="font-sans text-base leading-tight text-foreground sm:text-lg">
+                  {product.name}
+                </p>
 
-              {/* Footer: CTA centrado */}
-              <div className="mt-5 flex items-center justify-center font-mono text-[10px] uppercase tracking-[1.8px]">
-                <span className="flex items-center gap-1 text-foreground transition-opacity group-hover:opacity-70">
-                  Ver ficha
-                  <ArrowUpRight className="h-3 w-3" />
-                </span>
+                {/* Variants line */}
+                {variants.length > 0 ? (
+                  <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[10px] uppercase tracking-[1.5px] text-muted-strong">
+                    {variants.map((variant, i) => (
+                      <span key={variant} className="whitespace-nowrap">
+                        {variant}
+                        {i < variants.length - 1 ? (
+                          <span aria-hidden="true"> ·</span>
+                        ) : null}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+
+                {/* Divider */}
+                <div className="mt-5 h-px w-full bg-foreground/10" />
+
+                {/* Description */}
+                <p className="mt-4 font-sans text-[13px] leading-snug text-body sm:text-sm">
+                  {product.description}
+                </p>
+
+                {/* Footer: CTA centrado */}
+                <div className="mt-5 flex items-center justify-center font-mono text-[10px] uppercase tracking-[1.8px]">
+                  <span className="flex items-center gap-1 text-foreground transition-opacity group-hover:opacity-70">
+                    Ver ficha
+                    <ArrowUpRight className="h-3 w-3" />
+                  </span>
+                </div>
               </div>
             </Link>
           );
@@ -422,13 +470,11 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
               ref={(el) => {
                 sectionRefs.current[index + 1] = el;
               }}
-              data-shape-index={index}
+              data-shape-index={index + 1}
               className="pointer-events-none relative flex min-h-screen items-center px-5 py-24 sm:px-8 md:px-16 lg:px-[10%] xl:px-[14%] 2xl:px-[18%]"
             >
               <div
-                className={`flex w-full items-stretch lg:justify-between ${
-                  isLeft ? "justify-start" : "justify-end"
-                }`}
+                className="flex w-full items-stretch justify-center lg:justify-between"
               >
                 {isLeft ? (
                   <>

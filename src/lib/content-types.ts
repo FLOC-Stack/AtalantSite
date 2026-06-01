@@ -23,8 +23,14 @@ export type SiteSettingsData = {
   address: string;
   footerText: string;
   defaultSeo: SeoData;
+  headerCtaLabel?: string;
+  headerCtaHref?: string;
   navigation: NavItem[];
   footerLinks: NavItem[];
+  socialLinks?: Array<{
+    label: string;
+    href: string;
+  }>;
 };
 
 export type HomeHero = {
@@ -32,7 +38,9 @@ export type HomeHero = {
   headline: string;
   body: string;
   primaryLabel: string;
+  primaryHref?: string;
   secondaryLabel: string;
+  secondaryHref?: string;
 };
 
 export type StatsBlock = {
@@ -53,6 +61,8 @@ export type SectionBlock = {
   eyebrow: string;
   title: string;
   body: RichContent;
+  ctaLabel?: string;
+  ctaHref?: string;
 };
 
 export type ProductPreviewBlock = {
@@ -62,6 +72,27 @@ export type ProductPreviewBlock = {
   title: string;
   body: string;
   ctaLabel: string;
+  ctaHref?: string;
+  videoSrc?: string;
+  videoPoster?: string;
+};
+
+export type NewsBlock = {
+  anchorId: string;
+  type: "news";
+  eyebrow: string;
+  title: string;
+  body: string;
+  sectionLabel?: string;
+  ctaLabel: string;
+  items: Array<{
+    date: string;
+    title: string;
+    excerpt: string;
+    href: string;
+    image?: string;
+    imageAlt?: string;
+  }>;
 };
 
 export type ContactBlock = {
@@ -72,9 +103,15 @@ export type ContactBlock = {
   body: string;
   note: string;
   submitLabel: string;
+  ctaHref?: string;
 };
 
-export type HomeBlock = StatsBlock | SectionBlock | ProductPreviewBlock | ContactBlock;
+export type HomeBlock =
+  | StatsBlock
+  | SectionBlock
+  | ProductPreviewBlock
+  | NewsBlock
+  | ContactBlock;
 
 export type HomePageData = {
   locale: AppLocale;

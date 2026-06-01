@@ -1,6 +1,19 @@
 import Link from "next/link";
+import type { NavItem, SiteSettingsData } from "@/lib/content-types";
 import { locales, type AppLocale } from "@/lib/locales";
-import { buildLocalePath, buildProductsPath } from "@/lib/routes";
+import {
+  buildCookiesPath,
+  buildFinancingPath,
+  buildLegalNoticePath,
+  buildLocalePath,
+  buildLogisticsPath,
+  buildPrivacyPath,
+  buildProductsPath,
+  buildAboutPath,
+  buildSectionPath,
+  buildSustainabilityPath,
+} from "@/lib/routes";
+import { fallbackSiteSettings } from "@/lib/fallback-content";
 
 type FooterLink = {
   label: string;
@@ -14,6 +27,7 @@ type FooterColumn = {
 
 type Props = {
   locale: AppLocale;
+  settings?: SiteSettingsData;
 };
 
 const localeShort: Record<AppLocale, string> = {
@@ -23,43 +37,67 @@ const localeShort: Record<AppLocale, string> = {
   fr: "FR",
 };
 
-function getColumns(locale: AppLocale): FooterColumn[] {
-  const home = buildLocalePath(locale);
+function resolveFooterHref(item: NavItem, locale: AppLocale): string {
+  if (item.kind === "products") return buildProductsPath(locale);
+  if (item.kind === "logistics") return buildLogisticsPath(locale);
+  if (item.kind === "external") return item.href ?? "#";
+  if (
+    ["sustainability", "sostenibilidad"].includes((item.sectionId ?? "").toLowerCase())
+  ) {
+    return buildSustainabilityPath(locale);
+  }
+  if (
+    ["financing", "financiacion", "financement", "financiamento"].includes(
+      (item.sectionId ?? "").toLowerCase(),
+    )
+  ) {
+    return buildFinancingPath(locale);
+  }
+  if (["team", "equipo", "nosotros", "about"].includes((item.sectionId ?? "").toLowerCase())) {
+    return buildAboutPath(locale);
+  }
+  return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
+}
+
+function getColumns(locale: AppLocale, settings: SiteSettingsData): FooterColumn[] {
   const products = buildProductsPath(locale);
+  const sustainability = buildSustainabilityPath(locale);
+  const financing = buildFinancingPath(locale);
+  const footerLinks = settings.footerLinks.length
+    ? settings.footerLinks.map((item) => ({
+        href: resolveFooterHref(item, locale),
+        label: item.label,
+      }))
+    : [
+        { label: "Productos", href: products },
+        { label: "Logística", href: buildLogisticsPath(locale) },
+        { label: "Financiación", href: financing },
+        { label: "Sostenibilidad", href: sustainability },
+      ];
 
   return [
     {
-      heading: "Soluciones",
-      links: [
-        { label: "Productos", href: products },
-        { label: "Logística", href: `${home}#logistica` },
-        { label: "Financiación", href: `${home}#financiacion` },
-        { label: "Sostenibilidad", href: `${home}#sostenibilidad` },
-      ],
-    },
-    {
-      heading: "Empresa",
-      links: [
-        { label: "Equipo", href: `${home}#equipo` },
-        { label: "Principios de trabajo", href: `${home}#principios` },
-        { label: "Evolución", href: `${home}#evolucion` },
-      ],
+      heading: "Enlaces",
+      links: footerLinks,
     },
     {
       heading: "Contacto",
-      links: [
-        { label: "info@atalant.com", href: "mailto:info@atalant.com" },
-        { label: "logistics@atalant.com", href: "mailto:logistics@atalant.com" },
-        { label: "marketing@atalant.com", href: "mailto:marketing@atalant.com" },
-        { label: "job@atalant.com", href: "mailto:job@atalant.com" },
-      ],
+      links: [{ label: settings.contactEmail, href: `mailto:${settings.contactEmail}` }],
     },
   ];
 }
 
-export function SiteFooter({ locale }: Props) {
-  const columns = getColumns(locale);
+function isExternalHref(href: string) {
+  return href.startsWith("mailto:") || href.startsWith("http://") || href.startsWith("https://");
+}
+
+export function SiteFooter({ locale, settings: cmsSettings }: Props) {
+  const settings = cmsSettings ?? fallbackSiteSettings[locale];
+  const columns = getColumns(locale, settings);
   const currentYear = new Date().getFullYear();
+  const socialLinks = settings.socialLinks?.length
+    ? settings.socialLinks
+    : fallbackSiteSettings[locale].socialLinks;
 
   return (
     <footer className="relative w-full bg-primary text-white">
@@ -72,22 +110,18 @@ export function SiteFooter({ locale }: Props) {
         <div className="mt-12 h-px w-full bg-white/20 sm:mt-16 lg:mt-20" aria-hidden="true" />
 
         {/* Columns grid */}
-        <div className="mt-8 grid grid-cols-1 gap-10 sm:mt-10 sm:grid-cols-2 sm:gap-12 lg:mt-10 lg:grid-cols-[2fr_1fr_1fr_1.2fr] lg:gap-14">
+        <div className="mt-8 grid grid-cols-1 gap-10 sm:mt-10 sm:grid-cols-2 sm:gap-12 lg:mt-10 lg:grid-cols-[2fr_1.4fr_1.2fr] lg:gap-14">
           {/* Atalant — info block */}
           <div className="flex flex-col">
             <p className="font-mono text-[10px] uppercase tracking-[2px] text-white/55">
-              Atalant
+              {settings.brandName}
             </p>
             <p className="mt-7 font-sans text-lg font-light leading-[1.4] tracking-[-0.3px] text-white/90 sm:text-xl sm:leading-[1.4]">
-              Distribución europea
-              <br />
-              de polímeros desde 1997.
+              {settings.footerText}
             </p>
             <address className="mt-6 flex flex-col gap-1 font-mono text-[12px] not-italic leading-[1.5] tracking-[0.2px] text-white/55">
-              <span>+34 965 661 828</span>
-              <span>Avda. de la Industria, 13–15</span>
-              <span>Pol. Ind. Canastell · Alicante</span>
-              <span>España</span>
+              <span>{settings.phone}</span>
+              <span>{settings.address}</span>
             </address>
           </div>
 
@@ -99,7 +133,7 @@ export function SiteFooter({ locale }: Props) {
               </p>
               <ul className="mt-7 flex flex-col gap-2.5">
                 {column.links.map((link) => {
-                  const isExternal = link.href.startsWith("mailto:");
+                  const isExternal = isExternalHref(link.href);
 
                   if (isExternal) {
                     return (
@@ -142,29 +176,34 @@ export function SiteFooter({ locale }: Props) {
             aria-label="Legal"
             className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/55"
           >
-            <Link href={`${buildLocalePath(locale)}/privacidad`} className="transition-opacity hover:opacity-70">
+            <Link href={buildPrivacyPath(locale)} className="transition-opacity hover:opacity-70">
               Privacidad
             </Link>
             <span aria-hidden="true">·</span>
-            <Link href={`${buildLocalePath(locale)}/cookies`} className="transition-opacity hover:opacity-70">
+            <Link href={buildCookiesPath(locale)} className="transition-opacity hover:opacity-70">
               Cookies
             </Link>
             <span aria-hidden="true">·</span>
-            <Link href={`${buildLocalePath(locale)}/aviso-legal`} className="transition-opacity hover:opacity-70">
+            <Link href={buildLegalNoticePath(locale)} className="transition-opacity hover:opacity-70">
               Aviso legal
             </Link>
           </nav>
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/70">
-            <a
-              href="https://www.linkedin.com/company/atalant-europe/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-opacity hover:opacity-70"
-            >
-              LinkedIn
-            </a>
-            <span aria-hidden="true" className="mx-1 text-white/30">/</span>
+            {socialLinks?.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-70"
+              >
+                {link.label}
+              </a>
+            ))}
+            {socialLinks?.length ? (
+              <span aria-hidden="true" className="mx-1 text-white/30">/</span>
+            ) : null}
             <ul className="flex items-center gap-x-2.5">
               {locales.map((code) => {
                 const active = code === locale;

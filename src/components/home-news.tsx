@@ -33,7 +33,7 @@ const FALLBACK_ITEMS: NewsItem[] = [
     excerpt:
       "Ampliamos capacidad operativa y reducimos los tiempos de entrega en el norte de Europa.",
     href: "#",
-    image: "/imgsrc/atalant-post-1.jpeg",
+    image: "/imgsrc/atalant-post-1.webp",
     imageAlt: "Polímeros Atalant",
   },
   {
@@ -42,7 +42,7 @@ const FALLBACK_ITEMS: NewsItem[] = [
     excerpt:
       "Nuestra línea de reciclados consolida su trazabilidad y calidad bajo estándar europeo.",
     href: "#",
-    image: "/imgsrc/atalant-post-2.jpeg",
+    image: "/imgsrc/atalant-post-2.webp",
     imageAlt: "Reciclados Greenlant Atalant",
   },
   {
@@ -51,7 +51,7 @@ const FALLBACK_ITEMS: NewsItem[] = [
     excerpt:
       "Reforzamos la oferta de polímeros técnicos con un nuevo contrato de suministro estable.",
     href: "#",
-    image: "/imgsrc/atalant-post-3.jpeg",
+    image: "/imgsrc/atalant-post-3.webp",
     imageAlt: "Polímeros técnicos Atalant",
   },
 ];

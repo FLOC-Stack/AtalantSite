@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ArrowDown, ArrowRight } from "lucide-react";
-import { DitheredVideo } from "./dithered-video";
 
 export type HomeProductsIntroStat = {
   label: string;
@@ -52,14 +51,21 @@ function MediaLayer({
   return (
     <>
       {videoSrc ? (
-        <DitheredVideo
-          src={videoSrc}
-          poster={videoPoster}
-          cellSize={3}
-          light={[255, 255, 255]}
-          dark={[30, 75, 182]}
-          className="absolute inset-0 h-full w-full"
-        />
+        <div className="absolute inset-y-0 left-1/2 aspect-square h-full max-w-none -translate-x-1/2">
+          <video
+            src={videoSrc}
+            poster={videoPoster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 h-full w-full object-contain opacity-95 contrast-[1.08] saturate-[0.9]"
+          />
+          <div
+            className="pointer-events-none absolute inset-0 bg-background mix-blend-multiply"
+            aria-hidden="true"
+          />
+        </div>
       ) : (
         <div
           className="absolute inset-0 flex items-center justify-center bg-[#d9d9d9] font-mono text-[11px] uppercase tracking-[2px] text-muted-strong"
@@ -92,7 +98,7 @@ export function HomeProductsIntro({
       className="relative min-h-screen overflow-hidden bg-background text-foreground"
     >
       {/* Card editorial flotante — glass sobre el video */}
-      <div className="glass relative z-10 m-4 flex flex-col rounded-3xl px-6 pt-12 pb-10 sm:m-6 sm:px-8 sm:pt-14 sm:pb-12 lg:absolute lg:inset-y-8 lg:left-8 lg:m-0 lg:w-[640px] lg:rounded-[28px] lg:px-12 lg:pt-12 lg:pb-10">
+      <div className="glass relative z-10 m-4 flex flex-col rounded-3xl px-6 pt-12 pb-10 backdrop-blur-[16px] backdrop-saturate-[1.2] sm:m-6 sm:px-8 sm:pt-14 sm:pb-12 lg:absolute lg:inset-y-8 lg:left-8 lg:m-0 lg:w-[640px] lg:rounded-[28px] lg:px-12 lg:pt-12 lg:pb-10">
         {/* Header: index + counter */}
         <div className="flex items-start justify-between gap-4">
           <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary-dark">
@@ -162,8 +168,8 @@ export function HomeProductsIntro({
         </dl>
       </div>
 
-      {/* Video/imagen — full-bleed detrás en desktop, debajo del texto en mobile */}
-      <div className="relative z-0 h-[60vh] w-full sm:h-[70vh] lg:absolute lg:inset-0 lg:h-full">
+      {/* Video/imagen: full-bleed sobre el fondo base de la web */}
+      <div className="relative z-0 h-[60vh] w-full bg-background sm:h-[70vh] lg:absolute lg:inset-0 lg:h-full">
         <MediaLayer videoSrc={videoSrc} videoPoster={videoPoster} />
       </div>
 
