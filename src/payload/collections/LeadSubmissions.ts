@@ -35,5 +35,19 @@ export const LeadSubmissions: CollectionConfig = {
     { name: "message", required: true, type: "textarea" },
     { name: "locale", required: true, type: "text" },
     { name: "sourcePath", required: true, type: "text" },
+    {
+      name: "ipHash",
+      type: "text",
+      admin: {
+        readOnly: true,
+      },
+    },
+    {
+      name: "userAgent",
+      type: "text",
+      admin: {
+        readOnly: true,
+      },
+    },
   ],
 };

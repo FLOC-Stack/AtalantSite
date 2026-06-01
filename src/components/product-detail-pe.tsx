@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ProductHeroParticles } from "@/components/product-hero-particles";
 import type { AppLocale } from "@/lib/locales";
-import { buildFamilyPath, buildProductsPath, buildSectionPath } from "@/lib/routes";
+import { buildContactoPath, buildFamilyPath, buildProductsPath } from "@/lib/routes";
 
 // Datos extraídos del nodo Figma 145:25 — no se inventa nada.
 type Grade = {
@@ -69,7 +69,7 @@ type Props = {
 
 export function ProductDetailPE({ locale }: Props) {
   const productsHref = buildProductsPath(locale);
-  const contactHref = buildSectionPath(locale, "contact");
+  const contactHref = buildContactoPath(locale);
 
   return (
     <main className="relative bg-white">

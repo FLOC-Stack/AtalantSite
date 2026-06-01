@@ -1,9 +1,14 @@
 import configPromise from "@payload-config";
-import { isLocale, type AppLocale } from "@/lib/locales";
+import type { AppLocale } from "@/lib/locales";
+import { createHash } from "crypto";
 import { getPayload } from "payload";
 import {
+  asContactString,
+  hasSpamIdentitySignals,
+  normalizeContactSubmission,
+} from "@/lib/contact-request";
+import {
   CONTACT_TOPICS,
-  isContactTopic,
   masterBccAddress,
   recipientForTopic,
   type ContactTopic,
@@ -11,27 +16,11 @@ import {
 
 export const runtime = "nodejs";
 
-// === Anti-spam: rate limit en memoria ===
-// 5 envíos por IP cada 60s. Map en módulo: sobrevive entre requests del
-// mismo worker. En serverless cold start se reinicia, pero detiene los
-// ataques sostenidos desde una misma IP en una instancia caliente.
+// === Anti-spam: rate limit persistente ===
+// Se calcula contra Payload usando un hash de IP, no un Map en memoria.
+// Así funciona también con serverless y múltiples instancias.
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const ipHits = new Map<string, number[]>();
-
-function tooManyRequests(ip: string): boolean {
-  const now = Date.now();
-  const hits = (ipHits.get(ip) ?? []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-  hits.push(now);
-  ipHits.set(ip, hits);
-  // Limpieza esporádica para que el Map no crezca sin parar.
-  if (ipHits.size > 5_000) {
-    for (const [key, ts] of ipHits) {
-      if (ts.every((t) => now - t > RATE_LIMIT_WINDOW_MS)) ipHits.delete(key);
-    }
-  }
-  return hits.length > RATE_LIMIT_MAX;
-}
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get("x-forwarded-for");
@@ -39,28 +28,9 @@ function getClientIp(request: Request): string {
   return request.headers.get("x-real-ip") ?? "unknown";
 }
 
-// Validación de email moderada — rechaza basura evidente sin pretender
-// cubrir el RFC entero (de eso se ocupa el envío real).
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-// Límites de longitud generosos pero suficientes para frenar payloads
-// abusivos. Cualquier exceso → 400.
-const LIMITS = {
-  name: 120,
-  role: 120,
-  phone: 40,
-  email: 160,
-  company: 160,
-  country: 80,
-  message: 4_000,
-} as const;
-
-function asString(value: unknown, max: number): string | null {
-  if (typeof value !== "string") return null;
-  const trimmed = value.trim();
-  if (trimmed.length === 0) return "";
-  if (trimmed.length > max) return null;
-  return trimmed;
+function hashClientIp(ip: string): string {
+  const salt = process.env.PAYLOAD_SECRET || "dev-secret";
+  return createHash("sha256").update(`${salt}:${ip}`).digest("hex");
 }
 
 function escapeHtml(text: string): string {
@@ -231,9 +201,8 @@ function buildAutoReplyHtml(input: {
 export async function POST(request: Request) {
   try {
     const ip = getClientIp(request);
-    if (tooManyRequests(ip)) {
-      return Response.json({ error: "Too many requests" }, { status: 429 });
-    }
+    const ipHash = hashClientIp(ip);
+    const userAgent = asContactString(request.headers.get("user-agent") ?? "", 300) ?? "";
 
     const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
     if (!body) {
@@ -246,40 +215,32 @@ export async function POST(request: Request) {
       return Response.json({ ok: true });
     }
 
-    // Guardia temporal — formularios enviados en <2s casi siempre son bots.
-    const elapsed = typeof body.elapsedMs === "number" ? body.elapsedMs : 0;
-    if (elapsed > 0 && elapsed < 2_000) {
-      return Response.json({ ok: true });
-    }
+    // `elapsedMs` se mantiene como señal diagnóstica, pero no descarta por sí
+    // sola. Autofill y usuarios rápidos pueden enviar formularios válidos.
 
-    const name = asString(body.name, LIMITS.name);
-    const role = asString(body.role, LIMITS.role) ?? "";
-    const phone = asString(body.phone, LIMITS.phone) ?? "";
-    const email = asString(body.email, LIMITS.email);
-    const company = asString(body.company, LIMITS.company) ?? "";
-    const country = asString(body.country, LIMITS.country) ?? "";
-    const message = asString(body.message, LIMITS.message);
-    const localeRaw = typeof body.locale === "string" ? body.locale : "";
-    const sourcePathRaw = typeof body.sourcePath === "string" ? body.sourcePath : "";
-    const topicRaw = typeof body.topic === "string" ? body.topic : "";
+    const submission = normalizeContactSubmission(body);
 
-    if (
-      !name ||
-      !email ||
-      !message ||
-      !EMAIL_RE.test(email) ||
-      !isLocale(localeRaw) ||
-      !isContactTopic(topicRaw)
-    ) {
+    if (!submission) {
       return Response.json({ error: "Invalid payload" }, { status: 400 });
     }
 
     // URLs en el nombre o el rol son señal casi inequívoca de spam.
-    if (/(https?:\/\/|www\.)/i.test(name) || /(https?:\/\/|www\.)/i.test(role)) {
+    if (hasSpamIdentitySignals(submission.name, submission.role)) {
       return Response.json({ ok: true });
     }
 
-    const topic = topicRaw as ContactTopic;
+    const {
+      company,
+      country,
+      email,
+      locale: localeRaw,
+      message,
+      name,
+      phone,
+      role,
+      sourcePath,
+      topic,
+    } = submission;
     const topicLabel =
       CONTACT_TOPICS.find((t) => t.value === topic)?.label.es ?? topic;
 
@@ -295,6 +256,23 @@ export async function POST(request: Request) {
 
     try {
       const payload = await getPayload({ config: configPromise });
+      const recentWindowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+      const recentSubmissions = await payload.find({
+        collection: "leadSubmissions",
+        depth: 0,
+        limit: 0,
+        where: {
+          and: [
+            { ipHash: { equals: ipHash } },
+            { createdAt: { greater_than: recentWindowStart } },
+          ],
+        },
+      });
+
+      if (recentSubmissions.totalDocs >= RATE_LIMIT_MAX) {
+        return Response.json({ error: "Too many requests" }, { status: 429 });
+      }
+
       await payload.create({
         collection: "leadSubmissions",
         data: {
@@ -306,8 +284,10 @@ export async function POST(request: Request) {
           name,
           phone,
           role,
-          sourcePath: sourcePathRaw || `/${localeRaw}/contacto`,
+          ipHash,
+          sourcePath,
           topic,
+          userAgent,
         },
       });
     } catch (dbError) {
@@ -342,7 +322,7 @@ export async function POST(request: Request) {
           name,
           phone,
           role,
-          sourcePath: sourcePathRaw || `/${localeRaw}/contacto`,
+          sourcePath,
           topic,
           topicLabel,
         }),

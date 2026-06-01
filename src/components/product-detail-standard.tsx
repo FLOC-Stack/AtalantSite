@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ProductHeroParticles } from "@/components/product-hero-particles";
 import type { ProductDetailData } from "@/lib/product-detail-data";
 import type { AppLocale } from "@/lib/locales";
-import { buildFamilyPath, buildProductsPath, buildSectionPath } from "@/lib/routes";
+import { buildContactoPath, buildFamilyPath, buildProductsPath } from "@/lib/routes";
 
 type Props = {
   data: ProductDetailData;
@@ -11,7 +11,7 @@ type Props = {
 
 export function ProductDetailStandard({ data, locale }: Props) {
   const productsHref = buildProductsPath(locale);
-  const contactHref = buildSectionPath(locale, "contact");
+  const contactHref = buildContactoPath(locale);
 
   return (
     <main className="relative bg-white">

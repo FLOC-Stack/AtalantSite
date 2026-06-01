@@ -7,10 +7,10 @@ import type { HomeBlock, NewsBlock } from "../src/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "../src/lib/fallback-content";
 import { locales, type AppLocale } from "../src/lib/locales";
 import {
+  buildContactoPath,
   buildFinancingPath,
   buildLogisticsPath,
   buildProductsPath,
-  buildSectionPath,
   buildSustainabilityPath,
 } from "../src/lib/routes";
 import { productDetailData, type ProductDetailData } from "../src/lib/product-detail-data";
@@ -246,7 +246,7 @@ function getHomeBlockCtaLabel(block: HomeBlock, locale: AppLocale) {
 
 function getHomeBlockHref(block: HomeBlock, locale: AppLocale) {
   if (block.type === "productPreview") return buildProductsPath(locale);
-  if (block.type === "contact") return buildSectionPath(locale, "contact");
+  if (block.type === "contact") return buildContactoPath(locale);
   if (block.type !== "section") return undefined;
   if (block.anchorId === "logistics") return buildLogisticsPath(locale);
   if (block.anchorId === "financing") return buildFinancingPath(locale);
@@ -321,7 +321,7 @@ async function seedHomePage(locale: AppLocale) {
     hero: {
       ...data.hero,
       primaryHref: buildProductsPath(locale),
-      secondaryHref: buildSectionPath(locale, "contact"),
+      secondaryHref: buildContactoPath(locale),
     },
     layoutBlocks: [
       ...serializeBlocks(data.blocks, locale),

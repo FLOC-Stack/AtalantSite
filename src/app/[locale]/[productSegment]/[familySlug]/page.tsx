@@ -8,7 +8,7 @@ import { catalogCopy } from "@/lib/catalog-copy";
 import { getProductFamilyBySlug } from "@/lib/payload-data";
 import { productDetailData } from "@/lib/product-detail-data";
 import { defaultLocale, getProductSegment, isLocale, locales, type AppLocale } from "@/lib/locales";
-import { buildFamilyPath, buildProductsPath, buildSectionPath } from "@/lib/routes";
+import { buildContactoPath, buildFamilyPath, buildProductsPath } from "@/lib/routes";
 
 export const dynamic = "force-dynamic";
 
@@ -114,7 +114,7 @@ export default async function ProductFamilyPage({ params }: Props) {
               </span>
             ))}
           </div>
-          <Link className="cta-primary mt-8 w-full justify-center" href={buildSectionPath(locale, "contact")}>
+          <Link className="cta-primary mt-8 w-full justify-center" href={buildContactoPath(locale)}>
             {copy.talkToAtalant}
           </Link>
         </aside>

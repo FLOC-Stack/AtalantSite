@@ -21,6 +21,7 @@ import type {
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "@/lib/fallback-content";
 import type { AppLocale } from "@/lib/locales";
 import { productDetailData } from "@/lib/product-detail-data";
+import { buildContactoPath } from "@/lib/routes";
 import { getPayload } from "payload";
 
 type PageDoc = {
@@ -85,6 +86,11 @@ function mapMediaUrl(value: unknown): string | undefined {
 function mapMediaAlt(value: unknown): string | undefined {
   const record = asRecord(value);
   return typeof record?.alt === "string" ? record.alt : undefined;
+}
+
+function normalizeContactHref(href: string | undefined, locale: AppLocale) {
+  if (!href) return href;
+  return href.endsWith("#contact") ? buildContactoPath(locale) : href;
 }
 
 function normalizeNavItems(items: unknown): SiteSettingsData["navigation"] {
@@ -335,7 +341,7 @@ export const getSiteSettings = cache(async function getSiteSettings(
           : fallbackSiteSettings[locale].footerText,
       headerCtaHref:
         typeof settings.headerCtaHref === "string"
-          ? settings.headerCtaHref
+          ? normalizeContactHref(settings.headerCtaHref, locale)
           : fallbackSiteSettings[locale].headerCtaHref,
       headerCtaLabel:
         typeof settings.headerCtaLabel === "string"
@@ -418,8 +424,10 @@ export const getHomePage = cache(async function getHomePage(
           page.hero?.secondaryLabel ||
           fallbackHomePages[locale].hero.secondaryLabel,
         secondaryHref:
-          page.hero?.secondaryHref ||
-          fallbackHomePages[locale].hero.secondaryHref,
+          normalizeContactHref(
+            page.hero?.secondaryHref || fallbackHomePages[locale].hero.secondaryHref,
+            locale,
+          ),
       },
       locale,
       seo: {

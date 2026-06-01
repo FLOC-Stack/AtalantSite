@@ -427,6 +427,8 @@ export interface LeadSubmission {
   message: string;
   locale: string;
   sourcePath: string;
+  ipHash?: string | null;
+  userAgent?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -815,6 +817,8 @@ export interface LeadSubmissionsSelect<T extends boolean = true> {
   message?: T;
   locale?: T;
   sourcePath?: T;
+  ipHash?: T;
+  userAgent?: T;
   updatedAt?: T;
   createdAt?: T;
 }

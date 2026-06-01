@@ -3,6 +3,7 @@ import type {
   ProductFamilyData,
   SiteSettingsData,
 } from "@/lib/content-types";
+import { buildContactoPath } from "@/lib/routes";
 import type { AppLocale } from "@/lib/locales";
 
 const byLocale = {
@@ -79,7 +80,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "About", sectionId: "team" },
     ],
     footerText: byLocale.en.footerText,
-    headerCtaHref: "/en#contact",
+    headerCtaHref: buildContactoPath("en"),
     headerCtaLabel: "Contact",
     locale: "en",
     navigation: [
@@ -112,7 +113,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Nosotros", sectionId: "team" },
     ],
     footerText: byLocale.es.footerText,
-    headerCtaHref: "/es#contact",
+    headerCtaHref: buildContactoPath("es"),
     headerCtaLabel: "Contacto",
     locale: "es",
     navigation: [
@@ -145,7 +146,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "À propos", sectionId: "team" },
     ],
     footerText: byLocale.fr.footerText,
-    headerCtaHref: "/fr#contact",
+    headerCtaHref: buildContactoPath("fr"),
     headerCtaLabel: "Contact",
     locale: "fr",
     navigation: [
@@ -178,7 +179,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Sobre nós", sectionId: "team" },
     ],
     footerText: byLocale.pt.footerText,
-    headerCtaHref: "/pt#contact",
+    headerCtaHref: buildContactoPath("pt"),
     headerCtaLabel: "Contato",
     locale: "pt",
     navigation: [

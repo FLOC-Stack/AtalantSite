@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { HomePageData, ProductFamilyData } from "@/lib/content-types";
 import type { AppLocale } from "@/lib/locales";
 import { buildProductsPath } from "@/lib/routes";
-import { ContactForm } from "@/components/contact-form";
+import { ContactoForm } from "@/components/contacto-form";
 import { FamilyCard } from "@/components/family-card";
 
 type Props = {
@@ -101,7 +101,7 @@ export function HomeBlocks({ families, locale, page }: Props) {
                 <p className="mt-4 max-w-xl text-white/74">{block.body}</p>
                 <p className="mt-6 max-w-lg text-sm text-white/60">{block.note}</p>
               </div>
-              <ContactForm locale={locale} submitLabel={block.submitLabel} />
+              <ContactoForm locale={locale} />
             </section>
           );
         }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { AppLocale } from "@/lib/locales";
 import { CONTACT_TOPICS, type ContactTopic } from "@/lib/contact-topics";
@@ -22,7 +23,11 @@ type Strings = {
   errorGeneric: string;
   errorValidation: string;
   errorRate: string;
-  privacy: string;
+  fieldRequired: string;
+  emailInvalid: string;
+  privacyPrefix: string;
+  privacyLink: string;
+  privacySuffix: string;
 };
 
 const COPY: Record<AppLocale, Strings> = {
@@ -45,8 +50,11 @@ const COPY: Record<AppLocale, Strings> = {
     errorGeneric: "No hemos podido enviar tu mensaje. Inténtalo de nuevo en unos minutos.",
     errorValidation: "Revisa los campos marcados antes de enviar.",
     errorRate: "Has hecho demasiados envíos seguidos. Espera un minuto y vuelve a intentarlo.",
-    privacy:
-      "Al enviar este formulario aceptas nuestra política de privacidad y el tratamiento de tus datos para responder a tu consulta.",
+    fieldRequired: "Campo obligatorio.",
+    emailInvalid: "Introduce un email válido.",
+    privacyPrefix: "Al enviar este formulario aceptas nuestra",
+    privacyLink: "política de privacidad",
+    privacySuffix: "y el tratamiento de tus datos para responder a tu consulta.",
   },
   en: {
     name: "Full name",
@@ -67,8 +75,11 @@ const COPY: Record<AppLocale, Strings> = {
     errorGeneric: "We couldn't send your message. Please try again in a few minutes.",
     errorValidation: "Please review the highlighted fields before submitting.",
     errorRate: "Too many submissions in a row. Please wait a minute and try again.",
-    privacy:
-      "By submitting this form you accept our privacy policy and the processing of your data to respond to your enquiry.",
+    fieldRequired: "Required field.",
+    emailInvalid: "Enter a valid email.",
+    privacyPrefix: "By submitting this form you accept our",
+    privacyLink: "privacy policy",
+    privacySuffix: "and the processing of your data to respond to your enquiry.",
   },
   pt: {
     name: "Nome completo",
@@ -89,8 +100,11 @@ const COPY: Record<AppLocale, Strings> = {
     errorGeneric: "Não foi possível enviar a sua mensagem. Tente novamente em alguns minutos.",
     errorValidation: "Reveja os campos marcados antes de enviar.",
     errorRate: "Demasiados envios seguidos. Aguarde um minuto e tente novamente.",
-    privacy:
-      "Ao enviar este formulário aceita a nossa política de privacidade e o tratamento dos seus dados para responder à sua consulta.",
+    fieldRequired: "Campo obrigatório.",
+    emailInvalid: "Introduza um email válido.",
+    privacyPrefix: "Ao enviar este formulário aceita a nossa",
+    privacyLink: "política de privacidade",
+    privacySuffix: "e o tratamento dos seus dados para responder à sua consulta.",
   },
   fr: {
     name: "Nom complet",
@@ -111,8 +125,11 @@ const COPY: Record<AppLocale, Strings> = {
     errorGeneric: "Nous n'avons pas pu envoyer votre message. Réessayez dans quelques minutes.",
     errorValidation: "Veuillez vérifier les champs marqués avant l'envoi.",
     errorRate: "Trop d'envois successifs. Attendez une minute puis réessayez.",
-    privacy:
-      "En soumettant ce formulaire, vous acceptez notre politique de confidentialité et le traitement de vos données pour répondre à votre demande.",
+    fieldRequired: "Champ obligatoire.",
+    emailInvalid: "Saisissez un email valide.",
+    privacyPrefix: "En soumettant ce formulaire, vous acceptez notre",
+    privacyLink: "politique de confidentialité",
+    privacySuffix: "et le traitement de vos données pour répondre à votre demande.",
   },
 };
 
@@ -251,6 +268,7 @@ export function ContactoForm({ locale }: Props) {
         autoComplete="name"
         required
         invalid={fieldErrors.name}
+        errorMessage={copy.fieldRequired}
       />
       <Field
         label={copy.role}
@@ -272,6 +290,7 @@ export function ContactoForm({ locale }: Props) {
         autoComplete="email"
         required
         invalid={fieldErrors.email}
+        errorMessage={copy.emailInvalid}
       />
       <Field
         label={copy.company}
@@ -291,6 +310,8 @@ export function ContactoForm({ locale }: Props) {
           <select
             name="topic"
             required
+            aria-invalid={fieldErrors.topic ? "true" : undefined}
+            aria-describedby={fieldErrors.topic ? "contact-topic-error" : undefined}
             defaultValue=""
             className={`input-field w-full appearance-none pr-12 [&::-ms-expand]:hidden ${
               fieldErrors.topic ? "!border-red-500/60 !shadow-[0_0_0_4px_rgba(239,68,68,0.12)]" : ""
@@ -321,6 +342,14 @@ export function ContactoForm({ locale }: Props) {
             />
           </svg>
         </div>
+        {fieldErrors.topic ? (
+          <span
+            id="contact-topic-error"
+            className="font-mono text-[10px] uppercase tracking-[1.4px] text-red-600"
+          >
+            {copy.fieldRequired}
+          </span>
+        ) : null}
       </label>
 
       <label className="flex flex-col gap-2 md:col-span-2">
@@ -330,6 +359,8 @@ export function ContactoForm({ locale }: Props) {
         <textarea
           name="message"
           required
+          aria-invalid={fieldErrors.message ? "true" : undefined}
+          aria-describedby={fieldErrors.message ? "contact-message-error" : undefined}
           rows={6}
           maxLength={4000}
           placeholder={copy.messagePlaceholder}
@@ -339,11 +370,26 @@ export function ContactoForm({ locale }: Props) {
               : ""
           }`}
         />
+        {fieldErrors.message ? (
+          <span
+            id="contact-message-error"
+            className="font-mono text-[10px] uppercase tracking-[1.4px] text-red-600"
+          >
+            {copy.fieldRequired}
+          </span>
+        ) : null}
       </label>
 
       <div className="flex flex-col gap-4 md:col-span-2 md:flex-row md:items-end md:justify-between">
         <p className="max-w-[420px] font-sans text-[12px] leading-[18px] tracking-[-0.05px] text-muted">
-          {copy.privacy}
+          {copy.privacyPrefix}{" "}
+          <Link
+            href={`/${locale}/privacidad`}
+            className="font-medium text-foreground underline underline-offset-4 transition-opacity hover:opacity-70"
+          >
+            {copy.privacyLink}
+          </Link>{" "}
+          {copy.privacySuffix}
         </p>
         <div className="flex flex-col items-start gap-3 md:items-end">
           {status === "error" && errorMsg ? (
@@ -376,6 +422,7 @@ type FieldProps = {
   inputMode?: "text" | "email" | "tel";
   required?: boolean;
   invalid?: boolean;
+  errorMessage?: string;
   className?: string;
 };
 
@@ -387,8 +434,11 @@ function Field({
   inputMode,
   required,
   invalid,
+  errorMessage,
   className,
 }: FieldProps) {
+  const errorId = `${name}-error`;
+
   return (
     <label className={`flex flex-col gap-2 ${className ?? ""}`}>
       <span className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
@@ -400,11 +450,21 @@ function Field({
         autoComplete={autoComplete}
         inputMode={inputMode}
         required={required}
+        aria-invalid={invalid ? "true" : undefined}
+        aria-describedby={invalid ? errorId : undefined}
         maxLength={160}
         className={`input-field ${
           invalid ? "!border-red-500/60 !shadow-[0_0_0_4px_rgba(239,68,68,0.12)]" : ""
         }`}
       />
+      {invalid && errorMessage ? (
+        <span
+          id={errorId}
+          className="font-mono text-[10px] uppercase tracking-[1.4px] text-red-600"
+        >
+          {errorMessage}
+        </span>
+      ) : null}
     </label>
   );
 }

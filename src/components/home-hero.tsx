@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { HomePageData, SiteSettingsData } from "@/lib/content-types";
 import type { AppLocale } from "@/lib/locales";
-import { buildProductsPath, buildSectionPath } from "@/lib/routes";
+import { buildContactoPath, buildProductsPath } from "@/lib/routes";
 import { HeroBackdrop } from "@/components/hero-backdrop";
 
 type Props = {
@@ -32,7 +32,7 @@ export function HomeHero({ locale, page, settings }: Props) {
             <Link className="cta-primary" href={buildProductsPath(locale)}>
               {page.hero.primaryLabel}
             </Link>
-            <Link className="cta-secondary" href={buildSectionPath(locale, "contact")}>
+            <Link className="cta-secondary" href={buildContactoPath(locale)}>
               {page.hero.secondaryLabel}
             </Link>
           </div>

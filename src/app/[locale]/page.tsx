@@ -15,6 +15,7 @@ import type {
   StatsBlock,
 } from "@/lib/content-types";
 import { isLocale, type AppLocale } from "@/lib/locales";
+import { buildContactoPath } from "@/lib/routes";
 
 export const dynamic = "force-dynamic";
 
@@ -79,7 +80,7 @@ export default async function LocaleHomePage({ params }: Props) {
         hero={heroProps}
         stats={statsProps}
         primaryHref={heroProps?.primaryHref ?? productsHref}
-        secondaryHref={heroProps?.secondaryHref ?? "#contact"}
+        secondaryHref={heroProps?.secondaryHref ?? buildContactoPath(typedLocale)}
       />
       <HomeProductsIntro
         locale={typedLocale}

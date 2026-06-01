@@ -105,7 +105,6 @@ export function AtalantGlobe({
   useEffect(() => {
     if (dims.w === 0) return;
     applyCamera();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dims.w, dims.h]);
 
   const points = useMemo<PointDatum[]>(
