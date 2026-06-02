@@ -66,7 +66,7 @@ function collectMedia(value: unknown, source: string, output: MediaReference[]) 
   }
 
   const record = value as Record<string, unknown>;
-  if (typeof record.url === "string" && record.url.startsWith("/api/media/file/")) {
+  if (typeof record.filename === "string" && typeof record.url === "string") {
     output.push({ source, url: record.url });
   }
 

@@ -184,6 +184,11 @@ async function getMediaByFilename(payload: SeedPayload) {
 
   const mediaByFilename = new Map<string | null | undefined, number>();
   for (const media of mediaResult.docs) {
+    const criticalAsset = criticalMediaAssets.find((asset) => asset.alt === media.alt);
+    if (criticalAsset && !mediaByFilename.has(criticalAsset.filename)) {
+      mediaByFilename.set(criticalAsset.filename, media.id);
+    }
+
     if (!mediaByFilename.has(media.filename)) {
       mediaByFilename.set(media.filename, media.id);
     }
@@ -194,6 +199,15 @@ async function getMediaByFilename(payload: SeedPayload) {
 
 async function ensureCriticalMedia(payload: SeedPayload) {
   const shouldReupload = process.env.REUPLOAD_CRITICAL_MEDIA === "true";
+  if (
+    shouldReupload &&
+    !/^vercel_blob_rw_[a-z\d]+_[a-z\d]+$/i.test(process.env.BLOB_READ_WRITE_TOKEN ?? "")
+  ) {
+    throw new Error(
+      "REUPLOAD_CRITICAL_MEDIA=true requires a valid exported BLOB_READ_WRITE_TOKEN",
+    );
+  }
+
   const mediaByFilename = await getMediaByFilename(payload);
 
   for (const asset of criticalMediaAssets) {
