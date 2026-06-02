@@ -1,21 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { getProductParticleShapeIndex } from "@/lib/product-particle-shapes";
 import { ParticleMorph, type ParticleMorphHandle } from "./particle-morph";
-
-// Mapeo code → shape index, mismo orden que ParticlesMorph en el listado:
-// 0 sphere · 1 torus · 2 helix · 3 wave · 4 cube · 5 cylinder · 6 logo (REC)
-const SHAPE_BY_CODE: Record<string, number> = {
-  pe: 0,
-  pp: 1,
-  pvc: 2,
-  eva: 3,
-  ps: 4,
-  pet: 5,
-  rec: 6,
-  recycled: 6,
-  reciclados: 6,
-};
 
 type Props = {
   code: string;
@@ -24,7 +11,7 @@ type Props = {
 
 export function ProductHeroParticles({ code, className = "" }: Props) {
   const morphRef = useRef<ParticleMorphHandle>(null);
-  const shapeIndex = SHAPE_BY_CODE[code.toLowerCase()] ?? 0;
+  const shapeIndex = getProductParticleShapeIndex(code);
 
   useEffect(() => {
     morphRef.current?.setShape(shapeIndex);
@@ -35,7 +22,12 @@ export function ProductHeroParticles({ code, className = "" }: Props) {
       aria-hidden="true"
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
     >
-      <ParticleMorph ref={morphRef} autoPlay={false} className="h-full w-full" />
+      <ParticleMorph
+        ref={morphRef}
+        autoPlay={false}
+        className="h-full w-full"
+        motionIntensity={1.8}
+      />
     </div>
   );
 }

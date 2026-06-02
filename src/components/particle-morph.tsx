@@ -13,10 +13,11 @@ export interface ParticleMorphHandle {
 interface ParticleMorphProps {
   className?: string;
   autoPlay?: boolean;
+  motionIntensity?: number;
 }
 
 export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>(
-  function ParticleMorph({ className = "", autoPlay = true }, ref) {
+  function ParticleMorph({ className = "", autoPlay = true, motionIntensity = 1 }, ref) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const setShapeRef = useRef<(index: number) => void>(() => {});
     const setPausedRef = useRef<(paused: boolean) => void>(() => {});
@@ -252,7 +253,7 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
 
             points.push({
               x: handleX,
-              y: handleY,
+              y: -handleY,
               z: handleZ,
             });
             continue;
@@ -266,7 +267,7 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
 
           points.push({
             x: Math.cos(angle) * (radius + surfaceNoise),
-            y,
+            y: -y,
             z: Math.sin(angle) * radius * 0.72,
           });
         }
@@ -462,21 +463,30 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
         }
 
         const camZ = 200;
+        const rotationIntensity = Math.max(0.2, motionIntensity);
         currentRotX += (mouseY - currentRotX) * 0.05;
         currentRotY += (mouseX - currentRotY) * 0.05;
 
         const isBottleShape = currentShapeIndex === 1;
         const isElbowPipeShape = currentShapeIndex === 3;
         const globalAngleX = isBottleShape
-          ? -0.08 + Math.sin(time * 0.7) * 0.035 + currentRotX * Math.PI * 0.12
+          ? 0.18 +
+            Math.sin(time * 0.85 * rotationIntensity) * 0.16 * rotationIntensity +
+            currentRotX * Math.PI * 0.2 * rotationIntensity
           : isElbowPipeShape
-            ? -0.08 + Math.sin(time * 0.6) * 0.025 + currentRotX * Math.PI * 0.08
-          : time * 0.15 + currentRotX * Math.PI * 0.3;
+            ? -0.08 +
+              Math.sin(time * 0.6 * rotationIntensity) * 0.025 * rotationIntensity +
+              currentRotX * Math.PI * 0.08 * rotationIntensity
+          : time * 0.15 * rotationIntensity + currentRotX * Math.PI * 0.3 * rotationIntensity;
         const globalAngleY = isBottleShape
-          ? -0.22 + Math.sin(time * 0.55) * 0.075 + currentRotY * Math.PI * 0.12
+          ? -0.36 +
+            Math.sin(time * 0.7 * rotationIntensity) * 0.2 * rotationIntensity +
+            currentRotY * Math.PI * 0.18 * rotationIntensity
           : isElbowPipeShape
-            ? -0.34 + Math.sin(time * 0.5) * 0.05 + currentRotY * Math.PI * 0.08
-          : time * 0.2 + currentRotY * Math.PI * 0.3;
+            ? -0.34 +
+              Math.sin(time * 0.5 * rotationIntensity) * 0.05 * rotationIntensity +
+              currentRotY * Math.PI * 0.08 * rotationIntensity
+          : time * 0.2 * rotationIntensity + currentRotY * Math.PI * 0.3 * rotationIntensity;
 
         if (reduced) {
           for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -536,7 +546,7 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
         window.removeEventListener("resize", resize);
         cancelAnimationFrame(animationFrameId);
       };
-    }, [autoPlay]);
+    }, [autoPlay, motionIntensity]);
 
     return <canvas ref={canvasRef} className={`block h-full w-full ${className}`} />;
   }
