@@ -14,6 +14,19 @@ import {
   buildSustainabilityPath,
 } from "@/lib/routes";
 import { fallbackSiteSettings } from "@/lib/fallback-content";
+import { FooterEmailCopy } from "@/components/footer-email-copy";
+
+// Ubicación de la sede en Google Maps. Constante (no editable en CMS por
+// ahora); si se quiere gestionar desde Payload, añadir un campo a
+// SiteSettings y leerlo aquí.
+const MAP_URL = "https://goo.gl/maps/UmUZN4gmBqRf5CU19";
+
+const mapLabel: Record<AppLocale, string> = {
+  es: "Mostrar en mapa",
+  en: "Show on map",
+  pt: "Mostrar no mapa",
+  fr: "Afficher sur la carte",
+};
 
 type FooterLink = {
   label: string;
@@ -75,14 +88,12 @@ function getColumns(locale: AppLocale, settings: SiteSettingsData): FooterColumn
         { label: "Sostenibilidad", href: sustainability },
       ];
 
+  // Solo la columna de enlaces. La columna "Contacto" se renderiza aparte
+  // porque el email usa un botón de copiar (componente cliente), no un link.
   return [
     {
       heading: "Enlaces",
       links: footerLinks,
-    },
-    {
-      heading: "Contacto",
-      links: [{ label: settings.contactEmail, href: `mailto:${settings.contactEmail}` }],
     },
   ];
 }
@@ -119,9 +130,21 @@ export function SiteFooter({ locale, settings: cmsSettings }: Props) {
             <p className="mt-7 font-sans text-lg font-light leading-[1.4] tracking-[-0.3px] text-white/90 sm:text-xl sm:leading-[1.4]">
               {settings.footerText}
             </p>
-            <address className="mt-6 flex flex-col gap-1 font-mono text-[12px] not-italic leading-[1.5] tracking-[0.2px] text-white/55">
-              <span>{settings.phone}</span>
-              <span>{settings.address}</span>
+            <address className="mt-6 flex flex-col items-start gap-1 font-mono text-[12px] not-italic leading-[1.5] tracking-[0.2px] text-white/55">
+              <a
+                href={`tel:${settings.phone.replace(/\s+/g, "")}`}
+                className="transition-opacity hover:opacity-70 hover:text-white/80"
+              >
+                {settings.phone}
+              </a>
+              <a
+                href={MAP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-70 hover:text-white/80"
+              >
+                {mapLabel[locale]}
+              </a>
             </address>
           </div>
 
@@ -162,6 +185,16 @@ export function SiteFooter({ locale, settings: cmsSettings }: Props) {
               </ul>
             </div>
           ))}
+
+          {/* Contacto — email con botón de copiar al portapapeles */}
+          <div className="flex flex-col">
+            <p className="font-mono text-[10px] uppercase tracking-[2px] text-white/55">
+              Contacto
+            </p>
+            <div className="mt-7">
+              <FooterEmailCopy email={settings.contactEmail} locale={locale} />
+            </div>
+          </div>
         </div>
 
         <div className="mt-12 h-px w-full bg-white/20 sm:mt-16 lg:mt-20" aria-hidden="true" />

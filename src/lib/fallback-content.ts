@@ -67,7 +67,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
   en: {
     address: byLocale.en.address,
     brandName: "Atalant",
-    contactEmail: "hello@atalant.eu",
+    contactEmail: "info@atalant.com",
     defaultSeo: {
       description: byLocale.en.seoDescription,
       title: "Atalant | Polymer distribution in Europe",
@@ -91,7 +91,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Team", sectionId: "team" },
       { kind: "section", label: "Contact", sectionId: "contact" },
     ],
-    phone: "+34 93 555 0101",
+    phone: "+34 965 661 828",
     socialLinks: [
       { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
     ],
@@ -100,7 +100,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
   es: {
     address: byLocale.es.address,
     brandName: "Atalant",
-    contactEmail: "hola@atalant.eu",
+    contactEmail: "info@atalant.com",
     defaultSeo: {
       description: byLocale.es.seoDescription,
       title: "Atalant | Distribución de polímeros en Europa",
@@ -124,7 +124,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Nosotros", sectionId: "team" },
       { kind: "section", label: "Contacto", sectionId: "contact" },
     ],
-    phone: "+34 93 555 0101",
+    phone: "+34 965 661 828",
     socialLinks: [
       { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
     ],
@@ -133,7 +133,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
   fr: {
     address: byLocale.fr.address,
     brandName: "Atalant",
-    contactEmail: "bonjour@atalant.eu",
+    contactEmail: "info@atalant.com",
     defaultSeo: {
       description: byLocale.fr.seoDescription,
       title: "Atalant | Distribution de polymères en Europe",
@@ -157,7 +157,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Équipe", sectionId: "team" },
       { kind: "section", label: "Contact", sectionId: "contact" },
     ],
-    phone: "+34 93 555 0101",
+    phone: "+34 965 661 828",
     socialLinks: [
       { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
     ],
@@ -166,7 +166,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
   pt: {
     address: byLocale.pt.address,
     brandName: "Atalant",
-    contactEmail: "ola@atalant.eu",
+    contactEmail: "info@atalant.com",
     defaultSeo: {
       description: byLocale.pt.seoDescription,
       title: "Atalant | Distribuição de polímeros na Europa",
@@ -190,7 +190,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Equipa", sectionId: "team" },
       { kind: "section", label: "Contacto", sectionId: "contact" },
     ],
-    phone: "+34 93 555 0101",
+    phone: "+34 965 661 828",
     socialLinks: [
       { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
     ],
