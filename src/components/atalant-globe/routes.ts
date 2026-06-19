@@ -47,7 +47,7 @@ export const HUBS: Hub[] = [
     country: "España",
     lat: 39.4699,
     lng: -0.3763,
-    role: "Depósito Aduanero",
+    role: "Centro logístico",
     since: 2009,
   },
   {
@@ -57,7 +57,7 @@ export const HUBS: Hub[] = [
     country: "España",
     lat: 38.3452,
     lng: -0.481,
-    role: "Depósito Aduanero",
+    role: "Centro logístico",
     since: 2009,
   },
 ];

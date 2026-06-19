@@ -91,7 +91,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Team", sectionId: "team" },
       { kind: "section", label: "Contact", sectionId: "contact" },
     ],
-    phone: "+34 965 661 828",
+    phone: "+34 965 66 18 28",
     socialLinks: [
       { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
     ],
@@ -124,7 +124,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Nosotros", sectionId: "team" },
       { kind: "section", label: "Contacto", sectionId: "contact" },
     ],
-    phone: "+34 965 661 828",
+    phone: "+34 965 66 18 28",
     socialLinks: [
       { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
     ],
@@ -157,7 +157,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Équipe", sectionId: "team" },
       { kind: "section", label: "Contact", sectionId: "contact" },
     ],
-    phone: "+34 965 661 828",
+    phone: "+34 965 66 18 28",
     socialLinks: [
       { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
     ],
@@ -190,7 +190,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
       { kind: "section", label: "Equipa", sectionId: "team" },
       { kind: "section", label: "Contacto", sectionId: "contact" },
     ],
-    phone: "+34 965 661 828",
+    phone: "+34 965 66 18 28",
     socialLinks: [
       { href: "https://www.linkedin.com/company/atalant-europe/", label: "LinkedIn" },
     ],
@@ -203,29 +203,29 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
     blocks: [
       {
         anchorId: "capabilities",
-        body: "European reach, fast commercial response, and recycled materials integrated into a pragmatic industrial offer.",
+        body: "European coverage, fast commercial response, a broad portfolio, and packaging options adapted to each customer.",
         eyebrow: "Capabilities",
         stats: [
-          { label: "Reach", value: "12 EU countries" },
-          { label: "Response", value: "< 24h" },
-          { label: "Focus", value: "Polymer families" },
-          { label: "Recycled", value: "Traceable streams" },
+          { label: "Coverage", value: "18 EU countries" },
+          { label: "Response", value: "< 24 h" },
+          { label: "Portfolio", value: "+300 products" },
+          { label: "Packaging", value: "Customer-adaptable" },
         ],
         title: "An operating model designed for industrial continuity",
         type: "stats",
       },
       {
         anchorId: "logistics",
-        body: "We work with dependable supply lanes, documented quality expectations, and fast commercial response to reduce friction in industrial procurement.",
+        body: "We work with dependable supply lanes, documented quality expectations, and fast commercial response to reduce uncertainty in your purchasing.",
         eyebrow: "Logistics",
         title: "Logistics with fewer surprises",
         type: "section",
       },
       {
         anchorId: "financing",
-        body: "Commercial flexibility matters when supply continuity is at risk. We structure payment and sourcing conversations around operational reality, not generic promises.",
+        body: "We bring flexibility, advice, and less uncertainty to your supply chain. We support you throughout the entire procurement process.",
         eyebrow: "Financing",
-        title: "Commercial structures that support procurement",
+        title: "We keep your supply flow constant",
         type: "section",
       },
       {
@@ -244,10 +244,10 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
       {
         anchorId: "products-preview",
-        body: "Base polymers and recycled materials, structured as clear commercial families that can later expand into subtypes or grades.",
+        body: "Discover our product families, including PE, PP, PVC, PS, EVA, and PA.",
         ctaLabel: "See all product families",
         eyebrow: "Catalog",
-        title: "Families prepared to scale",
+        title: "High-quality polymers",
         type: "productPreview",
       },
       {
@@ -261,9 +261,9 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
     ],
     hero: {
-      body: "Distribution, recycled polymers, and operational support for industrial buyers who need supply continuity rather than generic trading.",
-      eyebrow: "Polymer distribution in Europe",
-      headline: "Built to keep production moving.",
+      body: "Distribution of plastic raw materials and recycled polymers.",
+      eyebrow: "Polymer distribution",
+      headline: "An evolution in the supply chain.",
       primaryLabel: "Explore product families",
       secondaryLabel: "Talk to Atalant",
     },
@@ -277,29 +277,29 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
     blocks: [
       {
         anchorId: "capabilities",
-        body: "Cobertura europea, capacidad de respuesta comercial y reciclados integrados en una propuesta industrial pragmática.",
+        body: "Cobertura europea, respuesta comercial rápida, portfolio amplio y opciones de packaging adaptadas a cada cliente.",
         eyebrow: "Capacidades operativas",
         stats: [
-          { label: "Cobertura", value: "12 países UE" },
-          { label: "Respuesta", value: "< 24h" },
-          { label: "Foco", value: "Familias de polímeros" },
-          { label: "Reciclados", value: "Corrientes trazables" },
+          { label: "Cobertura", value: "18 países UE" },
+          { label: "Respuesta", value: "< 24 h" },
+          { label: "Portfolio", value: "+300 productos" },
+          { label: "Packaging", value: "Adaptable al cliente" },
         ],
         title: "Un modelo operativo pensado para continuidad industrial",
         type: "stats",
       },
       {
         anchorId: "logistics",
-        body: "Trabajamos con rutas de suministro fiables, expectativas de calidad documentadas y respuesta comercial ágil para reducir fricción en compras industriales.",
+        body: "Recibe tus pedidos en nuestra propia flota de transporte con una trazabilidad completa desde el primer momento.",
         eyebrow: "Logística",
-        title: "Logística con menos sorpresas",
+        title: "Logística integrada para el mejor servicio",
         type: "section",
       },
       {
         anchorId: "financing",
-        body: "La flexibilidad comercial importa cuando la continuidad de suministro está en riesgo. Estructuramos pagos y aprovisionamiento desde la realidad operativa.",
+        body: "Aportamos flexibilidad, asesoramiento y reducimos tu incertidumbre en la cadena de suministro. Te acompañamos en todo el proceso de aprovisionamiento.",
         eyebrow: "Financiación",
-        title: "Estructuras comerciales que apoyan compras",
+        title: "Mantenemos tu flujo de suministro constante",
         type: "section",
       },
       {
@@ -318,10 +318,10 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
       {
         anchorId: "products-preview",
-        body: "Polímeros básicos y reciclados estructurados como familias comerciales claras, preparadas para crecer después hacia subtipos o grades.",
+        body: "Descubre nuestra familia de productos entre los que destacan: PE, PP, PVC, PS, EVA y PA.",
         ctaLabel: "Ver todas las familias",
         eyebrow: "Catálogo",
-        title: "Familias preparadas para escalar",
+        title: "Polímeros de alta calidad",
         type: "productPreview",
       },
       {
@@ -335,9 +335,9 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
     ],
     hero: {
-      body: "Distribución, reciclados y soporte operativo para compradores industriales que necesitan continuidad de suministro, no intermediación genérica.",
-      eyebrow: "Distribución de polímeros en Europa",
-      headline: "Hecho para mantener tu producción en marcha.",
+      body: "Distribución de materia prima plástica y polímeros reciclados. Hechos para mantener tu producción en marcha.",
+      eyebrow: "Distribución de polímeros",
+      headline: "Una evolución en la cadena de suministro.",
       primaryLabel: "Explorar productos",
       secondaryLabel: "Hablemos",
     },
@@ -351,29 +351,29 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
     blocks: [
       {
         anchorId: "capabilities",
-        body: "Portée européenne, réactivité commerciale et recyclés intégrés dans une offre industrielle pragmatique.",
+        body: "Couverture européenne, réponse commerciale rapide, large portefeuille et options de packaging adaptées à chaque client.",
         eyebrow: "Capacités",
         stats: [
-          { label: "Couverture", value: "12 pays UE" },
-          { label: "Réponse", value: "< 24h" },
-          { label: "Focus", value: "Familles de polymères" },
-          { label: "Recyclés", value: "Flux traçables" },
+          { label: "Couverture", value: "18 pays UE" },
+          { label: "Réponse", value: "< 24 h" },
+          { label: "Portefeuille", value: "+300 produits" },
+          { label: "Packaging", value: "Adapté au client" },
         ],
         title: "Un modèle opératoire pensé pour la continuité industrielle",
         type: "stats",
       },
       {
         anchorId: "logistics",
-        body: "Nous travaillons avec des flux fiables, des attentes qualité documentées et une réponse commerciale rapide pour réduire la friction d'achat.",
+        body: "Nous travaillons avec des flux fiables, des attentes qualité documentées et une réponse commerciale rapide pour réduire l'incertitude dans vos achats.",
         eyebrow: "Logistique",
         title: "Une logistique avec moins d'imprévus",
         type: "section",
       },
       {
         anchorId: "financing",
-        body: "La flexibilité commerciale compte lorsque la continuité d'approvisionnement est en jeu. Nous structurons paiement et sourcing selon la réalité opérationnelle.",
+        body: "Nous apportons flexibilité, conseil et moins d'incertitude dans votre chaîne d'approvisionnement. Nous vous accompagnons tout au long du processus.",
         eyebrow: "Financement",
-        title: "Des structures commerciales utiles aux achats",
+        title: "Nous maintenons votre flux d'approvisionnement constant",
         type: "section",
       },
       {
@@ -392,10 +392,10 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
       {
         anchorId: "products-preview",
-        body: "Polymères de base et matières recyclées structurés en familles commerciales lisibles, prêtes à évoluer ensuite vers des grades.",
+        body: "Découvrez nos familles de produits, notamment PE, PP, PVC, PS, EVA et PA.",
         ctaLabel: "Voir toutes les familles",
         eyebrow: "Catalogue",
-        title: "Des familles prêtes à évoluer",
+        title: "Polymères de haute qualité",
         type: "productPreview",
       },
       {
@@ -409,9 +409,9 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
     ],
     hero: {
-      body: "Distribution, polymères recyclés et support opérationnel pour des acheteurs industriels qui ont besoin de continuité d'approvisionnement.",
-      eyebrow: "Distribution de polymères en Europe",
-      headline: "Conçu pour maintenir la production en mouvement.",
+      body: "Distribution de matières premières plastiques et de polymères recyclés.",
+      eyebrow: "Distribution de polymères",
+      headline: "Une évolution dans la chaîne d'approvisionnement.",
       primaryLabel: "Explorer les familles de produits",
       secondaryLabel: "Contacter Atalant",
     },
@@ -425,29 +425,29 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
     blocks: [
       {
         anchorId: "capabilities",
-        body: "Alcance europeu, resposta comercial rápida e reciclados integrados numa oferta industrial pragmática.",
+        body: "Cobertura europeia, resposta comercial rápida, portfólio amplo e opções de packaging adaptadas a cada cliente.",
         eyebrow: "Capacidades",
         stats: [
-          { label: "Cobertura", value: "12 países UE" },
-          { label: "Resposta", value: "< 24h" },
-          { label: "Foco", value: "Famílias de polímeros" },
-          { label: "Reciclados", value: "Fluxos rastreáveis" },
+          { label: "Cobertura", value: "18 países UE" },
+          { label: "Resposta", value: "< 24 h" },
+          { label: "Portfólio", value: "+300 produtos" },
+          { label: "Packaging", value: "Adaptável ao cliente" },
         ],
         title: "Um modelo operacional pensado para continuidade industrial",
         type: "stats",
       },
       {
         anchorId: "logistics",
-        body: "Trabalhamos com rotas de fornecimento fiáveis, expectativas de qualidade documentadas e resposta comercial rápida para reduzir atrito na compra industrial.",
+        body: "Trabalhamos com rotas de fornecimento fiáveis, expectativas de qualidade documentadas e resposta comercial rápida para reduzir incerteza nas suas compras.",
         eyebrow: "Logística",
         title: "Logística com menos surpresas",
         type: "section",
       },
       {
         anchorId: "financing",
-        body: "A flexibilidade comercial importa quando a continuidade de fornecimento está em risco. Estruturamos pagamento e sourcing a partir da realidade operacional.",
+        body: "Aportamos flexibilidade, aconselhamento e reduzimos a incerteza na sua cadeia de fornecimento. Acompanhamos todo o processo de aprovisionamento.",
         eyebrow: "Financiamento",
-        title: "Estruturas comerciais úteis para compras",
+        title: "Mantemos o seu fluxo de fornecimento constante",
         type: "section",
       },
       {
@@ -466,10 +466,10 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
       {
         anchorId: "products-preview",
-        body: "Polímeros básicos e reciclados organizados em famílias comerciais claras, prontas para crescer depois para subtipos ou grades.",
+        body: "Descubra as nossas famílias de produtos, incluindo PE, PP, PVC, PS, EVA e PA.",
         ctaLabel: "Ver todas as famílias",
         eyebrow: "Catálogo",
-        title: "Famílias preparadas para escalar",
+        title: "Polímeros de alta qualidade",
         type: "productPreview",
       },
       {
@@ -483,9 +483,9 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
     ],
     hero: {
-      body: "Distribuição, reciclados e suporte operacional para compradores industriais que precisam de continuidade de fornecimento.",
-      eyebrow: "Distribuição de polímeros na Europa",
-      headline: "Feito para manter a sua produção em movimento.",
+      body: "Distribuição de matéria-prima plástica e polímeros reciclados.",
+      eyebrow: "Distribuição de polímeros",
+      headline: "Uma evolução na cadeia de fornecimento.",
       primaryLabel: "Explorar famílias de produto",
       secondaryLabel: "Falar com a Atalant",
     },
@@ -570,6 +570,19 @@ const baseFamilies = {
     title: { en: "PET", es: "PET", fr: "PET", pt: "PET" },
     variants: ["Botella", "Lámina", "Fibra"],
   },
+  pa: {
+    applications: ["Automoción", "Colectores de admisión", "Piezas técnicas"],
+    excerpt:
+      "Poliamida para aplicaciones técnicas de alta exigencia mecánica y térmica.",
+    seoTitle: "PA | Atalant",
+    title: {
+      en: "Polyamide",
+      es: "Poliamida",
+      fr: "Polyamide",
+      pt: "Poliamida",
+    },
+    variants: ["PA6", "PA66", "Reforzada"],
+  },
   recycled: {
     applications: ["Compra circular", "Blends", "Integración pragmática de reciclado"],
     excerpt:
@@ -597,7 +610,7 @@ export const fallbackFamilies: Record<AppLocale, ProductFamilyData[]> = (
           : "Familias estructuradas para compradores industriales que necesitan continuidad, repetibilidad y respuesta comercial ágil. La página queda preparada para crecer después hacia grades concretos.",
       code: slug,
       excerpt: family.excerpt,
-      featured: index < 2 || slug === "recycled",
+      featured: index < 2 || slug === "pa",
       locale,
       recycled: slug === "recycled",
       seo: {

@@ -20,7 +20,7 @@ Targets: Google/Bing/DuckDuckGo + ChatGPT Search, Claude, Perplexity, Gemini, Co
 - **HTML semántico** con `<main>`, `<aside>`, `<section>` en rutas de producto.
 - **Datos oficiales** ya presentes en `fallback-content.ts` y `site-footer.tsx`:
   - Dirección: Avda. de la Industria, 13–15 · Pol. Ind. Canastell · Alicante · España
-  - Teléfono real: +34 965 661 828
+  - Teléfono real: +34 965 66 18 28
   - Email: hola@atalant.eu (con variantes por locale)
   - Depósitos aduaneros: Valencia y Alicante
   - Marca propia: Greenlant (reciclados)

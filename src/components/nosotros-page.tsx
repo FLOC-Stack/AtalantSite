@@ -68,8 +68,8 @@ const COPY_ES: NosotrosCopy = {
   },
   metaValues: {
     experiencia: "30 años de mercado",
-    sede: "Alicante · Iberia",
-    red: "Iberia + Europa",
+    sede: "San Vicente del Raspeig (España)",
+    red: "",
     enfoque: "Socio a largo plazo",
   },
 
@@ -147,7 +147,7 @@ const COPY_ES: NosotrosCopy = {
   ctaAction: "Escribir al equipo  →",
   ctaHref: "mailto:hola@atalant.com?subject=Contacto%20Atalant",
   ctaFootnote: "© MMXXVI ATALANT  /  NS",
-  phone: "+34 965 661 828",
+  phone: "+34 965 66 18 28",
 };
 
 export const NOSOTROS_COPY: Record<AppLocale, NosotrosCopy> = {
@@ -168,6 +168,14 @@ function renderMultiline(text: string) {
 export function NosotrosPage({ locale, copy: pageCopy }: Props) {
   const copy = pageCopy ?? NOSOTROS_COPY[locale];
   const homeHref = copy.backHref ?? `/${locale}`;
+  const metaEntries = (
+    [
+      ["experiencia"],
+      ["sede"],
+      ["red"],
+      ["enfoque"],
+    ] as const
+  ).filter(([k]) => copy.metaLabels[k] && copy.metaValues[k]);
 
   return (
     <main className="relative bg-background text-foreground">
@@ -240,15 +248,8 @@ export function NosotrosPage({ locale, copy: pageCopy }: Props) {
         </div>
 
         {/* ======= Meta row ======= */}
-        <div className="relative z-10 mt-10 grid grid-cols-2 gap-y-8 pt-8 sm:mt-14 lg:mt-16 lg:grid-cols-4 lg:gap-x-10">
-          {(
-            [
-              ["experiencia"],
-              ["sede"],
-              ["red"],
-              ["enfoque"],
-            ] as const
-          ).map(([k]) => (
+        <div className="relative z-10 mt-10 grid grid-cols-1 gap-y-8 pt-8 sm:mt-14 sm:grid-cols-3 sm:gap-x-10 lg:mt-16">
+          {metaEntries.map(([k]) => (
             <div key={k}>
               <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
                 {copy.metaLabels[k]}

@@ -139,7 +139,7 @@ function validateFamiliesResponse(
     });
   }
 
-  const requiredSlugs = new Set(["pe", "pp", "pvc", "eva", "ps", "pet", "recycled"]);
+  const requiredSlugs = new Set(["pe", "pp", "pvc", "eva", "ps", "pet", "pa"]);
   for (const doc of docs) {
     const family = asRecord(doc);
     if (typeof family?.slug === "string") requiredSlugs.delete(family.slug);

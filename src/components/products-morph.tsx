@@ -70,15 +70,6 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
     image: "/imgsrc/products/3d-product-EVA.webp",
   },
   {
-    code: "EVA",
-    name: "Etileno acetato de vinilo",
-    description:
-      "Grados con diferentes MFI y contenido de acetato de vinilo para plantillas, láminas, films, calzado, adhesivos, automoción y construcción.",
-    variants: ["Diferentes MFI", "Acetato de vinilo"],
-    href: "/es/productos/eva",
-    image: "/imgsrc/atalant-post-2.jpeg",
-  },
-  {
     code: "PS",
     name: "Poliestireno",
     description:
@@ -97,21 +88,19 @@ const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
     image: "/imgsrc/products/3d-product-PET.webp",
   },
   {
-    code: "REC",
-    name: "Polímeros reciclados",
+    code: "PA",
+    name: "Poliamida",
     description:
-      "Corrientes recicladas tratadas como línea de producto, con trazabilidad y encaje real en el plan de suministro.",
-    variants: ["rPE", "rPP", "rPET"],
-    href: "/es/productos/recycled",
-    recycled: true,
-    image: "/imgsrc/products/3d-product-RE.webp",
+      "Poliamidas para aplicaciones técnicas de alta exigencia mecánica y térmica.",
+    variants: ["PA6", "PA66", "Reforzada"],
+    href: "/es/productos/pa",
   },
 ];
 
 const FALLBACK_HERO: ProductsMorphHero = {
   eyebrow: "Catálogo de producto",
-  title: "Polímeros técnicos\npara cada línea.",
-  body: "Siete familias de material con grados específicos para inyección, extrusión, soplado y termoconformado. Stock permanente en Europa, trazabilidad por lote y asesoría técnica en cada especificación.",
+  title: "Polímeros de alta calidad\npara tu producción.",
+  body: "Descubre todas nuestras familias de productos y procesos de transformación. Stock permanente en Europa, trazabilidad por lote y asesoría técnica en cada aplicación.",
 };
 
 type Props = {
@@ -134,8 +123,6 @@ function displayCode(code: string): string {
   return CODE_DISPLAY_OVERRIDES[code.toLowerCase()] ?? code.toUpperCase();
 }
 
-const PLACEHOLDER_IMAGE = "/imgsrc/botella_detergente.webp";
-
 type ProductImageRevealProps = {
   src?: string;
   videoSrc?: string;
@@ -153,8 +140,9 @@ function ProductImageReveal({
   mediaClassName = "object-cover",
   animate = true,
 }: ProductImageRevealProps) {
-  const imageSrc = src ?? PLACEHOLDER_IMAGE;
+  const imageSrc = src ?? "";
   const isVideo = Boolean(videoSrc);
+  const hasMedia = Boolean(src || videoSrc);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -247,6 +235,26 @@ function ProductImageReveal({
           preload="metadata"
           aria-label={alt}
         />
+      ) : !hasMedia ? (
+        <div
+          className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_50%_45%,rgba(30,75,182,0.08),rgba(30,75,182,0)_62%)]"
+          aria-label={alt}
+        >
+          <div className="relative h-[62%] w-[74%]">
+            <div className="absolute left-[8%] top-[36%] h-[28%] w-[74%] rounded-full border border-primary/35 bg-primary/10" />
+            <div className="absolute right-[2%] top-[41%] h-[18%] w-[24%] rounded-full border border-primary/35 bg-background" />
+            {[18, 42, 66].map((left) => (
+              <div
+                key={left}
+                className="absolute top-[55%] h-[36%] w-[15%] rounded-b-full border border-primary/35 bg-primary/10"
+                style={{ left: `${left}%` }}
+              />
+            ))}
+            <div className="absolute left-[16%] top-[28%] h-2 w-2 rounded-full bg-primary/70" />
+            <div className="absolute left-[48%] top-[30%] h-1.5 w-1.5 rounded-full bg-primary/50" />
+            <div className="absolute left-[76%] top-[35%] h-2 w-2 rounded-full bg-primary/60" />
+          </div>
+        </div>
       ) : (
         // next/image sirve variantes en WebP al tamaño exacto del
         // contenedor (320/360 px en este slide), evitando descargar el
@@ -268,10 +276,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
   // Si el CMS devuelve items sin imagen/video, caemos al media del fallback
   // con el mismo `code` para que cada producto tenga su cover sin tener que
   // tocar Payload. Cuando el cliente suba su propio heroMedia, pisa al fallback.
-  // Indexamos por `displayCode` para que tanto si Payload devuelve el
-  // slug en minúsculas ("recycled") como si llega ya el código display
-  // ("REC"), el lookup acierte. Sin esto, el item de reciclados caía al
-  // PLACEHOLDER_IMAGE porque "RECYCLED" ≠ "REC".
+  // Indexamos por `displayCode` para cubrir slugs en minúsculas y códigos display.
   const fallbackMediaByCode = new Map(
     FALLBACK_PRODUCTS.map((p) => [displayCode(p.code), { image: p.image, video: p.video }]),
   );
@@ -440,16 +445,11 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                 {/* Divider */}
                 <div className="mt-5 h-px w-full bg-foreground/10" />
 
-                {/* Description */}
-                <p className="mt-4 font-sans text-[13px] leading-snug text-body sm:text-sm">
-                  {product.description}
-                </p>
-
                 {/* Footer: CTA centrado */}
-                <div className="mt-5 flex items-center justify-center font-mono text-[10px] uppercase tracking-[1.8px]">
+                <div className="mt-5 flex items-center justify-center font-mono text-[12px] uppercase tracking-[1.8px] sm:text-[13px]">
                   <span className="flex items-center gap-1 text-foreground transition-opacity group-hover:opacity-70">
-                    Ver ficha
-                    <ArrowUpRight className="h-3 w-3" />
+                    Ver características
+                    <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
               </div>

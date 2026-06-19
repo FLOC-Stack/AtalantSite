@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: "Financiación · Crédito interno — Atalant",
     description:
-      "Sistema de crédito interno de Atalant: financiación caso a caso para acompañar la producción de cada cliente y crecer de forma equilibrada.",
+      "Sistema de crédito interno de Atalant para reforzar y hacer crecer tu negocio, con clientes asegurados mundialmente.",
   };
 }
 

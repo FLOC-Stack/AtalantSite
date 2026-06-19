@@ -21,10 +21,12 @@ type Props = {
   items?: NewsItem[];
 };
 
-const FALLBACK_TITLE = "Últimas\nnovedades.";
+const FALLBACK_TITLE = "Últimas\npublicaciones.";
 
 const FALLBACK_BODY =
-  "Comunicaciones recientes, hitos y notas de prensa. Lo que cuenta y lo que se mueve en Atalant.";
+  "Publicaciones recientes de Atalant. Contenido editorial y novedades de compañía gestionadas desde CMS.";
+
+const LINKEDIN_URL = "https://www.linkedin.com/company/atalant-europe/";
 
 const FALLBACK_ITEMS: NewsItem[] = [
   {
@@ -32,7 +34,7 @@ const FALLBACK_ITEMS: NewsItem[] = [
     title: "Nuevo hub logístico en Países Bajos",
     excerpt:
       "Ampliamos capacidad operativa y reducimos los tiempos de entrega en el norte de Europa.",
-    href: "#",
+    href: LINKEDIN_URL,
     image: "/imgsrc/atalant-post-1.webp",
     imageAlt: "Polímeros Atalant",
   },
@@ -41,7 +43,7 @@ const FALLBACK_ITEMS: NewsItem[] = [
     title: "Greenlant alcanza certificación EuCertPlast",
     excerpt:
       "Nuestra línea de reciclados consolida su trazabilidad y calidad bajo estándar europeo.",
-    href: "#",
+    href: LINKEDIN_URL,
     image: "/imgsrc/atalant-post-2.webp",
     imageAlt: "Reciclados Greenlant Atalant",
   },
@@ -50,7 +52,7 @@ const FALLBACK_ITEMS: NewsItem[] = [
     title: "Acuerdo con productor europeo de PP técnico",
     excerpt:
       "Reforzamos la oferta de polímeros técnicos con un nuevo contrato de suministro estable.",
-    href: "#",
+    href: LINKEDIN_URL,
     image: "/imgsrc/atalant-post-3.webp",
     imageAlt: "Polímeros técnicos Atalant",
   },
@@ -69,8 +71,8 @@ export function HomeNews({
   counter = "05 / 05",
   title = FALLBACK_TITLE,
   body = FALLBACK_BODY,
-  sectionLabel = "ÚLTIMAS NOTICIAS",
-  ctaLabel = "Leer noticia",
+  sectionLabel = "PUBLICACIONES RECIENTES",
+  ctaLabel = "Ver publicación",
   items = FALLBACK_ITEMS,
 }: Props = {}) {
   return (

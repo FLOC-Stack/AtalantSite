@@ -57,7 +57,7 @@ const homeSectionCtaLabels: Record<AppLocale, Record<string, string>> = {
   },
 };
 
-const productHeroMediaByCode: Record<string, string> = {
+const productHeroMediaByCode: Partial<Record<string, string>> = {
   eva: "3d-product-EVA.webp",
   pe: "3d-product-PE.webp",
   pet: "3d-product-PET.webp",
@@ -66,6 +66,10 @@ const productHeroMediaByCode: Record<string, string> = {
   pvc: "3d-product-PVC.webp",
   recycled: "3d-product-RE.webp",
 };
+
+const productHeroMediaFilenames = Object.values(productHeroMediaByCode).filter(
+  (filename): filename is string => Boolean(filename),
+);
 
 const staticPageMediaBySlug: Record<string, Record<string, string>> = {
   financiacion: {
@@ -88,15 +92,15 @@ const staticPageMediaBySlug: Record<string, Record<string, string>> = {
 const homeNewsBlock: Omit<NewsBlock, "type"> = {
   anchorId: "news",
   body:
-    "Comunicaciones recientes, hitos y notas de prensa. Lo que cuenta y lo que se mueve en Atalant.",
-  ctaLabel: "Leer noticia",
-  eyebrow: "Comunicación",
+    "Publicaciones recientes de Atalant. Contenido editorial y novedades de compañía gestionadas desde CMS.",
+  ctaLabel: "Ver publicación",
+  eyebrow: "LinkedIn",
   items: [
     {
       date: "15 ABR 2026",
       excerpt:
         "Ampliamos capacidad operativa y reducimos los tiempos de entrega en el norte de Europa.",
-      href: "#",
+      href: "https://www.linkedin.com/company/atalant-europe/",
       imageAlt: "Polímeros Atalant",
       title: "Nuevo hub logístico en Países Bajos",
     },
@@ -104,7 +108,7 @@ const homeNewsBlock: Omit<NewsBlock, "type"> = {
       date: "02 ABR 2026",
       excerpt:
         "Nuestra línea de reciclados consolida su trazabilidad y calidad bajo estándar europeo.",
-      href: "#",
+      href: "https://www.linkedin.com/company/atalant-europe/",
       imageAlt: "Reciclados Greenlant Atalant",
       title: "Greenlant alcanza certificación EuCertPlast",
     },
@@ -112,13 +116,13 @@ const homeNewsBlock: Omit<NewsBlock, "type"> = {
       date: "20 MAR 2026",
       excerpt:
         "Reforzamos la oferta de polímeros técnicos con un nuevo contrato de suministro estable.",
-      href: "#",
+      href: "https://www.linkedin.com/company/atalant-europe/",
       imageAlt: "Polímeros técnicos Atalant",
       title: "Acuerdo con productor europeo de PP técnico",
     },
   ],
-  sectionLabel: "ÚLTIMAS NOTICIAS",
-  title: "Últimas\nnovedades.",
+  sectionLabel: "PUBLICACIONES RECIENTES",
+  title: "Últimas\npublicaciones.",
 };
 
 const homeNewsImageFilenames = [
@@ -128,7 +132,7 @@ const homeNewsImageFilenames = [
 ];
 
 const criticalMediaAssets = [
-  ...Object.values(productHeroMediaByCode).map((filename) => ({
+  ...productHeroMediaFilenames.map((filename) => ({
     alt: filename.replace(/\.webp$/i, "").replace(/-/g, " "),
     filename,
     path: `public/imgsrc/products/${filename}`,
@@ -464,7 +468,7 @@ const staticPages = {
     pageType: "financiacion",
     seo: {
       description:
-        "Sistema de crédito interno de Atalant: financiación caso a caso para acompañar la producción de cada cliente y crecer de forma equilibrada.",
+        "Sistema de crédito interno de Atalant para reforzar y hacer crecer tu negocio, con clientes asegurados mundialmente.",
       title: "Financiación · Crédito interno — Atalant",
     },
   },
@@ -473,8 +477,8 @@ const staticPages = {
     pageType: "logistica",
     seo: {
       description:
-        "Almacenes con estatus oficial de Depósito Aduanero en Valencia y Alicante, hubs de distribución en Italia y Países Bajos, exportación a Norte de África.",
-      title: "Logística · Depósito Aduanero — Atalant",
+        "Logística integrada de Atalant con flota propia, trazabilidad completa, centros logísticos y principales hubs europeos.",
+      title: "Logística integrada — Atalant",
     },
   },
   nosotros: {
@@ -491,7 +495,7 @@ const staticPages = {
     pageType: "sostenibilidad",
     seo: {
       description:
-        "Sostenibilidad industrial en Atalant: ISO 14001, gestión de residuos, materiales reciclados, energía solar, flota eficiente e I+D en hidrógeno verde.",
+        "Sostenibilidad industrial en Atalant: ISO 14001, generación de energía propia mediante módulos solares, silo trucks eléctricos y materiales reciclados.",
       title: "Sostenibilidad industrial — Atalant",
     },
   },

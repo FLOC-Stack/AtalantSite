@@ -16,18 +16,19 @@ type Props = {
 };
 
 const FALLBACK_HERO: HomeHero = {
-  eyebrow: "Distribución de polímeros en Europa",
-  headline: "Made for keeping\nyour production moving.",
-  body: "Distribuimos materias primas plásticas y polímeros reciclados de alta calidad. Respuesta ágil, stock permanente y un enfoque basado en la excelencia operativa.",
+  eyebrow: "Distribución de polímeros",
+  headline: "Una evolución en la cadena de suministro.",
+  body:
+    "Distribución de materia prima plástica y polímeros reciclados.\nMade for responding: Hechos para mantener tu producción",
   primaryLabel: "Catálogo de productos",
   secondaryLabel: "Nuestras soluciones",
 };
 
 const FALLBACK_STATS: HeroStat[] = [
-  { label: "Alcance", value: "12 PAÍSES EU" },
-  { label: "Capacidad", value: "400M+ KG/AÑO" },
-  { label: "Latencia", value: "< 24H RESPUESTA" },
-  { label: "Segmento", value: "POLÍMEROS TÉCNICOS" },
+  { label: "Cobertura", value: "18 países UE" },
+  { label: "Respuesta", value: "< 24 h" },
+  { label: "Portfolio", value: "+300 productos" },
+  { label: "Packaging", value: "Adaptable al cliente" },
 ];
 
 function renderMultiline(text: string) {
@@ -83,7 +84,7 @@ export function Hero({
       {/* Body */}
       <div className="relative z-10 pb-8 sm:pb-10">
         <p className="max-w-[500px] font-sans text-base font-light leading-snug text-body sm:text-lg md:text-xl md:max-w-[480px] lg:max-w-[720px] lg:text-2xl lg:leading-[1.1]">
-          {hero.body}
+          {renderMultiline(hero.body)}
         </p>
       </div>
 

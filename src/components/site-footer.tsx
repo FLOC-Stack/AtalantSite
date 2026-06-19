@@ -16,17 +16,8 @@ import {
 import { fallbackSiteSettings } from "@/lib/fallback-content";
 import { FooterEmailCopy } from "@/components/footer-email-copy";
 
-// Ubicación de la sede en Google Maps. Constante (no editable en CMS por
-// ahora); si se quiere gestionar desde Payload, añadir un campo a
-// SiteSettings y leerlo aquí.
-const MAP_URL = "https://goo.gl/maps/UmUZN4gmBqRf5CU19";
-
-const mapLabel: Record<AppLocale, string> = {
-  es: "Mostrar en mapa",
-  en: "Show on map",
-  pt: "Mostrar no mapa",
-  fr: "Afficher sur la carte",
-};
+const CONTACT_EMAIL = "info@atalant.com";
+const CONTACT_PHONE = "+34 965 66 18 28";
 
 type FooterLink = {
   label: string;
@@ -103,7 +94,11 @@ function isExternalHref(href: string) {
 }
 
 export function SiteFooter({ locale, settings: cmsSettings }: Props) {
-  const settings = cmsSettings ?? fallbackSiteSettings[locale];
+  const settings = {
+    ...(cmsSettings ?? fallbackSiteSettings[locale]),
+    contactEmail: CONTACT_EMAIL,
+    phone: CONTACT_PHONE,
+  };
   const columns = getColumns(locale, settings);
   const currentYear = new Date().getFullYear();
   const socialLinks = settings.socialLinks?.length
@@ -115,7 +110,7 @@ export function SiteFooter({ locale, settings: cmsSettings }: Props) {
       <div className="px-5 py-12 sm:px-8 sm:py-14 md:px-12 md:py-16 lg:px-20 lg:py-20">
         {/* Display title */}
         <h2 className="font-sans font-light leading-[0.95] tracking-tight text-white text-[clamp(2.5rem,11vw,10rem)] sm:leading-[0.95] lg:tracking-[-5.5px]">
-          Made for responding.
+          READY FOR RESPONSE
         </h2>
 
         <div className="mt-12 h-px w-full bg-white/20 sm:mt-16 lg:mt-20" aria-hidden="true" />
@@ -136,14 +131,6 @@ export function SiteFooter({ locale, settings: cmsSettings }: Props) {
                 className="transition-opacity hover:opacity-70 hover:text-white/80"
               >
                 {settings.phone}
-              </a>
-              <a
-                href={MAP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-opacity hover:opacity-70 hover:text-white/80"
-              >
-                {mapLabel[locale]}
               </a>
             </address>
           </div>

@@ -68,10 +68,10 @@ const COPY_ES: FinanciacionCopy = {
     desde: "DESDE",
   },
   metaValues: {
-    programa: "Crédito interno",
-    modelo: "Caso a caso",
-    alcance: "Iberia + Europa",
-    desde: "1996",
+    programa: "",
+    modelo: "Crédito para reforzar y hacer crecer tu negocio",
+    alcance: "Aseguramos clientes mundialmente",
+    desde: "1997",
   },
 
   dataEyebrow: "DATOS  /  EL SISTEMA EN CIFRAS",
@@ -82,30 +82,15 @@ const COPY_ES: FinanciacionCopy = {
       figureAriaLabel: "treinta años",
       unit: "años",
       title: "Aplicando crédito interno",
-      body: "Tres décadas acompañando a clientes con líneas de crédito propias, sin intermediarios bancarios.",
+      body: "Tres décadas acompañando a clientes con líneas de crédito propias.",
     },
     {
-      to: 78,
+      to: 96,
       suffix: "%",
-      figureAriaLabel: "setenta y ocho por ciento",
+      figureAriaLabel: "noventa y seis por ciento",
       unit: "clientes",
       title: "Con línea de crédito activa",
       body: "La mayoría de nuestra cartera opera con un programa de crédito interno ajustado a su producción.",
-    },
-    {
-      to: 90,
-      figureAriaLabel: "noventa días",
-      unit: "días",
-      title: "Plazo medio de pago",
-      body: "Plazos diseñados para alinearse con los ciclos de fabricación reales del cliente.",
-    },
-    {
-      to: 5,
-      suffix: "M€",
-      figureAriaLabel: "cinco millones de euros",
-      unit: "agregados",
-      title: "Línea de crédito desplegada",
-      body: "Capital interno comprometido en operaciones de crédito a clientes durante el último ejercicio.",
     },
   ],
 };
@@ -128,6 +113,14 @@ function renderMultiline(text: string) {
 export function FinanciacionPage({ locale, copy: pageCopy }: Props) {
   const copy = pageCopy ?? FINANCIACION_COPY[locale];
   const homeHref = copy.backHref ?? `/${locale}`;
+  const metaEntries = (
+    [
+      ["programa"],
+      ["modelo"],
+      ["alcance"],
+      ["desde"],
+    ] as const
+  ).filter(([k]) => copy.metaLabels[k] && copy.metaValues[k]);
 
   return (
     <main className="relative bg-background text-foreground">
@@ -188,15 +181,8 @@ export function FinanciacionPage({ locale, copy: pageCopy }: Props) {
         </div>
 
         {/* ======= Meta row ======= */}
-        <div className="mt-10 grid grid-cols-2 gap-y-8 border-t border-foreground/15 pt-8 sm:mt-14 lg:mt-16 lg:grid-cols-4 lg:gap-x-10">
-          {(
-            [
-              ["programa"],
-              ["modelo"],
-              ["alcance"],
-              ["desde"],
-            ] as const
-          ).map(([k]) => (
+        <div className="mt-10 grid grid-cols-1 gap-y-8 border-t border-foreground/15 pt-8 sm:mt-14 sm:grid-cols-3 sm:gap-x-10 lg:mt-16">
+          {metaEntries.map(([k]) => (
             <div key={k}>
               <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
                 {copy.metaLabels[k]}
@@ -209,7 +195,7 @@ export function FinanciacionPage({ locale, copy: pageCopy }: Props) {
         </div>
       </section>
 
-      {/* ======= Datos (4 módulos en 2×2 con cifra animada) ======= */}
+      {/* ======= Datos con cifra animada ======= */}
       <section
         aria-labelledby="fn-data-title"
         className="mt-24 border-t border-foreground/15 px-10 pt-16 sm:px-14 lg:mt-32 lg:px-20 lg:pt-24"

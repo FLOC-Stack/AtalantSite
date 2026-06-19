@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: buildSustainabilityPath(locale),
     },
     description:
-      "Sostenibilidad industrial en Atalant: ISO 14001, gestión de residuos, materiales reciclados, energía solar, flota eficiente e I+D en hidrógeno verde.",
+      "Sostenibilidad industrial en Atalant: ISO 14001, generación de energía propia mediante módulos solares, silo trucks eléctricos y materiales reciclados.",
     title: "Sostenibilidad industrial — Atalant",
   };
 }

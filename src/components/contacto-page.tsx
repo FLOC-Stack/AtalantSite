@@ -28,9 +28,9 @@ const COPY_ES: ContactoCopy = {
   breadcrumb: "CONTACTO  /  HABLEMOS",
   back: "← VOLVER",
   monogram: "CT",
-  heroTitle: "Socio estratégico,\nno solo proveedor.",
+  heroTitle: "Socio estratégico",
   heroBody:
-    "Cuéntanos qué necesitas: volúmenes, polímeros, plazos o ese reto logístico que no te deja dormir. Te respondemos rápido y con el equipo adecuado.",
+    "Cuéntanos qué necesitas: volúmenes, grados, plazos o ese reto logístico que no te deja dormir. Te respondemos rápido y con el equipo adecuado.",
   metaLabels: {
     respuesta: "RESPUESTA",
     horario: "HORARIO",
@@ -46,9 +46,9 @@ const COPY_ES: ContactoCopy = {
   formBody:
     "Selecciona el asunto que mejor encaje y te pondremos en contacto con la persona del equipo que mejor pueda responderte.",
   ctaTitle: "¿Prefieres llamar\no escribirnos directamente?",
-  ctaAction: "hola@atalant.com  →",
+  ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
-  phone: "+34 965 661 828",
+  phone: "+34 965 66 18 28",
 };
 
 const COPY_EN: ContactoCopy = {
@@ -73,9 +73,9 @@ const COPY_EN: ContactoCopy = {
   formBody:
     "Pick the topic that fits your enquiry and we'll route you to the right person on our team.",
   ctaTitle: "Prefer to call\nor email us directly?",
-  ctaAction: "hola@atalant.com  →",
+  ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
-  phone: "+34 965 661 828",
+  phone: "+34 965 66 18 28",
 };
 
 const COPY: Record<AppLocale, ContactoCopy> = {
@@ -204,7 +204,7 @@ export function ContactoPage({ locale }: Props) {
           {renderMultiline(copy.ctaTitle)}
         </h2>
         <Link
-          href={`mailto:hola@atalant.com?subject=${encodeURIComponent("Contacto Atalant")}`}
+          href={`mailto:logistics@atalant.com?subject=${encodeURIComponent("Contacto Atalant")}`}
           className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
         >
           <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">
