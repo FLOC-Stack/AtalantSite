@@ -148,7 +148,7 @@ const AUTO_REPLY_COPY: Record<AppLocale, AutoReplyStrings> = {
     body: "Gracias por contactar con Atalant. Hemos recibido tu mensaje y el equipo te responderá en menos de 24 horas laborables.",
     summary: "Resumen de tu consulta",
     signature: "Equipo Atalant",
-    signatureLine: "atalant.com  ·  +34 965 661 828",
+    signatureLine: "atalant.com  ·  +34 965 66 18 28",
   },
   en: {
     subject: "We've received your message · Atalant",
@@ -156,7 +156,7 @@ const AUTO_REPLY_COPY: Record<AppLocale, AutoReplyStrings> = {
     body: "Thanks for getting in touch with Atalant. We have received your message and our team will get back to you within 24 working hours.",
     summary: "Summary of your enquiry",
     signature: "Atalant team",
-    signatureLine: "atalant.com  ·  +34 965 661 828",
+    signatureLine: "atalant.com  ·  +34 965 66 18 28",
   },
   pt: {
     subject: "Recebemos a sua mensagem · Atalant",
@@ -164,7 +164,7 @@ const AUTO_REPLY_COPY: Record<AppLocale, AutoReplyStrings> = {
     body: "Obrigado por entrar em contacto com a Atalant. Recebemos a sua mensagem e a nossa equipa responderá em menos de 24 horas úteis.",
     summary: "Resumo da sua consulta",
     signature: "Equipa Atalant",
-    signatureLine: "atalant.com  ·  +34 965 661 828",
+    signatureLine: "atalant.com  ·  +34 965 66 18 28",
   },
   fr: {
     subject: "Nous avons bien reçu votre message · Atalant",
@@ -172,7 +172,7 @@ const AUTO_REPLY_COPY: Record<AppLocale, AutoReplyStrings> = {
     body: "Merci d'avoir contacté Atalant. Nous avons bien reçu votre message et notre équipe vous répondra sous 24 heures ouvrées.",
     summary: "Résumé de votre demande",
     signature: "Équipe Atalant",
-    signatureLine: "atalant.com  ·  +34 965 661 828",
+    signatureLine: "atalant.com  ·  +34 965 66 18 28",
   },
 };
 

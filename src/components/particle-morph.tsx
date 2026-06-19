@@ -289,41 +289,47 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
         return points;
       };
 
-      const getShoppingBag = (count: number, height: number) => {
+      const getIntakeManifold = (count: number, width: number) => {
         const points: { x: number; y: number; z: number }[] = [];
-        const half = height / 2;
-        const bodyTop = half * 0.55;
-        const bodyBottom = -half * 0.74;
-        const bodyHeight = bodyTop - bodyBottom;
+        const plenumLength = width;
+        const plenumRadius = 92;
+        const runnerLength = 360;
+        const runnerRadius = 46;
 
         for (let i = 0; i < count; i++) {
           const section = Math.random();
 
-          if (section > 0.82) {
-            const side = Math.random() > 0.5 ? 1 : -1;
-            const t = Math.random() * Math.PI;
-            const tube = Math.random() * Math.PI * 2;
-            const tubeRadius = 16 + Math.random() * 10;
-
+          if (section < 0.5) {
+            const x = (Math.random() - 0.5) * plenumLength;
+            const angle = Math.random() * Math.PI * 2;
             points.push({
-              x: side * 108 + Math.cos(tube) * tubeRadius,
-              y: bodyTop + Math.sin(t) * 185 + Math.sin(tube) * tubeRadius,
-              z: Math.cos(t) * 34 + Math.sin(tube) * 24,
+              x,
+              y: Math.cos(angle) * plenumRadius + 90,
+              z: Math.sin(angle) * plenumRadius * 0.82,
             });
             continue;
           }
 
-          const t = Math.random();
-          const y = bodyTop - t * bodyHeight;
-          const angle = Math.random() * Math.PI * 2;
-          const width = 245 - t * 42 + Math.sin(t * Math.PI * 4) * 12;
-          const depth = 78 + Math.sin(t * Math.PI) * 26;
-          const crease = Math.sin((angle + t * 5) * 3) * 13;
+          if (section < 0.86) {
+            const runnerIndex = Math.floor(Math.random() * 3);
+            const baseX = [-220, 0, 220][runnerIndex];
+            const t = Math.random();
+            const angle = Math.random() * Math.PI * 2;
+            const bend = Math.sin(t * Math.PI) * 62;
+            points.push({
+              x: baseX + Math.cos(angle) * runnerRadius + bend * (runnerIndex - 1) * 0.18,
+              y: 30 - t * runnerLength + Math.sin(angle) * runnerRadius * 0.52,
+              z: Math.sin(angle) * runnerRadius + Math.sin(t * Math.PI) * 52,
+            });
+            continue;
+          }
 
+          const side = Math.random() > 0.5 ? 1 : -1;
+          const angle = Math.random() * Math.PI * 2;
           points.push({
-            x: Math.cos(angle) * (width + crease),
-            y,
-            z: Math.sin(angle) * depth,
+            x: side * (plenumLength * 0.52 + Math.cos(angle) * 58),
+            y: 90 + Math.sin(angle) * 58,
+            z: Math.sin(angle) * 44,
           });
         }
 
@@ -418,7 +424,7 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
           getWave(PARTICLE_COUNT, 900, 620),     // 4 - EVA
           getCup(PARTICLE_COUNT, 760),           // 5 - PS
           getWaterBottle(PARTICLE_COUNT, 900),    // 6 - PET
-          getShoppingBag(PARTICLE_COUNT, 780),    // 7 - REC
+          getIntakeManifold(PARTICLE_COUNT, 620), // 7 - PA
         ];
 
         // Start dispersed, targets converge to sphere
@@ -469,6 +475,7 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
 
         const isBottleShape = currentShapeIndex === 1;
         const isElbowPipeShape = currentShapeIndex === 3;
+        const isManifoldShape = currentShapeIndex === 7;
         const globalAngleX = isBottleShape
           ? 0.18 +
             Math.sin(time * 0.85 * rotationIntensity) * 0.16 * rotationIntensity +
@@ -476,6 +483,10 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
           : isElbowPipeShape
             ? -0.08 +
               Math.sin(time * 0.6 * rotationIntensity) * 0.025 * rotationIntensity +
+              currentRotX * Math.PI * 0.08 * rotationIntensity
+          : isManifoldShape
+            ? 0.18 +
+              Math.sin(time * 0.5 * rotationIntensity) * 0.035 * rotationIntensity +
               currentRotX * Math.PI * 0.08 * rotationIntensity
           : time * 0.15 * rotationIntensity + currentRotX * Math.PI * 0.3 * rotationIntensity;
         const globalAngleY = isBottleShape
@@ -485,6 +496,10 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
           : isElbowPipeShape
             ? -0.34 +
               Math.sin(time * 0.5 * rotationIntensity) * 0.05 * rotationIntensity +
+              currentRotY * Math.PI * 0.08 * rotationIntensity
+          : isManifoldShape
+            ? -0.28 +
+              Math.sin(time * 0.45 * rotationIntensity) * 0.04 * rotationIntensity +
               currentRotY * Math.PI * 0.08 * rotationIntensity
           : time * 0.2 * rotationIntensity + currentRotY * Math.PI * 0.3 * rotationIntensity;
 

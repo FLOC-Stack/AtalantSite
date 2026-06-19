@@ -311,7 +311,7 @@ export function ProductDetailPE({ locale }: Props) {
               © MMXXVI ATALANT&nbsp;&nbsp;/&nbsp;&nbsp;PRODUCTOS / PE
             </p>
             <p className="font-mono text-[11px] font-medium tracking-[2px] text-white/80">
-              INFO@ATALANT.COM&nbsp;&nbsp;·&nbsp;&nbsp;+34 965 661 828
+              INFO@ATALANT.COM&nbsp;&nbsp;·&nbsp;&nbsp;+34 965 66 18 28
             </p>
           </div>
         </div>

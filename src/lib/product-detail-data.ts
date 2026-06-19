@@ -14,7 +14,7 @@ const related = [
   { code: "EVA", name: "Etileno acetato de vinilo", grades: "MFI · Acetato de vinilo", slug: "eva" },
   { code: "PS", name: "Poliestireno", grades: "GPPS · HIPS", slug: "ps" },
   { code: "PET", name: "PET", grades: "Botella · Lámina · Fibra", slug: "pet" },
-  { code: "REC", name: "Reciclados", grades: "rPE · rPP · rPET · rPS", slug: "recycled" },
+  { code: "PA", name: "Poliamida", grades: "PA6 · PA66 · Reforzada", slug: "pa" },
 ];
 
 function relatedFor(slug: string) {
@@ -298,6 +298,53 @@ export const productDetailData: Record<string, ProductDetailData> = {
     slug: "pet",
     tableTitle: "Botella, lámina y fibra con trazabilidad comercial.",
     title: "PET",
+  },
+  pa: {
+    applications: [
+      "Colectores de admisión",
+      "Automoción",
+      "Piezas técnicas",
+      "Componentes reforzados",
+      "Aplicaciones térmicas",
+    ],
+    code: "PA",
+    footerQuestion: "¿Necesitas una ficha técnica PA?",
+    grades: [
+      {
+        code: "PA6",
+        denomination: "Poliamida 6",
+        spec: "Tenacidad · buena procesabilidad",
+        application: "Piezas técnicas · Componentes industriales · Automoción",
+        process: "Inyección, compounding",
+      },
+      {
+        code: "PA66",
+        denomination: "Poliamida 66",
+        spec: "Mayor resistencia térmica y mecánica",
+        application: "Colectores de admisión · Conectores · Piezas sometidas a carga",
+        process: "Inyección técnica",
+      },
+      {
+        code: "PA GF",
+        denomination: "Reforzada con fibra",
+        spec: "Rigidez y estabilidad dimensional",
+        application: "Automoción · Componentes estructurales · Aplicaciones exigentes",
+        process: "Inyección, compounding",
+      },
+    ],
+    heroLines: ["Poliamida.", "Resistencia", "para piezas técnicas."],
+    intro:
+      "Poliamidas para aplicaciones de alta exigencia mecánica y térmica. Trabajamos grados PA6, PA66 y opciones reforzadas para ajustar rigidez, impacto y estabilidad dimensional en piezas técnicas.",
+    meta: [
+      { label: "GRADOS", value: "PA6 · PA66 · Reforzada" },
+      { label: "TRANSFORMACIÓN", value: "Inyección · Compounding" },
+      { label: "APLICACIONES", value: "Automoción · Colectores · Piezas técnicas" },
+      { label: "RESPUESTA", value: "Consulta técnica por aplicación" },
+    ],
+    related: relatedFor("pa"),
+    slug: "pa",
+    tableTitle: "Poliamidas para resistencia mecánica, térmica y dimensional.",
+    title: "Poliamida",
   },
   recycled: {
     applications: ["Compra circular", "Blends", "rPE", "rPP", "rPET", "rPS"],

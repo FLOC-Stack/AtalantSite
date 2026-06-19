@@ -29,13 +29,13 @@ type Props = {
   principles?: FinancingPrinciple[];
 };
 
-const FALLBACK_TITLE = "Financiación\nque escucha.";
+const FALLBACK_TITLE = "Mantenemos tu flujo\nde suministro constante.";
 
 const FALLBACK_BODY =
-  "Participamos en la financiación de los clientes con un sistema de crédito propio. Adaptamos las condiciones a la realidad de cada relación comercial, escuchando activamente las necesidades del cliente y del proveedor.";
+  "Aportamos flexibilidad, asesoramiento y reducimos tu incertidumbre en la cadena de suministro. Te acompañamos en todo el proceso de aprovisionamiento.";
 
 const FALLBACK_QUOTE =
-  "\u201cEn Atalant potenciamos nuestro negocio y saber hacer a través de nuestros valores.\u201d";
+  "En Atalant potenciamos tu negocio y lo hacemos a través de nuestros valores.";
 
 const FALLBACK_PRINCIPLES: FinancingPrinciple[] = [
   {
@@ -45,7 +45,7 @@ const FALLBACK_PRINCIPLES: FinancingPrinciple[] = [
   },
   {
     numeral: "02",
-    title: "Flexibilidad",
+    title: "Nos adaptamos",
     body: "Adaptarnos a la realidad de nuestros clientes y proveedores escuchando activamente sus necesidades.",
   },
   {
@@ -89,7 +89,7 @@ export function HomeFinancing({
       id="financing"
       ref={sectionRef}
       aria-labelledby="home-financing-title"
-      className="relative flex min-h-screen flex-col overflow-hidden bg-white text-foreground"
+      className="relative flex min-h-screen flex-col overflow-hidden bg-background text-foreground"
     >
       <span id="financiacion" className="absolute top-0" aria-hidden="true" />
       {/* Content wrapper — inherits side padding from the layout system */}
@@ -125,7 +125,7 @@ export function HomeFinancing({
               className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
               style={{
                 background:
-                  "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
+                  "linear-gradient(to bottom, rgba(246,247,253,0) 0%, var(--color-background) 100%)",
               }}
             />
           </div>
@@ -133,8 +133,8 @@ export function HomeFinancing({
           <div
             className="pointer-events-none absolute inset-0 z-0 hidden md:block"
             style={{
-              background:
-                "linear-gradient(to right, rgba(255,255,255,1) 25%, rgba(255,255,255,0) 55%)",
+                background:
+                "linear-gradient(to right, var(--color-background) 25%, rgba(246,247,253,0) 55%)",
             }}
             aria-hidden="true"
           />

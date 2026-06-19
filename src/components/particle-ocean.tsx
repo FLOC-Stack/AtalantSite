@@ -20,6 +20,19 @@ const COLORS = [
   new THREE.Color(0xa0b9eb), // pale
 ];
 
+function hasWebGLSupport() {
+  try {
+    const canvas = document.createElement("canvas");
+    return Boolean(
+      canvas.getContext("webgl2") ||
+        canvas.getContext("webgl") ||
+        canvas.getContext("experimental-webgl"),
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function ParticleOcean({ className, mouseTargetRef }: ParticleOceanProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -30,6 +43,8 @@ export function ParticleOcean({ className, mouseTargetRef }: ParticleOceanProps)
     const w0 = container.clientWidth;
     const h0 = container.clientHeight;
     if (w0 === 0 || h0 === 0) return;
+
+    if (!hasWebGLSupport()) return;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(70, w0 / h0, 1, 10000);
@@ -173,5 +188,16 @@ export function ParticleOcean({ className, mouseTargetRef }: ParticleOceanProps)
     };
   }, [mouseTargetRef]);
 
-  return <div ref={containerRef} className={className} />;
+  return (
+    <div ref={containerRef} className={`relative overflow-hidden ${className ?? ""}`}>
+      <div
+        className="absolute inset-0 bg-[radial-gradient(circle_at_70%_35%,rgba(30,75,182,0.16)_0,rgba(30,75,182,0.06)_30%,rgba(255,255,255,0)_62%)]"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 opacity-55 [background-image:radial-gradient(circle,rgba(30,75,182,0.32)_1px,transparent_1px)] [background-size:18px_18px]"
+        aria-hidden="true"
+      />
+    </div>
+  );
 }

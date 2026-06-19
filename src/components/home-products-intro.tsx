@@ -19,16 +19,16 @@ type Props = {
   locale?: string;
 };
 
-const FALLBACK_TITLE = "Polímeros\nbásicos, técnicos\ny reciclados.";
+const FALLBACK_TITLE = "Polímeros\nde alta calidad.";
 
 const FALLBACK_BODY =
-  "Nuestra gama abarca polímeros básicos (PE, PP, PS, PVC), plásticos técnicos y polímeros reciclados de alta calidad y rendimiento. Socios de referencia de los principales productores europeos.";
+  "Descubre nuestra familia de productos entre los que destacan: PE, PP, PVC, PS, EVA y PA.";
 
 const FALLBACK_STATS: HomeProductsIntroStat[] = [
-  { label: "Catálogo", value: "5 familias base + reciclados" },
-  { label: "Grados", value: "40+ referencias" },
-  { label: "Marca", value: "Greenlant" },
-  { label: "Certificación", value: "Fichas técnicas bajo petición" },
+  { label: "Grados", value: "+300 referencias" },
+  { label: "Cumplimiento", value: "Adaptado a normativa" },
+  { label: "Producto", value: "Última generación" },
+  { label: "Laboratorio", value: "Propio" },
 ];
 
 function renderMultiline(text: string) {

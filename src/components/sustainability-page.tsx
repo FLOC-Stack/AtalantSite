@@ -96,9 +96,9 @@ const COPY_ES: SustainabilityCopy = {
     "Uno de los retos industriales más complejos es ser sostenible manteniendo un trabajo eficiente. La estrategia de Atalant parte de una idea concreta: cada mejora ambiental debe integrarse en el sistema operativo, no vivir separada de la realidad logística y comercial.",
   meta: [
     { label: "CERTIFICACIÓN", value: "ISO 14001" },
-    { label: "ENERGÍA", value: "Placas solares logísticas" },
-    { label: "TRANSPORTE", value: "Cisternas eléctricas" },
-    { label: "MATERIALES", value: "Reciclados de alta calidad" },
+    { label: "ENERGÍA", value: "Generación energía propia mediante módulos solares" },
+    { label: "TRANSPORTE", value: "Silo trucks eléctricos" },
+    { label: "MATERIALES", value: "Materiales reciclados de alta calidad" },
   ],
   proofEyebrow: "EVIDENCIAS  /  MEDICIÓN",
   proofTitle: "Lo medible se gestiona.",

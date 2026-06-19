@@ -44,6 +44,36 @@ type PointDatum =
 // Tipo ligero para features de GeoJSON (evitamos importar @types/geojson)
 type Feature = { type: "Feature"; geometry: unknown; properties: unknown };
 
+function hasWebGLSupport() {
+  try {
+    const canvas = document.createElement("canvas");
+    return Boolean(
+      canvas.getContext("webgl2") ||
+        canvas.getContext("webgl") ||
+        canvas.getContext("experimental-webgl"),
+    );
+  } catch {
+    return false;
+  }
+}
+
+function GlobeFallback() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+      <div className="relative aspect-square h-[78%] max-h-[620px] min-h-[260px] rounded-full border border-primary/15 bg-[radial-gradient(circle_at_35%_30%,rgba(255,255,255,0.95)_0,rgba(246,247,253,0.88)_34%,rgba(30,75,182,0.12)_68%,rgba(30,75,182,0.04)_100%)] shadow-[0_30px_90px_rgba(30,75,182,0.16)]">
+        <div className="absolute inset-[10%] rounded-full border border-primary/10" />
+        <div className="absolute inset-[20%] rounded-full border border-primary/10" />
+        <div className="absolute left-[18%] top-[47%] h-px w-[64%] rotate-[-12deg] bg-primary/35" />
+        <div className="absolute left-[24%] top-[54%] h-px w-[52%] rotate-[18deg] bg-primary/25" />
+        <span className="absolute left-[39%] top-[48%] h-2.5 w-2.5 rounded-full bg-primary" />
+        <span className="absolute left-[43%] top-[52%] h-2.5 w-2.5 rounded-full bg-primary" />
+        <span className="absolute left-[61%] top-[37%] h-2 w-2 rounded-full bg-primary/70" />
+        <span className="absolute left-[67%] top-[62%] h-2 w-2 rounded-full bg-primary/60" />
+      </div>
+    </div>
+  );
+}
+
 export function AtalantGlobe({
   style = "dotted",
   hubs = HUBS,
@@ -56,10 +86,21 @@ export function AtalantGlobe({
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
   const [dims, setDims] = useState({ w: 0, h: 0 });
   const [countries, setCountries] = useState<Feature[]>([]);
+  const [webglAvailable, setWebglAvailable] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) setWebglAvailable(hasWebGLSupport());
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Fetch del geojson (solo modo dotted)
   useEffect(() => {
-    if (style !== "dotted") return;
+    if (style !== "dotted" || !webglAvailable) return;
     let cancelled = false;
     fetch(COUNTRIES_GEOJSON_URL)
       .then((r) => r.json())
@@ -72,7 +113,7 @@ export function AtalantGlobe({
     return () => {
       cancelled = true;
     };
-  }, [style]);
+  }, [style, webglAvailable]);
 
   // Medición responsive del contenedor
   useEffect(() => {
@@ -174,7 +215,9 @@ export function AtalantGlobe({
       className="absolute inset-0"
       onMouseMove={handleMouseMove}
     >
-      {dims.w > 0 && dims.h > 0 ? (
+      {webglAvailable === false ? <GlobeFallback /> : null}
+
+      {webglAvailable && dims.w > 0 && dims.h > 0 ? (
         <div
           className="absolute"
           style={{

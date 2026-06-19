@@ -16,9 +16,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   return {
-    title: "Logística · Depósito Aduanero — Atalant",
+    title: "Logística integrada — Atalant",
     description:
-      "Almacenes con estatus oficial de Depósito Aduanero en Valencia y Alicante, hubs de distribución en Italia y Países Bajos, exportación a Norte de África.",
+      "Logística integrada de Atalant con flota propia, trazabilidad completa, centros logísticos y principales hubs europeos.",
   };
 }
 

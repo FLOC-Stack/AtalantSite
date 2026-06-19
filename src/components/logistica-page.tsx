@@ -49,89 +49,84 @@ export type LogisticaCopy = {
 };
 
 const COPY_ES: LogisticaCopy = {
-  breadcrumb: "LOGÍSTICA  /  DEPÓSITO ADUANERO",
+  breadcrumb: "LOGÍSTICA  /  SERVICIO INTEGRADO",
   back: "← VOLVER",
   monogram: "LG",
-  heroTitle: "Estatus aduanero\noficial, desde 2006.",
+  heroTitle: "Logística integrada\npara el mejor servicio",
   heroBody:
-    "Los almacenes de la costa mediterránea obtuvieron la denominación oficial de Depósito Aduanero entre 2006 y 2009. Valencia y Alicante operan con ventajas fiscales en operaciones de importación y exportación.",
+    "Recibe tus pedidos en nuestra propia flota de transporte con una trazabilidad completa desde el primer momento.",
   metaLabels: {
     ubicaciones: "UBICACIONES",
     estatus: "ESTATUS",
-    hubs: "HUBS EUROPA",
+    hubs: "PRINCIPALES HUBS",
     exportacion: "EXPORTACIÓN",
   },
   metaValues: {
-    ubicaciones: "Valencia · Alicante",
-    estatus: "Depósito Aduanero oficial",
-    hubs: "Italia · Países Bajos",
-    exportacion: "Marruecos · Argelia",
+    ubicaciones: "Almacenes propios situados estratégicamente por Europa",
+    estatus: "Operador Económico Autorizado (OEA)",
+    hubs: "Antwerp · Valencia · Fos",
+    exportacion: "18 países",
   },
   advantagesEyebrow: "VENTAJAS  /  CUATRO PUNTOS CLAVE",
-  advantagesTitle: "Por qué importa operar\ndesde Depósito Aduanero.",
+  advantagesTitle: "Por qué importa operar\ncon logística integrada.",
   advantages: [
     {
       number: "01",
-      title: "Aplazamiento fiscal",
-      body:
-        "Las mercancías no pagan derechos de aduana ni IVA hasta que salen del depósito, mejorando el cash-flow del cliente.",
+      title: "Control total en la cadena de suministro",
+      body: "Gestionamos directamente cada paso, garantizando fiabilidad y trazabilidad total.",
     },
     {
       number: "02",
-      title: "Ventaja en importación",
-      body:
-        "Importa desde fuera de la UE sin coste aduanero inmediato; libera solo lo necesario.",
+      title: "Mayor rapidez y disponibilidad",
+      body: "Entrega más rápida y stock disponible para responder con agilidad.",
     },
     {
       number: "03",
-      title: "Reexportación sin carga",
-      body:
-        "Posibilidad de reexportar a terceros países sin devolución ni costes adicionales.",
+      title: "Reducción en costes y mayor eficiencia",
+      body: "Elimina intermediarios y optimiza ruta para unos precios más competitivos.",
     },
     {
       number: "04",
-      title: "Almacenaje prolongado",
-      body:
-        "Sin límite temporal bajo el régimen; la materia prima se libera al ritmo de la producción.",
+      title: "Mejor experiencia cliente",
+      body: "Seguimiento a tiempo real y servicio personalizado que genera confianza.",
     },
   ],
   networkEyebrow: "RED  /  TERRITORIOS",
-  networkTitle: "Dos depósitos, dos hubs,\nsiete países activos.",
+  networkTitle: "Centros logísticos /\nPrincipales hubs",
   networkCaption: "RED ATALANT 2026  /  OESTE ←    → ESTE",
-  networkLegend: "●  SEDE / HUB / DA      ○  DISTRIBUCIÓN / EXPORTACIÓN",
+  networkLegend: "●  CENTRO / HUB      ○  RED / DISTRIBUCIÓN",
   processEyebrow: "PROCESO  /  PUERTA A PUERTA",
   process: [
-    { roman: "01", title: "Origen", body: "Fabricante europeo." },
+    { roman: "01", title: "Origen", body: "Petroquímicas mundiales con la última tecnología disponible." },
     {
       roman: "02",
       title: "Importación",
-      body: "Entrada sin carga fiscal en depósito aduanero.",
+      body: "Importación mediante nuestro sistema integrado.",
     },
     {
       roman: "03",
       title: "Almacenaje",
-      body: "Stock disponible en ES, IT o NL.",
+      body: "Almacenaje en lugares estratégicos.",
     },
     {
       roman: "04",
       title: "Entrega",
-      body: "Liberación y transporte a planta del cliente.",
+      body: "Entrega al cliente con trazabilidad.",
     },
   ],
-  ctaTitle: "¿Ruta específica? Lo resolvemos.",
+  ctaTitle: "¿Necesidad de entrega urgente? Lo resolvemos.",
   ctaAction: "Solicitar condiciones  →",
-  ctaHref: "mailto:logistica@atalant.com?subject=Consulta%20ruta%20DA",
-  ctaFootnote: "© MMXXVI ATALANT  /  LG",
-  phone: "+34 965 661 828",
+  ctaHref: "mailto:logistica@atalant.com?subject=Consulta%20entrega%20urgente",
+  ctaFootnote: "",
+  phone: "",
   hubs: [
-    { code: "ES · Alicante", role: "SEDE · DA", tier: "primary" },
-    { code: "ES · Valencia", role: "DA", tier: "primary" },
-    { code: "PT", role: "DISTRIBUCIÓN", tier: "secondary" },
-    { code: "FR", role: "DISTRIBUCIÓN", tier: "secondary" },
-    { code: "IT", role: "HUB", tier: "primary" },
-    { code: "NL", role: "HUB", tier: "primary" },
-    { code: "MA", role: "EXPORT NAF", tier: "secondary" },
-    { code: "DZ", role: "EXPORT NAF", tier: "secondary" },
+    { code: "Alicante", role: "Centro logístico", tier: "primary" },
+    { code: "Valencia", role: "Centro logístico", tier: "secondary" },
+    { code: "Leixoes", role: "Hub", tier: "primary" },
+    { code: "Antwerp", role: "Hub", tier: "secondary" },
+    { code: "Fos", role: "Hub", tier: "primary" },
+    { code: "Ravenna", role: "Hub", tier: "secondary" },
+    { code: "Chesterfield", role: "Hub", tier: "primary" },
   ],
 };
 
@@ -351,7 +346,7 @@ export function LogisticaPage({ locale, copy: pageCopy }: Props) {
           {copy.ctaTitle}
         </h2>
         <Link
-          href={copy.ctaHref ?? `mailto:logistica@atalant.com?subject=${encodeURIComponent("Consulta ruta DA")}`}
+          href={copy.ctaHref ?? `mailto:logistica@atalant.com?subject=${encodeURIComponent("Consulta entrega urgente")}`}
           className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
         >
           <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">
@@ -360,14 +355,20 @@ export function LogisticaPage({ locale, copy: pageCopy }: Props) {
           <span className="mt-2 block h-px w-[212px] bg-white" aria-hidden="true" />
         </Link>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-white/20 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[9px] uppercase tracking-[1.5px] text-white/50">
-            {copy.ctaFootnote}
-          </p>
-          <p className="font-mono text-[11px] uppercase tracking-[2px] text-white/80">
-            {copy.phone}
-          </p>
-        </div>
+        {copy.ctaFootnote || copy.phone ? (
+          <div className="mt-14 flex flex-col gap-4 border-t border-white/20 pt-6 sm:flex-row sm:items-center sm:justify-between">
+            {copy.ctaFootnote ? (
+              <p className="font-mono text-[9px] uppercase tracking-[1.5px] text-white/50">
+                {copy.ctaFootnote}
+              </p>
+            ) : null}
+            {copy.phone ? (
+              <p className="font-mono text-[11px] uppercase tracking-[2px] text-white/80">
+                {copy.phone}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
       </section>
     </main>
   );

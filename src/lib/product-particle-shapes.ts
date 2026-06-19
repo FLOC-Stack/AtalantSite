@@ -6,9 +6,9 @@ const PRODUCT_PARTICLE_SHAPE_BY_CODE: Record<string, number> = {
   eva: 4,
   ps: 5,
   pet: 6,
-  rec: 7,
-  recycled: 7,
-  reciclados: 7,
+  pa: 7,
+  polyamide: 7,
+  poliamida: 7,
 };
 
 export function getProductParticleShapeIndex(code: string) {

@@ -32,7 +32,7 @@ type Props = {
 const FALLBACK_TITLE = "Del Mediterráneo\nal resto de Europa.";
 
 const FALLBACK_BODY =
-  "Almacenes propios con estatus oficial de Depósito Aduanero en Valencia y Alicante. Hubs de distribución en Italia y Países Bajos. Un solo interlocutor para el flujo completo: importación, almacenaje, entrega, financiación.";
+  "Recibe tus pedidos en nuestra propia flota de transporte con una trazabilidad completa desde el primer momento. Un solo interlocutor para el flujo completo: importación, almacenaje, entrega y financiación.";
 
 const FALLBACK_MILESTONES: LogisticsMilestone[] = [
   {
@@ -51,10 +51,10 @@ const FALLBACK_MILESTONES: LogisticsMilestone[] = [
   },
   {
     year: "2006/09",
-    label: "Aduanero",
-    title: "Depósito Aduanero",
+    label: "Logística",
+    title: "Centros propios",
     location: "Valencia · Alicante",
-    body: "Consolidación logística. Denominación oficial obtenida.",
+    body: "Consolidación logística con almacenes propios en la costa mediterránea.",
   },
   {
     year: "2010/14",

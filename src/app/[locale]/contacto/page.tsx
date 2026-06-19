@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: "Contacto · Atalant",
     description:
-      "Habla con el equipo de Atalant: volúmenes, polímeros, plazos o retos logísticos. Respondemos en menos de 24 horas laborables.",
+      "Habla con el equipo de Atalant: volúmenes, grados, plazos o retos logísticos. Respondemos en menos de 24 horas laborables.",
   };
 }
 
