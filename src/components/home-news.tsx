@@ -78,9 +78,9 @@ export function HomeNews({
   return (
     <section
       aria-labelledby="home-news-title"
-      className="relative flex min-h-screen flex-col bg-background text-foreground"
+      className="relative flex min-h-svh snap-start flex-col bg-background text-foreground"
     >
-      <div className="relative z-10 flex w-full flex-1 flex-col px-10 pt-16 pb-12 sm:px-14 sm:pt-20 sm:pb-14 lg:px-20 lg:pt-[100px] lg:pb-[80px]">
+      <div className="relative z-10 flex w-full flex-1 flex-col px-10 pt-28 pb-12 sm:px-14 sm:pt-36 sm:pb-14 lg:px-20 lg:pt-[136px] lg:pb-[80px]">
         <div className="flex items-start justify-between gap-4">
           <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary">
             {indexLabel}

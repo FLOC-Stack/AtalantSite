@@ -5,7 +5,6 @@ import { HomeLogistics } from "@/components/home-logistics";
 import { HomeFinancing } from "@/components/home-financing";
 import { HomeNews } from "@/components/home-news";
 import { AtalantGlobe } from "@/components/atalant-globe";
-import { FullpageScroll } from "@/components/fullpage-scroll";
 import { getHomePage } from "@/lib/payload-data";
 import type {
   HomeBlock,
@@ -75,7 +74,7 @@ export default async function LocaleHomePage({ params }: Props) {
   }
 
   return (
-    <FullpageScroll>
+    <main className="home-snap-scroll h-svh overflow-y-auto overscroll-contain scroll-smooth snap-y snap-mandatory">
       <Hero
         hero={heroProps}
         stats={statsProps}
@@ -112,6 +111,6 @@ export default async function LocaleHomePage({ params }: Props) {
         ctaLabel={newsBlock?.ctaLabel}
         items={newsBlock?.items}
       />
-    </FullpageScroll>
+    </main>
   );
 }

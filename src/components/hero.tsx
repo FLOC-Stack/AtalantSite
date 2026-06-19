@@ -53,7 +53,7 @@ export function Hero({
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen bg-background px-5 pt-28 pb-32 overflow-hidden sm:px-8 sm:pt-36 sm:pb-36 md:px-12 md:pt-40 lg:px-20 lg:pt-[180px] lg:pb-20"
+      className="relative min-h-svh snap-start overflow-hidden bg-background px-5 pt-28 pb-32 sm:px-8 sm:pt-36 sm:pb-36 md:px-12 md:pt-40 lg:px-20 lg:pt-[150px] lg:pb-20"
     >
       {/* Logo particles background */}
       <LogoParticles

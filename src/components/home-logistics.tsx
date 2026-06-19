@@ -133,7 +133,7 @@ export function HomeLogistics({
   return (
     <section
       aria-labelledby="home-logistics-title"
-      className="relative flex min-h-screen flex-col overflow-hidden bg-background text-foreground"
+      className="relative flex min-h-svh snap-start flex-col overflow-hidden bg-background text-foreground"
     >
       {/* Background: video / animación / globo.
           Composición invertida: en desktop el globo vive en la mitad izquierda,
@@ -153,7 +153,7 @@ export function HomeLogistics({
       />
 
       {/* Contenido */}
-      <div className="relative z-10 flex w-full flex-1 flex-col px-10 pt-16 pb-12 sm:px-14 sm:pt-20 sm:pb-14 lg:px-20 lg:pt-[100px] lg:pb-[80px]">
+      <div className="relative z-10 flex w-full flex-1 flex-col px-10 pt-28 pb-12 sm:px-14 sm:pt-36 sm:pb-14 lg:px-20 lg:pt-[136px] lg:pb-[80px]">
         {/* Bloque editorial: en mobile full-width; en desktop empujado a la
             derecha para no solaparse con el globo que ahora vive a la izquierda. */}
         <div className="md:ml-auto md:w-[45%]">

@@ -91,10 +91,10 @@ export function HomeProductsIntro({
   return (
     <section
       aria-labelledby="home-products-intro-title"
-      className="relative min-h-screen overflow-hidden bg-background text-foreground"
+      className="relative min-h-svh snap-start overflow-hidden bg-background text-foreground"
     >
       {/* Card editorial flotante — glass sobre el video */}
-      <div className="glass relative z-10 m-4 flex flex-col rounded-3xl px-6 pt-12 pb-10 backdrop-blur-[16px] backdrop-saturate-[1.2] sm:m-6 sm:px-8 sm:pt-14 sm:pb-12 lg:absolute lg:inset-y-8 lg:left-8 lg:m-0 lg:w-[640px] lg:rounded-[28px] lg:px-12 lg:pt-12 lg:pb-10">
+      <div className="glass relative z-10 mx-4 mt-28 mb-4 flex flex-col rounded-3xl px-6 pt-12 pb-10 backdrop-blur-[16px] backdrop-saturate-[1.2] sm:mx-6 sm:mt-36 sm:mb-6 sm:px-8 sm:pt-14 sm:pb-12 lg:absolute lg:top-[136px] lg:bottom-8 lg:left-8 lg:m-0 lg:w-[640px] lg:rounded-[28px] lg:px-12 lg:pt-12 lg:pb-10">
         {/* Header: index + counter */}
         <div className="flex items-start justify-between gap-4">
           <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary-dark">
