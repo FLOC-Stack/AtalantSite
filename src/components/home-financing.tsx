@@ -91,7 +91,7 @@ export function HomeFinancing({
       aria-labelledby="home-financing-title"
       className="relative flex min-h-svh snap-start flex-col overflow-hidden bg-background text-foreground"
     >
-      <div className="pointer-events-none absolute top-0 right-0 bottom-0 z-0 min-h-full w-full md:w-[78%]">
+      <div className="pointer-events-none absolute top-0 right-0 bottom-[270px] z-0 w-full overflow-hidden md:w-[78%]">
         <ParticleOcean
           className="absolute inset-0 h-full min-h-svh"
           mouseTargetRef={sectionRef}
@@ -99,7 +99,7 @@ export function HomeFinancing({
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%]"
           style={{
             background:
               "linear-gradient(to bottom, rgba(246,247,253,0) 0%, var(--color-background) 100%)",
@@ -170,7 +170,7 @@ export function HomeFinancing({
         </div>
 
         {/* Bottom: four principles */}
-        <div className="mt-10">
+        <div className="relative z-20 -mx-10 mt-10 bg-background px-10 sm:-mx-14 sm:px-14 lg:-mx-20 lg:px-20">
           <div className="h-px w-full bg-foreground" aria-hidden="true" />
           <p className="mt-3 font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
             {principlesLabel}

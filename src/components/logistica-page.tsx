@@ -58,14 +58,14 @@ const COPY_ES: LogisticaCopy = {
   metaLabels: {
     ubicaciones: "UBICACIONES",
     estatus: "ESTATUS",
-    hubs: "PRINCIPALES HUBS",
+    hubs: "Principales Hubs",
     exportacion: "EXPORTACIÓN",
   },
   metaValues: {
     ubicaciones: "Almacenes propios situados estratégicamente por Europa",
     estatus: "Operador Económico Autorizado (OEA)",
-    hubs: "Antwerp · Valencia · Fos",
-    exportacion: "18 países",
+    hubs: "Antwerp Valencia Fos",
+    exportacion: "18 paises",
   },
   advantagesEyebrow: "VENTAJAS  /  CUATRO PUNTOS CLAVE",
   advantagesTitle: "Por qué importa operar\ncon logística integrada.",

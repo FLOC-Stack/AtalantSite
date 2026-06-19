@@ -81,7 +81,7 @@ const staticPageMediaBySlug: Record<string, Record<string, string>> = {
   nosotros: {
     nosotrosChapter1Image: "atalant-about-1.webp",
     nosotrosChapter2Image: "atalant-about-2.webp",
-    nosotrosChapter3Image: "atalant-about-3-v2.webp",
+    nosotrosChapter3Image: "atalant-industrial-logistics.webp",
     nosotrosHeroImage: "atalant-about-hero.webp",
   },
   sostenibilidad: {

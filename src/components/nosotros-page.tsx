@@ -107,8 +107,8 @@ const COPY_ES: NosotrosCopy = {
         "Ofrecemos soluciones de abastecimiento flexibles, adaptadas a la realidad operativa de cada planta y a los ritmos reales de cada producción.",
       ],
       image: {
-        src: "/imgsrc/about/atalant-about-3-v2.webp",
-        alt: "Muelle de carga y descarga de camiones",
+        src: "/imgsrc/about/atalant-industrial-logistics.webp",
+        alt: "Flota Atalant en muelle de carga industrial",
       },
     },
   ],

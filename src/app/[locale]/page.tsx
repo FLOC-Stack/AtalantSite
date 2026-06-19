@@ -5,6 +5,7 @@ import { HomeLogistics } from "@/components/home-logistics";
 import { HomeFinancing } from "@/components/home-financing";
 import { HomeNews } from "@/components/home-news";
 import { AtalantGlobe } from "@/components/atalant-globe";
+import { HomeScrollSnap } from "@/components/home-scroll-snap";
 import { getHomePage } from "@/lib/payload-data";
 import type {
   HomeBlock,
@@ -74,43 +75,46 @@ export default async function LocaleHomePage({ params }: Props) {
   }
 
   return (
-    <main className="home-snap-scroll h-svh overflow-y-auto overscroll-contain scroll-smooth snap-y snap-mandatory">
-      <Hero
-        hero={heroProps}
-        stats={statsProps}
-        primaryHref={heroProps?.primaryHref ?? productsHref}
-        secondaryHref={heroProps?.secondaryHref ?? buildContactoPath(typedLocale)}
-      />
-      <HomeProductsIntro
-        locale={typedLocale}
-        title={productsBlock?.title}
-        body={productsBlock?.body}
-        primaryCtaLabel={productsBlock?.ctaLabel}
-        primaryCtaHref={productsBlock?.ctaHref ?? productsHref}
-        videoSrc={productsBlock?.videoSrc ?? "/video-morp-atalant.mp4"}
-        videoPoster={productsBlock?.videoPoster}
-      />
-      <HomeLogistics
-        background={<AtalantGlobe style="dotted" />}
-        title={logisticsBlock?.title}
-        body={logisticsBlock?.body}
-        ctaLabel={logisticsBlock?.ctaLabel}
-        ctaHref={logisticsBlock?.ctaHref ?? `/${typedLocale}/logistica`}
-      />
-      <HomeFinancing
-        locale={typedLocale}
-        title={financingBlock?.title}
-        body={financingBlock?.body}
-        ctaLabel={financingBlock?.ctaLabel}
-        ctaHref={financingBlock?.ctaHref}
-      />
-      <HomeNews
-        title={newsBlock?.title}
-        body={newsBlock?.body}
-        sectionLabel={newsBlock?.sectionLabel}
-        ctaLabel={newsBlock?.ctaLabel}
-        items={newsBlock?.items}
-      />
-    </main>
+    <>
+      <HomeScrollSnap />
+      <main className="home-snap-scroll">
+        <Hero
+          hero={heroProps}
+          stats={statsProps}
+          primaryHref={heroProps?.primaryHref ?? productsHref}
+          secondaryHref={heroProps?.secondaryHref ?? buildContactoPath(typedLocale)}
+        />
+        <HomeProductsIntro
+          locale={typedLocale}
+          title={productsBlock?.title}
+          body={productsBlock?.body}
+          primaryCtaLabel={productsBlock?.ctaLabel}
+          primaryCtaHref={productsBlock?.ctaHref ?? productsHref}
+          videoSrc={productsBlock?.videoSrc ?? "/video-morp-atalant.mp4"}
+          videoPoster={productsBlock?.videoPoster}
+        />
+        <HomeLogistics
+          background={<AtalantGlobe style="dotted" />}
+          title={logisticsBlock?.title}
+          body={logisticsBlock?.body}
+          ctaLabel={logisticsBlock?.ctaLabel}
+          ctaHref={logisticsBlock?.ctaHref ?? `/${typedLocale}/logistica`}
+        />
+        <HomeFinancing
+          locale={typedLocale}
+          title={financingBlock?.title}
+          body={financingBlock?.body}
+          ctaLabel={financingBlock?.ctaLabel}
+          ctaHref={financingBlock?.ctaHref}
+        />
+        <HomeNews
+          title={newsBlock?.title}
+          body={newsBlock?.body}
+          sectionLabel={newsBlock?.sectionLabel}
+          ctaLabel={newsBlock?.ctaLabel}
+          items={newsBlock?.items}
+        />
+      </main>
+    </>
   );
 }

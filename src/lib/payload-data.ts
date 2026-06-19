@@ -134,6 +134,7 @@ const localMediaFallbacks: Record<string, string> = {
   "atalant-about-1.webp": "/imgsrc/about/atalant-about-1.webp",
   "atalant-about-2.webp": "/imgsrc/about/atalant-about-2.webp",
   "atalant-about-3-v2.webp": "/imgsrc/about/atalant-about-3-v2.webp",
+  "atalant-industrial-logistics.webp": "/imgsrc/about/atalant-industrial-logistics.webp",
   "atalant-about-hero.webp": "/imgsrc/about/atalant-about-hero.webp",
   "atalant-bg-financiacion.webp": "/imgsrc/financing/atalant-bg-financiacion.webp",
   "atalant-post-1.webp": "/imgsrc/atalant-post-1.webp",

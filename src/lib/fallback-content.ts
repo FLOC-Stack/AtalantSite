@@ -335,7 +335,8 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
     ],
     hero: {
-      body: "Distribución de materia prima plástica y polímeros reciclados. Hechos para mantener tu producción en marcha.",
+      body:
+        "Distribución de materia prima plástica y polímeros reciclados.\nMade for responding: Hechos para mantener tu producción",
       eyebrow: "Distribución de polímeros",
       headline: "Una evolución en la cadena de suministro.",
       primaryLabel: "Explorar productos",
