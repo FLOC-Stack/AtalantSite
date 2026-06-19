@@ -12,14 +12,33 @@ type Props = {
   }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params;
-  if (!isLocale(locale)) return {};
-  return {
+const metadataByLocale: Record<AppLocale, Metadata> = {
+  en: {
+    title: "Integrated logistics — Atalant",
+    description:
+      "Atalant integrated logistics with its own fleet, full traceability, logistics centers, and main European hubs.",
+  },
+  es: {
     title: "Logística integrada — Atalant",
     description:
       "Logística integrada de Atalant con flota propia, trazabilidad completa, centros logísticos y principales hubs europeos.",
-  };
+  },
+  fr: {
+    title: "Logistique intégrée — Atalant",
+    description:
+      "Logistique intégrée d'Atalant avec flotte propre, traçabilité complète, centres logistiques et hubs européens principaux.",
+  },
+  pt: {
+    title: "Logística integrada — Atalant",
+    description:
+      "Logística integrada da Atalant com frota própria, rastreabilidade completa, centros logísticos e principais hubs europeus.",
+  },
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return metadataByLocale[locale];
 }
 
 export default async function LogisticaRoute({ params }: Props) {

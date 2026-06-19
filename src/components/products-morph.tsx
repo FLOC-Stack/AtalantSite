@@ -7,6 +7,7 @@ import { ArrowUpRight, Recycle } from "lucide-react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import type { AppLocale } from "@/lib/locales";
 import { ParticleMorph, type ParticleMorphHandle } from "./particle-morph";
 
 if (typeof window !== "undefined") {
@@ -103,9 +104,51 @@ const FALLBACK_HERO: ProductsMorphHero = {
   body: "Descubre todas nuestras familias de productos y procesos de transformación. Stock permanente en Europa, trazabilidad por lote y asesoría técnica en cada aplicación.",
 };
 
+const HERO_BY_LOCALE: Record<AppLocale, ProductsMorphHero> = {
+  en: {
+    eyebrow: "Product catalog",
+    title: "High-quality polymers\nfor your production.",
+    body:
+      "Explore all our product families and transformation processes. Permanent stock in Europe, batch traceability, and technical advice for every application.",
+  },
+  es: FALLBACK_HERO,
+  fr: {
+    eyebrow: "Catalogue produit",
+    title: "Polymères de haute qualité\npour votre production.",
+    body:
+      "Découvrez toutes nos familles de produits et procédés de transformation. Stock permanent en Europe, traçabilité par lot et conseil technique pour chaque application.",
+  },
+  pt: {
+    eyebrow: "Catálogo de produto",
+    title: "Polímeros de alta qualidade\npara a sua produção.",
+    body:
+      "Descubra todas as nossas famílias de produtos e processos de transformação. Stock permanente na Europa, rastreabilidade por lote e assessoria técnica em cada aplicação.",
+  },
+};
+
+const PRODUCT_MORPH_COPY: Record<AppLocale, { characteristics: string; recycled: string }> = {
+  en: {
+    characteristics: "View characteristics",
+    recycled: "Recycled",
+  },
+  es: {
+    characteristics: "Ver características",
+    recycled: "Reciclado",
+  },
+  fr: {
+    characteristics: "Voir caractéristiques",
+    recycled: "Recyclé",
+  },
+  pt: {
+    characteristics: "Ver características",
+    recycled: "Reciclado",
+  },
+};
+
 type Props = {
   products?: ProductsMorphItem[];
   hero?: ProductsMorphHero;
+  locale?: AppLocale;
 };
 
 function renderMultiline(text: string) {
@@ -272,7 +315,9 @@ function ProductImageReveal({
   );
 }
 
-export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
+export function ProductsMorph({ products, hero, locale = "es" }: Props = {}) {
+  const resolvedHero = hero ?? HERO_BY_LOCALE[locale];
+  const copy = PRODUCT_MORPH_COPY[locale];
   // Si el CMS devuelve items sin imagen/video, caemos al media del fallback
   // con el mismo `code` para que cada producto tenga su cover sin tener que
   // tocar Payload. Cuando el cliente suba su propio heroMedia, pisa al fallback.
@@ -358,13 +403,13 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
         >
           <div className="mx-auto w-full max-w-[1100px]">
             <span className="font-mono text-[10px] uppercase tracking-[2.5px] text-primary-dark sm:text-[11px] sm:tracking-[3px]">
-              {hero.eyebrow}
+              {resolvedHero.eyebrow}
             </span>
             <h1 className="mt-6 font-sans text-[clamp(2.5rem,8vw,8.125rem)] font-normal leading-[0.95] tracking-tight text-foreground lg:tracking-[-2.76px]">
-              {renderMultiline(hero.title)}
+              {renderMultiline(resolvedHero.title)}
             </h1>
             <p className="mx-auto mt-8 max-w-[640px] font-sans text-lg leading-snug text-body md:text-xl lg:text-2xl lg:leading-[1.15]">
-              {hero.body}
+              {resolvedHero.body}
             </p>
           </div>
         </article>
@@ -408,7 +453,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                     {number} / {total}
                   </span>
                   {product.recycled ? (
-                    <Recycle className="h-4 w-4 text-primary-dark" aria-label="Reciclado" />
+                    <Recycle className="h-4 w-4 text-primary-dark" aria-label={copy.recycled} />
                   ) : (
                     <ArrowUpRight className="h-4 w-4 text-foreground/60 transition-colors group-hover:text-primary-dark" />
                   )}
@@ -448,7 +493,7 @@ export function ProductsMorph({ products, hero = FALLBACK_HERO }: Props = {}) {
                 {/* Footer: CTA centrado */}
                 <div className="mt-5 flex items-center justify-center font-mono text-[12px] uppercase tracking-[1.8px] sm:text-[13px]">
                   <span className="flex items-center gap-1 text-foreground transition-opacity group-hover:opacity-70">
-                    Ver características
+                    {copy.characteristics}
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </div>

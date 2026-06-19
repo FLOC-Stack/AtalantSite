@@ -9,10 +9,6 @@ type Props = {
   copy?: FinanciacionCopy;
 };
 
-// === i18n preparado ===
-// Estructura tipada por locale, igual que en logistica-page.tsx y
-// nosotros-page.tsx. Por ahora solo `es` está traducido; el resto cae
-// al fallback español.
 export type DataModule = {
   /** Valor numérico final del contador (anima 0 → to) */
   to: number;
@@ -95,11 +91,131 @@ const COPY_ES: FinanciacionCopy = {
   ],
 };
 
+const COPY_EN: FinanciacionCopy = {
+  ...COPY_ES,
+  breadcrumb: "FINANCING  /  INTERNAL CREDIT",
+  back: "← BACK",
+  heroTitle: "Financing\nthat grows with you.",
+  heroBody:
+    "Atalant actively supports customer financing through our internal credit system. Every customer is unique to Atalant: we study each case in the way that best serves both parties, keeping the working cycle healthy and enabling balanced growth.",
+  metaLabels: {
+    programa: "PROGRAM",
+    modelo: "MODEL",
+    alcance: "REACH",
+    desde: "SINCE",
+  },
+  metaValues: {
+    programa: "",
+    modelo: "Credit to strengthen and grow your business",
+    alcance: "We insure customers worldwide",
+    desde: "1997",
+  },
+  dataEyebrow: "DATA  /  THE SYSTEM IN FIGURES",
+  dataTitle: "Balanced growth,\nin figures.",
+  modules: [
+    {
+      to: 30,
+      figureAriaLabel: "thirty years",
+      unit: "years",
+      title: "Applying internal credit",
+      body: "Three decades supporting customers with our own credit lines.",
+    },
+    {
+      to: 96,
+      suffix: "%",
+      figureAriaLabel: "ninety-six percent",
+      unit: "customers",
+      title: "With an active credit line",
+      body: "Most of our portfolio operates with an internal credit program adapted to production needs.",
+    },
+  ],
+};
+
+const COPY_FR: FinanciacionCopy = {
+  ...COPY_ES,
+  breadcrumb: "FINANCEMENT  /  CRÉDIT INTERNE",
+  back: "← RETOUR",
+  heroTitle: "Un financement\nqui grandit avec vous.",
+  heroBody:
+    "Atalant participe activement au financement de ses clients grâce à son système de crédit interne. Chaque client est unique pour Atalant : nous étudions chaque cas de la manière la plus favorable aux deux parties afin de maintenir un cycle de travail sain et une croissance équilibrée.",
+  metaLabels: {
+    programa: "PROGRAMME",
+    modelo: "MODÈLE",
+    alcance: "PORTÉE",
+    desde: "DEPUIS",
+  },
+  metaValues: {
+    programa: "",
+    modelo: "Crédit pour renforcer et développer votre activité",
+    alcance: "Nous assurons des clients dans le monde entier",
+    desde: "1997",
+  },
+  dataEyebrow: "DONNÉES  /  LE SYSTÈME EN CHIFFRES",
+  dataTitle: "Croissance équilibrée,\nen chiffres.",
+  modules: [
+    {
+      to: 30,
+      figureAriaLabel: "trente ans",
+      unit: "ans",
+      title: "Application du crédit interne",
+      body: "Trois décennies d'accompagnement des clients avec nos propres lignes de crédit.",
+    },
+    {
+      to: 96,
+      suffix: "%",
+      figureAriaLabel: "quatre-vingt-seize pour cent",
+      unit: "clients",
+      title: "Avec ligne de crédit active",
+      body: "La majorité de notre portefeuille fonctionne avec un programme de crédit interne adapté à sa production.",
+    },
+  ],
+};
+
+const COPY_PT: FinanciacionCopy = {
+  ...COPY_ES,
+  breadcrumb: "FINANCIAMENTO  /  CRÉDITO INTERNO",
+  back: "← VOLTAR",
+  heroTitle: "Financiamento\nque cresce consigo.",
+  heroBody:
+    "A Atalant participa ativamente no financiamento dos clientes através do nosso sistema de crédito interno. Cada cliente é único para a Atalant: estudamos cada caso da forma mais favorável para ambas as partes, mantendo um ciclo de trabalho correto e um crescimento equilibrado.",
+  metaLabels: {
+    programa: "PROGRAMA",
+    modelo: "MODELO",
+    alcance: "ALCANCE",
+    desde: "DESDE",
+  },
+  metaValues: {
+    programa: "",
+    modelo: "Crédito para reforçar e fazer crescer o seu negócio",
+    alcance: "Asseguramos clientes a nível mundial",
+    desde: "1997",
+  },
+  dataEyebrow: "DADOS  /  O SISTEMA EM NÚMEROS",
+  dataTitle: "Crescimento equilibrado,\nem números.",
+  modules: [
+    {
+      to: 30,
+      figureAriaLabel: "trinta anos",
+      unit: "anos",
+      title: "Aplicação de crédito interno",
+      body: "Três décadas a acompanhar clientes com linhas de crédito próprias.",
+    },
+    {
+      to: 96,
+      suffix: "%",
+      figureAriaLabel: "noventa e seis por cento",
+      unit: "clientes",
+      title: "Com linha de crédito ativa",
+      body: "A maioria da nossa carteira opera com um programa de crédito interno ajustado à sua produção.",
+    },
+  ],
+};
+
 export const FINANCIACION_COPY: Record<AppLocale, FinanciacionCopy> = {
   es: COPY_ES,
-  en: COPY_ES,
-  pt: COPY_ES,
-  fr: COPY_ES,
+  en: COPY_EN,
+  pt: COPY_PT,
+  fr: COPY_FR,
 };
 
 function renderMultiline(text: string) {

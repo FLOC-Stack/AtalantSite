@@ -180,7 +180,7 @@ export const fallbackSiteSettings: Record<AppLocale, SiteSettingsData> = {
     ],
     footerText: byLocale.pt.footerText,
     headerCtaHref: buildContactoPath("pt"),
-    headerCtaLabel: "Contato",
+    headerCtaLabel: "Contacto",
     locale: "pt",
     navigation: [
       { kind: "products", label: "Produtos" },
@@ -216,9 +216,9 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
       {
         anchorId: "logistics",
-        body: "We work with dependable supply lanes, documented quality expectations, and fast commercial response to reduce uncertainty in your purchasing.",
+        body: "Receive your orders through our own transport fleet with complete traceability from the very first moment.",
         eyebrow: "Logistics",
-        title: "Logistics with fewer surprises",
+        title: "Integrated logistics for better service",
         type: "section",
       },
       {
@@ -261,7 +261,8 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
     ],
     hero: {
-      body: "Distribution of plastic raw materials and recycled polymers.",
+      body:
+        "Distribution of plastic raw materials and recycled polymers.\nMade for responding: built to keep your production moving",
       eyebrow: "Polymer distribution",
       headline: "An evolution in the supply chain.",
       primaryLabel: "Explore product families",
@@ -365,9 +366,9 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
       {
         anchorId: "logistics",
-        body: "Nous travaillons avec des flux fiables, des attentes qualité documentées et une réponse commerciale rapide pour réduire l'incertitude dans vos achats.",
+        body: "Recevez vos commandes avec notre propre flotte de transport et une traçabilité complète dès le premier instant.",
         eyebrow: "Logistique",
-        title: "Une logistique avec moins d'imprévus",
+        title: "Logistique intégrée pour un meilleur service",
         type: "section",
       },
       {
@@ -410,7 +411,8 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
     ],
     hero: {
-      body: "Distribution de matières premières plastiques et de polymères recyclés.",
+      body:
+        "Distribution de matières premières plastiques et de polymères recyclés.\nConçu pour répondre : maintenir votre production en mouvement",
       eyebrow: "Distribution de polymères",
       headline: "Une évolution dans la chaîne d'approvisionnement.",
       primaryLabel: "Explorer les familles de produits",
@@ -439,9 +441,9 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
       {
         anchorId: "logistics",
-        body: "Trabalhamos com rotas de fornecimento fiáveis, expectativas de qualidade documentadas e resposta comercial rápida para reduzir incerteza nas suas compras.",
+        body: "Receba as suas encomendas na nossa própria frota de transporte com rastreabilidade completa desde o primeiro momento.",
         eyebrow: "Logística",
-        title: "Logística com menos surpresas",
+        title: "Logística integrada para o melhor serviço",
         type: "section",
       },
       {
@@ -484,7 +486,8 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
     ],
     hero: {
-      body: "Distribuição de matéria-prima plástica e polímeros reciclados.",
+      body:
+        "Distribuição de matéria-prima plástica e polímeros reciclados.\nMade for responding: feitos para manter a sua produção em marcha",
       eyebrow: "Distribuição de polímeros",
       headline: "Uma evolução na cadeia de fornecimento.",
       primaryLabel: "Explorar famílias de produto",
@@ -599,18 +602,222 @@ const baseFamilies = {
   },
 } as const;
 
+type BaseFamilySlug = keyof typeof baseFamilies;
+
+const familyLocaleText: Record<
+  BaseFamilySlug,
+  Partial<Record<AppLocale, { applications: string[]; body: string; excerpt: string; variants?: string[] }>>
+> = {
+  eva: {
+    en: {
+      applications: ["Insoles and sheets", "Films", "Footwear", "Adhesives", "Automotive", "Construction"],
+      body:
+        "Structured grades for industrial buyers who need continuity, repeatability, and fast commercial response. The page is ready to grow later into specific grades.",
+      excerpt:
+        "Ethylene vinyl acetate with different MFI values and vinyl acetate content.",
+      variants: ["Different MFI", "Vinyl acetate content"],
+    },
+    fr: {
+      applications: ["Semelles et feuilles", "Films", "Chaussure", "Adhésifs", "Automobile", "Construction"],
+      body:
+        "Familles structurées pour des acheteurs industriels qui exigent continuité, répétabilité et réponse commerciale agile. La page pourra évoluer vers des grades concrets.",
+      excerpt:
+        "Éthylène-acétate de vinyle avec différents MFI et teneurs en acétate de vinyle.",
+      variants: ["Différents MFI", "Teneur en acétate de vinyle"],
+    },
+    pt: {
+      applications: ["Palmilhas e lâminas", "Films", "Calçado", "Adesivos", "Automóvel", "Construção"],
+      body:
+        "Famílias estruturadas para compradores industriais que precisam de continuidade, repetibilidade e resposta comercial ágil. A página fica preparada para evoluir depois para graus concretos.",
+      excerpt:
+        "Etileno acetato de vinila com diferentes MFI e conteúdo de acetato de vinila.",
+      variants: ["Diferentes MFI", "Conteúdo de acetato de vinila"],
+    },
+  },
+  pa: {
+    en: {
+      applications: ["Automotive", "Intake manifolds", "Technical parts"],
+      body:
+        "Structured grades for industrial buyers who need continuity, repeatability, and fast commercial response. The page is ready to grow later into specific grades.",
+      excerpt:
+        "Polyamide for technical applications with high mechanical and thermal requirements.",
+      variants: ["PA6", "PA66", "Reinforced"],
+    },
+    fr: {
+      applications: ["Automobile", "Collecteurs d'admission", "Pièces techniques"],
+      body:
+        "Familles structurées pour des acheteurs industriels qui exigent continuité, répétabilité et réponse commerciale agile. La page pourra évoluer vers des grades concrets.",
+      excerpt:
+        "Polyamide pour applications techniques à fortes exigences mécaniques et thermiques.",
+      variants: ["PA6", "PA66", "Renforcée"],
+    },
+    pt: {
+      applications: ["Automóvel", "Coletores de admissão", "Peças técnicas"],
+      body:
+        "Famílias estruturadas para compradores industriais que precisam de continuidade, repetibilidade e resposta comercial ágil. A página fica preparada para evoluir depois para graus concretos.",
+      excerpt:
+        "Poliamida para aplicações técnicas de elevada exigência mecânica e térmica.",
+      variants: ["PA6", "PA66", "Reforçada"],
+    },
+  },
+  pe: {
+    en: {
+      applications: ["Film and flexible packaging", "General extrusion", "Consumer goods"],
+      body:
+        "Structured grades for industrial buyers who need continuity, repeatability, and fast commercial response. The page is ready to grow later into specific grades.",
+      excerpt:
+        "Flexible and rigid polyethylene solutions for broad industrial use.",
+    },
+    fr: {
+      applications: ["Film et packaging flexible", "Extrusion générale", "Biens de consommation"],
+      body:
+        "Familles structurées pour des acheteurs industriels qui exigent continuité, répétabilité et réponse commerciale agile. La page pourra évoluer vers des grades concrets.",
+      excerpt:
+        "Solutions de polyéthylène souple et rigide pour un large usage industriel.",
+    },
+    pt: {
+      applications: ["Filme e packaging flexível", "Extrusão geral", "Bens de consumo"],
+      body:
+        "Famílias estruturadas para compradores industriais que precisam de continuidade, repetibilidade e resposta comercial ágil. A página fica preparada para evoluir depois para graus concretos.",
+      excerpt:
+        "Soluções de polietileno flexível e rígido para amplo uso industrial.",
+    },
+  },
+  pet: {
+    en: {
+      applications: ["Bottle", "Sheet", "Fiber"],
+      body:
+        "Structured grades for industrial buyers who need continuity, repeatability, and fast commercial response. The page is ready to grow later into specific grades.",
+      excerpt:
+        "PET for supply chains focused on bottles, sheet, and fiber.",
+      variants: ["Bottle", "Sheet", "Fiber"],
+    },
+    fr: {
+      applications: ["Bouteille", "Feuille", "Fibre"],
+      body:
+        "Familles structurées pour des acheteurs industriels qui exigent continuité, répétabilité et réponse commerciale agile. La page pourra évoluer vers des grades concrets.",
+      excerpt:
+        "PET pour des chaînes d'approvisionnement orientées bouteille, feuille et fibre.",
+      variants: ["Bouteille", "Feuille", "Fibre"],
+    },
+    pt: {
+      applications: ["Garrafa", "Lâmina", "Fibra"],
+      body:
+        "Famílias estruturadas para compradores industriais que precisam de continuidade, repetibilidade e resposta comercial ágil. A página fica preparada para evoluir depois para graus concretos.",
+      excerpt:
+        "PET para cadeias de fornecimento orientadas para garrafa, lâmina e fibra.",
+      variants: ["Garrafa", "Lâmina", "Fibra"],
+    },
+  },
+  pp: {
+    en: {
+      applications: ["Injection", "Raffia", "Compounds"],
+      body:
+        "Structured grades for industrial buyers who need continuity, repeatability, and fast commercial response. The page is ready to grow later into specific grades.",
+      excerpt:
+        "Polypropylene family for processing, molding, and industrial manufacturing.",
+    },
+    fr: {
+      applications: ["Injection", "Rafia", "Compounds"],
+      body:
+        "Familles structurées pour des acheteurs industriels qui exigent continuité, répétabilité et réponse commerciale agile. La page pourra évoluer vers des grades concrets.",
+      excerpt:
+        "Famille de polypropylène pour transformation, moulage et fabrication industrielle.",
+    },
+    pt: {
+      applications: ["Injeção", "Ráfia", "Compounds"],
+      body:
+        "Famílias estruturadas para compradores industriais que precisam de continuidade, repetibilidade e resposta comercial ágil. A página fica preparada para evoluir depois para graus concretos.",
+      excerpt:
+        "Família de polipropileno para transformação, moldagem e fabrico industrial.",
+    },
+  },
+  ps: {
+    en: {
+      applications: ["Packaging", "Housewares", "General processing"],
+      body:
+        "Structured grades for industrial buyers who need continuity, repeatability, and fast commercial response. The page is ready to grow later into specific grades.",
+      excerpt:
+        "General-purpose and impact polystyrene for practical industrial use.",
+    },
+    fr: {
+      applications: ["Packaging", "Articles ménagers", "Transformation générale"],
+      body:
+        "Familles structurées pour des acheteurs industriels qui exigent continuité, répétabilité et réponse commerciale agile. La page pourra évoluer vers des grades concrets.",
+      excerpt:
+        "Polystyrène général et impact pour usage industriel pratique.",
+    },
+    pt: {
+      applications: ["Packaging", "Utilidades domésticas", "Transformação geral"],
+      body:
+        "Famílias estruturadas para compradores industriais que precisam de continuidade, repetibilidade e resposta comercial ágil. A página fica preparada para evoluir depois para graus concretos.",
+      excerpt:
+        "Poliestireno geral e de impacto para uso industrial prático.",
+    },
+  },
+  pvc: {
+    en: {
+      applications: ["Profiles", "Cable", "Technical applications"],
+      body:
+        "Structured grades for industrial buyers who need continuity, repeatability, and fast commercial response. The page is ready to grow later into specific grades.",
+      excerpt: "Rigid and flexible PVC families with a clear operating frame.",
+      variants: ["Rigid", "Flexible"],
+    },
+    fr: {
+      applications: ["Profilés", "Câble", "Applications techniques"],
+      body:
+        "Familles structurées pour des acheteurs industriels qui exigent continuité, répétabilité et réponse commerciale agile. La page pourra évoluer vers des grades concrets.",
+      excerpt: "Familles de PVC rigide et flexible avec cadre opérationnel clair.",
+      variants: ["Rigide", "Flexible"],
+    },
+    pt: {
+      applications: ["Perfis", "Cabo", "Aplicações técnicas"],
+      body:
+        "Famílias estruturadas para compradores industriais que precisam de continuidade, repetibilidade e resposta comercial ágil. A página fica preparada para evoluir depois para graus concretos.",
+      excerpt: "Famílias de PVC rígido e flexível com enquadramento operacional claro.",
+      variants: ["Rígido", "Flexível"],
+    },
+  },
+  recycled: {
+    en: {
+      applications: ["Circular purchasing", "Blends", "Pragmatic recycled integration"],
+      body:
+        "Recycled families are treated as a serious supply line, with traceability and commercial realism.",
+      excerpt:
+        "Traceable recycled streams integrated into realistic purchasing strategies.",
+    },
+    fr: {
+      applications: ["Achat circulaire", "Blends", "Intégration pragmatique du recyclé"],
+      body:
+        "Les familles recyclées sont traitées comme une ligne d'approvisionnement sérieuse, avec traçabilité et réalisme commercial.",
+      excerpt:
+        "Flux recyclés traçables intégrés dans des stratégies d'achat réalistes.",
+    },
+    pt: {
+      applications: ["Compra circular", "Blends", "Integração pragmática de reciclado"],
+      body:
+        "As famílias recicladas são tratadas como uma linha séria de fornecimento, com rastreabilidade e realismo comercial.",
+      excerpt:
+        "Fluxos reciclados rastreáveis integrados em estratégias de compra realistas.",
+    },
+  },
+};
+
 export const fallbackFamilies: Record<AppLocale, ProductFamilyData[]> = (
   Object.keys(byLocale) as AppLocale[]
 ).reduce(
   (acc, locale) => {
     acc[locale] = Object.entries(baseFamilies).map(([slug, family], index) => ({
-      applications: [...family.applications],
+      applications: [
+        ...(familyLocaleText[slug as BaseFamilySlug][locale]?.applications ?? family.applications),
+      ],
       body:
-        slug === "recycled"
+        familyLocaleText[slug as BaseFamilySlug][locale]?.body ??
+        (slug === "recycled"
           ? "Las familias recicladas se tratan como una línea seria de suministro, con trazabilidad y realismo comercial."
-          : "Familias estructuradas para compradores industriales que necesitan continuidad, repetibilidad y respuesta comercial ágil. La página queda preparada para crecer después hacia grades concretos.",
+          : "Familias estructuradas para compradores industriales que necesitan continuidad, repetibilidad y respuesta comercial ágil. La página queda preparada para crecer después hacia grades concretos."),
       code: slug,
-      excerpt: family.excerpt,
+      excerpt: familyLocaleText[slug as BaseFamilySlug][locale]?.excerpt ?? family.excerpt,
       featured: index < 2 || slug === "pa",
       locale,
       recycled: slug === "recycled",
@@ -620,7 +827,7 @@ export const fallbackFamilies: Record<AppLocale, ProductFamilyData[]> = (
       },
       slug,
       title: family.title[locale],
-      variants: [...family.variants],
+      variants: [...(familyLocaleText[slug as BaseFamilySlug][locale]?.variants ?? family.variants)],
     }));
 
     return acc;

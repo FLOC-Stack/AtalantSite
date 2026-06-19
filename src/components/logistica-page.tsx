@@ -7,9 +7,6 @@ type Props = {
   copy?: LogisticaCopy;
 };
 
-// === i18n preparado ===
-// Los textos quedan tipados por locale para cuando llegue la traducción.
-// Por ahora solo `es` está traducido; el resto cae al fallback.
 export type LogisticaCopy = {
   breadcrumb: string;
   back: string;
@@ -130,11 +127,185 @@ const COPY_ES: LogisticaCopy = {
   ],
 };
 
+const COPY_EN: LogisticaCopy = {
+  ...COPY_ES,
+  breadcrumb: "LOGISTICS  /  INTEGRATED SERVICE",
+  back: "← BACK",
+  heroTitle: "Integrated logistics\nfor better service",
+  heroBody:
+    "Receive your orders through our own transport fleet with complete traceability from the very first moment.",
+  metaLabels: {
+    ubicaciones: "LOCATIONS",
+    estatus: "STATUS",
+    hubs: "Main Hubs",
+    exportacion: "EXPORT",
+  },
+  metaValues: {
+    ubicaciones: "Own warehouses strategically located across Europe",
+    estatus: "Authorised Economic Operator (AEO)",
+    hubs: "Antwerp Valencia Fos",
+    exportacion: "18 countries",
+  },
+  advantagesEyebrow: "ADVANTAGES  /  FOUR KEY POINTS",
+  advantagesTitle: "Why integrated\nlogistics matters.",
+  advantages: [
+    {
+      number: "01",
+      title: "Full supply-chain control",
+      body: "We manage every step directly, ensuring reliability and full traceability.",
+    },
+    {
+      number: "02",
+      title: "Greater speed and availability",
+      body: "Faster delivery and available stock to respond with agility.",
+    },
+    {
+      number: "03",
+      title: "Lower costs and higher efficiency",
+      body: "Fewer intermediaries and optimized routes for more competitive pricing.",
+    },
+    {
+      number: "04",
+      title: "Better customer experience",
+      body: "Real-time tracking and personalized service that builds confidence.",
+    },
+  ],
+  networkEyebrow: "NETWORK  /  TERRITORIES",
+  networkTitle: "Logistics centers /\nMain hubs",
+  networkCaption: "ATALANT NETWORK 2026  /  WEST ←    → EAST",
+  networkLegend: "●  CENTER / HUB      ○  NETWORK / DISTRIBUTION",
+  processEyebrow: "PROCESS  /  DOOR TO DOOR",
+  process: [
+    { roman: "01", title: "Origin", body: "Global petrochemical producers using the latest available technology." },
+    { roman: "02", title: "Import", body: "Import managed through our integrated system." },
+    { roman: "03", title: "Storage", body: "Storage in strategically located facilities." },
+    { roman: "04", title: "Delivery", body: "Customer delivery with full traceability." },
+  ],
+  ctaTitle: "Need urgent delivery? We solve it.",
+  ctaAction: "Request conditions  →",
+};
+
+const COPY_FR: LogisticaCopy = {
+  ...COPY_ES,
+  breadcrumb: "LOGISTIQUE  /  SERVICE INTÉGRÉ",
+  back: "← RETOUR",
+  heroTitle: "Logistique intégrée\npour un meilleur service",
+  heroBody:
+    "Recevez vos commandes avec notre propre flotte de transport et une traçabilité complète dès le premier instant.",
+  metaLabels: {
+    ubicaciones: "EMPLACEMENTS",
+    estatus: "STATUT",
+    hubs: "Hubs principaux",
+    exportacion: "EXPORT",
+  },
+  metaValues: {
+    ubicaciones: "Entrepôts propres situés stratégiquement en Europe",
+    estatus: "Opérateur Économique Agréé (OEA)",
+    hubs: "Antwerp Valencia Fos",
+    exportacion: "18 pays",
+  },
+  advantagesEyebrow: "AVANTAGES  /  QUATRE POINTS CLÉS",
+  advantagesTitle: "Pourquoi opérer\navec une logistique intégrée.",
+  advantages: [
+    {
+      number: "01",
+      title: "Contrôle total de la chaîne d'approvisionnement",
+      body: "Nous gérons directement chaque étape, avec fiabilité et traçabilité complète.",
+    },
+    {
+      number: "02",
+      title: "Plus de rapidité et de disponibilité",
+      body: "Livraison plus rapide et stock disponible pour répondre avec agilité.",
+    },
+    {
+      number: "03",
+      title: "Réduction des coûts et meilleure efficacité",
+      body: "Moins d'intermédiaires et des routes optimisées pour des prix plus compétitifs.",
+    },
+    {
+      number: "04",
+      title: "Meilleure expérience client",
+      body: "Suivi en temps réel et service personnalisé pour renforcer la confiance.",
+    },
+  ],
+  networkEyebrow: "RÉSEAU  /  TERRITOIRES",
+  networkTitle: "Centres logistiques /\nHubs principaux",
+  networkCaption: "RÉSEAU ATALANT 2026  /  OUEST ←    → EST",
+  networkLegend: "●  CENTRE / HUB      ○  RÉSEAU / DISTRIBUTION",
+  processEyebrow: "PROCESSUS  /  PORTE À PORTE",
+  process: [
+    { roman: "01", title: "Origine", body: "Pétrochimies mondiales avec la dernière technologie disponible." },
+    { roman: "02", title: "Importation", body: "Importation via notre système intégré." },
+    { roman: "03", title: "Stockage", body: "Stockage dans des sites stratégiques." },
+    { roman: "04", title: "Livraison", body: "Livraison au client avec traçabilité." },
+  ],
+  ctaTitle: "Besoin d'une livraison urgente ? Nous la gérons.",
+  ctaAction: "Demander les conditions  →",
+};
+
+const COPY_PT: LogisticaCopy = {
+  ...COPY_ES,
+  breadcrumb: "LOGÍSTICA  /  SERVIÇO INTEGRADO",
+  back: "← VOLTAR",
+  heroTitle: "Logística integrada\npara o melhor serviço",
+  heroBody:
+    "Receba as suas encomendas na nossa própria frota de transporte com rastreabilidade completa desde o primeiro momento.",
+  metaLabels: {
+    ubicaciones: "LOCALIZAÇÕES",
+    estatus: "ESTATUTO",
+    hubs: "Principais Hubs",
+    exportacion: "EXPORTAÇÃO",
+  },
+  metaValues: {
+    ubicaciones: "Armazéns próprios situados estrategicamente pela Europa",
+    estatus: "Operador Económico Autorizado (OEA)",
+    hubs: "Antwerp Valencia Fos",
+    exportacion: "18 países",
+  },
+  advantagesEyebrow: "VANTAGENS  /  QUATRO PONTOS-CHAVE",
+  advantagesTitle: "Porque importa operar\ncom logística integrada.",
+  advantages: [
+    {
+      number: "01",
+      title: "Controlo total da cadeia de fornecimento",
+      body: "Gerimos diretamente cada passo, garantindo fiabilidade e rastreabilidade total.",
+    },
+    {
+      number: "02",
+      title: "Maior rapidez e disponibilidade",
+      body: "Entrega mais rápida e stock disponível para responder com agilidade.",
+    },
+    {
+      number: "03",
+      title: "Redução de custos e maior eficiência",
+      body: "Eliminamos intermediários e otimizamos rotas para preços mais competitivos.",
+    },
+    {
+      number: "04",
+      title: "Melhor experiência para o cliente",
+      body: "Acompanhamento em tempo real e serviço personalizado que gera confiança.",
+    },
+  ],
+  networkEyebrow: "REDE  /  TERRITÓRIOS",
+  networkTitle: "Centros logísticos /\nPrincipais hubs",
+  networkCaption: "REDE ATALANT 2026  /  OESTE ←    → ESTE",
+  networkLegend: "●  CENTRO / HUB      ○  REDE / DISTRIBUIÇÃO",
+  processEyebrow: "PROCESSO  /  PORTA A PORTA",
+  process: [
+    { roman: "01", title: "Origem", body: "Petroquímicas mundiais com a tecnologia mais recente disponível." },
+    { roman: "02", title: "Importação", body: "Importação através do nosso sistema integrado." },
+    { roman: "03", title: "Armazenagem", body: "Armazenagem em locais estratégicos." },
+    { roman: "04", title: "Entrega", body: "Entrega ao cliente com rastreabilidade." },
+  ],
+  ctaTitle: "Precisa de entrega urgente? Nós resolvemos.",
+  ctaAction: "Solicitar condições  →",
+};
+
 export const LOGISTICA_COPY: Record<AppLocale, LogisticaCopy> = {
   es: COPY_ES,
-  en: COPY_ES,
-  pt: COPY_ES,
-  fr: COPY_ES,
+  en: COPY_EN,
+  pt: COPY_PT,
+  fr: COPY_FR,
 };
 
 function renderMultiline(text: string) {

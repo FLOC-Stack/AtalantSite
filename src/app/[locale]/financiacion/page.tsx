@@ -12,14 +12,33 @@ type Props = {
   }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params;
-  if (!isLocale(locale)) return {};
-  return {
+const metadataByLocale: Record<AppLocale, Metadata> = {
+  en: {
+    title: "Financing · Internal credit — Atalant",
+    description:
+      "Atalant internal credit system to strengthen and grow your business, with customers insured worldwide.",
+  },
+  es: {
     title: "Financiación · Crédito interno — Atalant",
     description:
       "Sistema de crédito interno de Atalant para reforzar y hacer crecer tu negocio, con clientes asegurados mundialmente.",
-  };
+  },
+  fr: {
+    title: "Financement · Crédit interne — Atalant",
+    description:
+      "Système de crédit interne d'Atalant pour renforcer et développer votre activité, avec des clients assurés dans le monde entier.",
+  },
+  pt: {
+    title: "Financiamento · Crédito interno — Atalant",
+    description:
+      "Sistema de crédito interno da Atalant para reforçar e fazer crescer o seu negócio, com clientes assegurados a nível mundial.",
+  },
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return metadataByLocale[locale];
 }
 
 export default async function FinanciacionRoute({ params }: Props) {

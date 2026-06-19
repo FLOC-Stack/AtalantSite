@@ -75,7 +75,7 @@ const fallbackStrings: Record<AppLocale, FallbackStrings> = {
     financing: "Financiamento",
     sustainability: "Sustentabilidade",
     about: "Sobre nós",
-    contact: "Contato",
+    contact: "Contacto",
   },
 };
 

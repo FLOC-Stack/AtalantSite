@@ -78,11 +78,65 @@ const COPY_EN: ContactoCopy = {
   phone: "+34 965 66 18 28",
 };
 
+const COPY_FR: ContactoCopy = {
+  breadcrumb: "CONTACT  /  PARLONS",
+  back: "← RETOUR",
+  monogram: "CT",
+  heroTitle: "Partenaire stratégique,\npas seulement fournisseur.",
+  heroBody:
+    "Dites-nous ce dont vous avez besoin : volumes, types de polymères, délais ou ce défi logistique qui vous préoccupe. Nous répondons vite, avec la bonne équipe.",
+  metaLabels: {
+    respuesta: "RÉPONSE",
+    horario: "HORAIRES",
+    sede: "SIÈGE",
+  },
+  metaValues: {
+    respuesta: "< 24 h ouvrables",
+    horario: "Lun–Ven · 9h–18h CET",
+    sede: "Alicante (Espagne)",
+  },
+  formEyebrow: "FORMULAIRE  /  PREMIER CONTACT",
+  formTitle: "Dites-nous comment\nnous pouvons vous aider.",
+  formBody:
+    "Sélectionnez le sujet le plus adapté et nous vous mettrons en contact avec la personne de l'équipe la mieux placée pour vous répondre.",
+  ctaTitle: "Vous préférez appeler\nou nous écrire directement ?",
+  ctaAction: "logistics@atalant.com  →",
+  ctaFootnote: "© MMXXVI ATALANT  /  CT",
+  phone: "+34 965 66 18 28",
+};
+
+const COPY_PT: ContactoCopy = {
+  breadcrumb: "CONTACTO  /  FALEMOS",
+  back: "← VOLTAR",
+  monogram: "CT",
+  heroTitle: "Parceiro estratégico,\nnão apenas fornecedor.",
+  heroBody:
+    "Diga-nos o que precisa: volumes, graus, prazos ou esse desafio logístico que não o deixa dormir. Respondemos rápido e com a equipa adequada.",
+  metaLabels: {
+    respuesta: "RESPOSTA",
+    horario: "HORÁRIO",
+    sede: "SEDE",
+  },
+  metaValues: {
+    respuesta: "< 24 h úteis",
+    horario: "Seg–Sex · 9h–18h CET",
+    sede: "Alicante (Espanha)",
+  },
+  formEyebrow: "FORMULÁRIO  /  PRIMEIRO CONTACTO",
+  formTitle: "Diga-nos como\npodemos ajudar.",
+  formBody:
+    "Selecione o assunto que melhor se ajusta e colocá-lo-emos em contacto com a pessoa da equipa que melhor pode responder.",
+  ctaTitle: "Prefere ligar\nou escrever-nos diretamente?",
+  ctaAction: "logistics@atalant.com  →",
+  ctaFootnote: "© MMXXVI ATALANT  /  CT",
+  phone: "+34 965 66 18 28",
+};
+
 const COPY: Record<AppLocale, ContactoCopy> = {
   es: COPY_ES,
   en: COPY_EN,
-  pt: COPY_ES,
-  fr: COPY_ES,
+  pt: COPY_PT,
+  fr: COPY_FR,
 };
 
 function renderMultiline(text: string) {

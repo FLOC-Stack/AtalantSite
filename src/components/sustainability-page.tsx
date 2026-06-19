@@ -114,11 +114,249 @@ const COPY_ES: SustainabilityCopy = {
     "La gestión ambiental se conecta con compras, almacenaje, transporte, energía e I+D. Esa integración permite avanzar en reducción de impacto sin perder capacidades industriales ni velocidad de respuesta.",
 };
 
+const COPY_EN: SustainabilityCopy = {
+  ...COPY_ES,
+  back: "← BACK",
+  breadcrumb: "SUSTAINABILITY  /  INDUSTRIAL OPERATION",
+  ctaAction: "Talk to Atalant  →",
+  ctaHref: "mailto:info@atalant.com?subject=Atalant%20Sustainability",
+  ctaFootnote: "© MMXXVI ATALANT  /  SUST",
+  ctaTitle: "Sustainability holds when it improves the operation.",
+  heroBody:
+    "Being sustainable at industrial scale means maintaining efficiency, capacity, and continuity. Atalant has adapted its operation to reduce impact without turning sustainability into a decorative promise.",
+  heroTitle: "Sustainability\nwithout losing\ncapacity.",
+  initiatives: [
+    {
+      number: "01",
+      title: "Waste management",
+      body:
+        "A system implemented across all centers to manage, reduce, and continuously improve the company's environmental impact.",
+    },
+    {
+      number: "02",
+      title: "Recycled materials",
+      body:
+        "The inclusion of high-quality recycled materials sets a clear precedent within Atalant's sustainability plan.",
+    },
+    {
+      number: "03",
+      title: "Solar energy",
+      body:
+        "Solar panels at logistics points reduce dependence on the electrical grid and move operations toward greater self-sufficiency.",
+    },
+    {
+      number: "04",
+      title: "Electric unloading",
+      body:
+        "Trucks with electric silo systems avoid fuel use during selected unloading operations.",
+    },
+    {
+      number: "05",
+      title: "Efficient fleet",
+      body:
+        "New trucks and internal warehouse equipment are designed to reduce consumption and pollution.",
+    },
+    {
+      number: "06",
+      title: "Green hydrogen R&D",
+      body:
+        "Investment and leadership in projects based on green hydrogen technologies for fuel cells and electrolyzers.",
+    },
+  ],
+  introEyebrow: "APPROACH  /  EFFICIENCY AND RESPONSIBILITY",
+  introTitle: "Reducing impact without reducing response.",
+  introBody:
+    "One of the most complex industrial challenges is becoming sustainable while maintaining efficient work. Atalant's strategy starts from a concrete idea: every environmental improvement must be integrated into the operating system, not separated from logistics and commercial reality.",
+  meta: [
+    { label: "CERTIFICATION", value: "ISO 14001" },
+    { label: "ENERGY", value: "Own energy generation through solar modules" },
+    { label: "TRANSPORT", value: "Electric silo trucks" },
+    { label: "MATERIALS", value: "High-quality recycled materials" },
+  ],
+  proofEyebrow: "EVIDENCE  /  MEASUREMENT",
+  proofTitle: "What is measurable can be managed.",
+  proofItems: [
+    { label: "Environmental system", value: "ISO 14001 implemented" },
+    { label: "Carbon footprint", value: "Measurement and certification under monitoring" },
+    { label: "Centers", value: "Waste management across all operating points" },
+    { label: "Natural environment", value: "Conservation of areas with trees and forest mass" },
+  ],
+  systemsEyebrow: "SYSTEM  /  CONTINUOUS IMPROVEMENT",
+  systemsTitle: "Sustainability as infrastructure, not as a campaign.",
+  systemsBody:
+    "Environmental management connects purchasing, storage, transport, energy, and R&D. That integration makes it possible to reduce impact without losing industrial capability or response speed.",
+};
+
+const COPY_FR: SustainabilityCopy = {
+  ...COPY_ES,
+  back: "← RETOUR",
+  breadcrumb: "DURABILITÉ  /  OPÉRATION INDUSTRIELLE",
+  ctaAction: "Parler avec Atalant  →",
+  ctaHref: "mailto:info@atalant.com?subject=Durabilit%C3%A9%20Atalant",
+  ctaFootnote: "© MMXXVI ATALANT  /  DUR",
+  ctaTitle: "La durabilité tient lorsqu'elle améliore l'opération.",
+  heroBody:
+    "Être durable à l'échelle industrielle exige de maintenir efficacité, capacité et continuité. Atalant a adapté son fonctionnement pour réduire son impact sans transformer la durabilité en promesse décorative.",
+  heroTitle: "Durabilité\nsans perdre\nde capacité.",
+  initiatives: [
+    {
+      number: "01",
+      title: "Gestion des déchets",
+      body:
+        "Système déployé dans tous les centres pour gérer, réduire et améliorer en continu l'impact environnemental de l'entreprise.",
+    },
+    {
+      number: "02",
+      title: "Matériaux recyclés",
+      body:
+        "L'intégration de matériaux recyclés de haute qualité marque un précédent dans le plan de durabilité d'Atalant.",
+    },
+    {
+      number: "03",
+      title: "Énergie solaire",
+      body:
+        "Des panneaux solaires sur les points logistiques réduisent la dépendance au réseau électrique et renforcent l'autosuffisance opérationnelle.",
+    },
+    {
+      number: "04",
+      title: "Déchargement électrique",
+      body:
+        "Des camions équipés de citernes électriques évitent l'utilisation de carburant pendant certaines opérations de déchargement.",
+    },
+    {
+      number: "05",
+      title: "Flotte efficace",
+      body:
+        "Nouveaux camions et moyens internes dans les entrepôts et centres logistiques afin de réduire consommation et pollution.",
+    },
+    {
+      number: "06",
+      title: "R&D hydrogène vert",
+      body:
+        "Investissement et leadership dans des projets basés sur les technologies d'hydrogène vert pour piles à combustible et électrolyseurs.",
+    },
+  ],
+  introEyebrow: "APPROCHE  /  EFFICACITÉ ET RESPONSABILITÉ",
+  introTitle: "Réduire l'impact sans réduire la réponse.",
+  introBody:
+    "L'un des défis industriels les plus complexes consiste à être durable tout en conservant un travail efficace. La stratégie d'Atalant part d'une idée concrète : chaque amélioration environnementale doit s'intégrer au système opérationnel, et non vivre séparée de la réalité logistique et commerciale.",
+  meta: [
+    { label: "CERTIFICATION", value: "ISO 14001" },
+    { label: "ÉNERGIE", value: "Production d'énergie propre grâce à des modules solaires" },
+    { label: "TRANSPORT", value: "Silo trucks électriques" },
+    { label: "MATÉRIAUX", value: "Matériaux recyclés de haute qualité" },
+  ],
+  proofEyebrow: "PREUVES  /  MESURE",
+  proofTitle: "Ce qui se mesure se gère.",
+  proofItems: [
+    { label: "Système environnemental", value: "ISO 14001 déployé" },
+    { label: "Empreinte carbone", value: "Mesure et certification en suivi" },
+    { label: "Centres", value: "Gestion des déchets sur tous les points opérationnels" },
+    { label: "Milieu naturel", value: "Conservation de zones arborées et forestières" },
+  ],
+  systemsEyebrow: "SYSTÈME  /  AMÉLIORATION CONTINUE",
+  systemsTitle: "La durabilité comme infrastructure, pas comme campagne.",
+  systemsBody:
+    "La gestion environnementale relie achats, stockage, transport, énergie et R&D. Cette intégration permet de progresser dans la réduction d'impact sans perdre capacités industrielles ni vitesse de réponse.",
+};
+
+const COPY_PT: SustainabilityCopy = {
+  ...COPY_ES,
+  back: "← VOLTAR",
+  breadcrumb: "SUSTENTABILIDADE  /  OPERAÇÃO INDUSTRIAL",
+  ctaAction: "Falar com a Atalant  →",
+  ctaHref: "mailto:info@atalant.com?subject=Sustentabilidade%20Atalant",
+  ctaFootnote: "© MMXXVI ATALANT  /  SUST",
+  ctaTitle: "A sustentabilidade mantém-se quando melhora a operação.",
+  heroBody:
+    "Ser sustentável à escala industrial exige manter eficiência, capacidade e continuidade. A Atalant adaptou a sua operação para reduzir impacto sem transformar a sustentabilidade numa promessa decorativa.",
+  heroTitle: "Sustentabilidade\nsem perder\ncapacidade.",
+  initiatives: [
+    {
+      number: "01",
+      title: "Gestão de resíduos",
+      body:
+        "Sistema implementado em todos os centros para gerir, reduzir e melhorar de forma constante o impacto ambiental da empresa.",
+    },
+    {
+      number: "02",
+      title: "Materiais reciclados",
+      body:
+        "A inclusão de materiais reciclados de alta qualidade cria um precedente no plano de sustentabilidade da Atalant.",
+    },
+    {
+      number: "03",
+      title: "Energia solar",
+      body:
+        "Painéis solares em pontos logísticos para operar com menor dependência da rede elétrica e avançar para maior autossuficiência operacional.",
+    },
+    {
+      number: "04",
+      title: "Descarga elétrica",
+      body:
+        "Camiões com cisternas elétricas para evitar o uso de combustível durante descargas em operações selecionadas.",
+    },
+    {
+      number: "05",
+      title: "Frota eficiente",
+      body:
+        "Novos camiões e meios internos em armazéns e centros logísticos orientados para reduzir consumos e contaminação.",
+    },
+    {
+      number: "06",
+      title: "I+D em hidrogénio verde",
+      body:
+        "Investimento e liderança em projetos baseados em tecnologias de hidrogénio verde para pilhas de combustível e eletrolisadores.",
+    },
+  ],
+  introEyebrow: "ENFOQUE  /  EFICIÊNCIA E RESPONSABILIDADE",
+  introTitle: "Reduzir impacto sem reduzir resposta.",
+  introBody:
+    "Um dos desafios industriais mais complexos é ser sustentável mantendo um trabalho eficiente. A estratégia da Atalant parte de uma ideia concreta: cada melhoria ambiental deve integrar-se no sistema operativo, não viver separada da realidade logística e comercial.",
+  meta: [
+    { label: "CERTIFICAÇÃO", value: "ISO 14001" },
+    { label: "ENERGIA", value: "Geração de energia própria através de módulos solares" },
+    { label: "TRANSPORTE", value: "Silo trucks elétricos" },
+    { label: "MATERIAIS", value: "Materiais reciclados de alta qualidade" },
+  ],
+  proofEyebrow: "EVIDÊNCIAS  /  MEDIÇÃO",
+  proofTitle: "O que se mede, gere-se.",
+  proofItems: [
+    { label: "Sistema ambiental", value: "ISO 14001 implementado" },
+    { label: "Pegada de carbono", value: "Medição e certificação em acompanhamento" },
+    { label: "Centros", value: "Gestão de resíduos em todos os pontos operacionais" },
+    { label: "Ambiente natural", value: "Conservação de zonas com árvores e massas florestais" },
+  ],
+  systemsEyebrow: "SISTEMA  /  MELHORIA CONTÍNUA",
+  systemsTitle: "Sustentabilidade como infraestrutura, não como campanha.",
+  systemsBody:
+    "A gestão ambiental liga compras, armazenagem, transporte, energia e I+D. Essa integração permite avançar na redução de impacto sem perder capacidades industriais nem velocidade de resposta.",
+};
+
 export const SUSTAINABILITY_COPY: Record<AppLocale, SustainabilityCopy> = {
   es: COPY_ES,
-  en: COPY_ES,
-  pt: COPY_ES,
-  fr: COPY_ES,
+  en: COPY_EN,
+  pt: COPY_PT,
+  fr: COPY_FR,
+};
+
+const initiativesHeader: Record<AppLocale, { eyebrow: string; title: string }> = {
+  en: {
+    eyebrow: "ACTIONS  /  SIX FRONTS",
+    title: "Improvements applied across centers, fleet, energy, and product.",
+  },
+  es: {
+    eyebrow: "ACTUACIONES  /  SEIS FRENTES",
+    title: "Mejoras aplicadas en centros, flota, energía y producto.",
+  },
+  fr: {
+    eyebrow: "ACTIONS  /  SIX AXES",
+    title: "Améliorations appliquées aux centres, à la flotte, à l'énergie et au produit.",
+  },
+  pt: {
+    eyebrow: "AÇÕES  /  SEIS FRENTES",
+    title: "Melhorias aplicadas em centros, frota, energia e produto.",
+  },
 };
 
 function renderMultiline(text: string) {
@@ -216,13 +454,13 @@ export function SustainabilityPage({ locale, copy: pageCopy }: Props) {
         className="mt-24 px-10 sm:px-14 lg:mt-32 lg:px-20"
       >
         <p className="font-mono text-[11px] uppercase tracking-[2px] text-green">
-          ACTUACIONES  /  SEIS FRENTES
+          {initiativesHeader[locale].eyebrow}
         </p>
         <h2
           id="sustainability-initiatives-title"
           className="mt-6 max-w-[1200px] text-balance font-sans text-[32px] font-light leading-[1.08] tracking-[-1px] text-foreground sm:text-[44px] lg:text-[56px] lg:tracking-[-1.8px]"
         >
-          Mejoras aplicadas en centros, flota, energía y producto.
+          {initiativesHeader[locale].title}
         </h2>
 
         <div className="mt-14 grid grid-cols-1 gap-x-12 gap-y-16 lg:mt-20 lg:grid-cols-2">

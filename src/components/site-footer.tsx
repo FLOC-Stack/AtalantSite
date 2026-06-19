@@ -41,6 +41,51 @@ const localeShort: Record<AppLocale, string> = {
   fr: "FR",
 };
 
+const footerCopy: Record<
+  AppLocale,
+  {
+    allRights: string;
+    contact: string;
+    cookies: string;
+    legal: string;
+    links: string;
+    privacy: string;
+  }
+> = {
+  en: {
+    allRights: "All rights reserved",
+    contact: "Contact",
+    cookies: "Cookies",
+    legal: "Legal notice",
+    links: "Links",
+    privacy: "Privacy",
+  },
+  es: {
+    allRights: "Todos los derechos reservados",
+    contact: "Contacto",
+    cookies: "Cookies",
+    legal: "Aviso legal",
+    links: "Enlaces",
+    privacy: "Privacidad",
+  },
+  fr: {
+    allRights: "Tous droits réservés",
+    contact: "Contact",
+    cookies: "Cookies",
+    legal: "Mentions légales",
+    links: "Liens",
+    privacy: "Confidentialité",
+  },
+  pt: {
+    allRights: "Todos os direitos reservados",
+    contact: "Contacto",
+    cookies: "Cookies",
+    legal: "Aviso legal",
+    links: "Ligações",
+    privacy: "Privacidade",
+  },
+};
+
 function resolveFooterHref(item: NavItem, locale: AppLocale): string {
   if (item.kind === "products") return buildProductsPath(locale);
   if (item.kind === "logistics") return buildLogisticsPath(locale);
@@ -83,7 +128,7 @@ function getColumns(locale: AppLocale, settings: SiteSettingsData): FooterColumn
   // porque el email usa un botón de copiar (componente cliente), no un link.
   return [
     {
-      heading: "Enlaces",
+      heading: footerCopy[locale].links,
       links: footerLinks,
     },
   ];
@@ -94,6 +139,7 @@ function isExternalHref(href: string) {
 }
 
 export function SiteFooter({ locale, settings: cmsSettings }: Props) {
+  const copy = footerCopy[locale];
   const settings = {
     ...(cmsSettings ?? fallbackSiteSettings[locale]),
     contactEmail: CONTACT_EMAIL,
@@ -176,7 +222,7 @@ export function SiteFooter({ locale, settings: cmsSettings }: Props) {
           {/* Contacto — email con botón de copiar al portapapeles */}
           <div className="flex flex-col">
             <p className="font-mono text-[10px] uppercase tracking-[2px] text-white/55">
-              Contacto
+              {copy.contact}
             </p>
             <div className="mt-7">
               <FooterEmailCopy email={settings.contactEmail} locale={locale} />
@@ -189,7 +235,7 @@ export function SiteFooter({ locale, settings: cmsSettings }: Props) {
         {/* Bottom bar */}
         <div className="mt-6 flex flex-col gap-4 font-mono text-[10px] uppercase tracking-[2px] sm:mt-7 md:flex-row md:items-center md:justify-between md:gap-6">
           <p className="text-white/50">
-            © {currentYear} · Atalant · Todos los derechos reservados
+            © {currentYear} · Atalant · {copy.allRights}
           </p>
 
           <nav
@@ -197,15 +243,15 @@ export function SiteFooter({ locale, settings: cmsSettings }: Props) {
             className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/55"
           >
             <Link href={buildPrivacyPath(locale)} className="transition-opacity hover:opacity-70">
-              Privacidad
+              {copy.privacy}
             </Link>
             <span aria-hidden="true">·</span>
             <Link href={buildCookiesPath(locale)} className="transition-opacity hover:opacity-70">
-              Cookies
+              {copy.cookies}
             </Link>
             <span aria-hidden="true">·</span>
             <Link href={buildLegalNoticePath(locale)} className="transition-opacity hover:opacity-70">
-              Aviso legal
+              {copy.legal}
             </Link>
           </nav>
 

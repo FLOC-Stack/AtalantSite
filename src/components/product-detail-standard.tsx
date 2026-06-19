@@ -9,9 +9,100 @@ type Props = {
   locale: AppLocale;
 };
 
+const detailCopy: Record<
+  AppLocale,
+  {
+    applications: string;
+    application: string;
+    back: string;
+    catalog: string;
+    contactSales: string;
+    denomination: string;
+    detailCta: string;
+    footerCatalog: string;
+    grades: string;
+    otherProducts: string;
+    process: string;
+    productLabel: string;
+    requestLabel: string;
+    technicalSheets: string;
+    variable: string;
+  }
+> = {
+  en: {
+    applications: "APPLICATIONS",
+    back: "BACK TO CATALOG",
+    catalog: "CATALOG",
+    contactSales: "Contact sales",
+    denomination: "DENOMINATION",
+    detailCta: "Sheet",
+    footerCatalog: "PRODUCTS",
+    grades: "GRADES",
+    otherProducts: "OTHER POLYMERS IN THE CATALOG",
+    process: "PROCESS",
+    productLabel: "PRODUCTS",
+    application: "APPLICATION",
+    requestLabel: "REQUEST",
+    technicalSheets: "TECHNICAL SHEETS",
+    variable: "VARIABLE",
+  },
+  es: {
+    applications: "APLICACIONES",
+    back: "VOLVER A CATÁLOGO",
+    catalog: "CATÁLOGO",
+    contactSales: "Contactar ventas",
+    denomination: "DENOMINACIÓN",
+    detailCta: "Ficha",
+    footerCatalog: "PRODUCTOS",
+    grades: "GRADO",
+    otherProducts: "OTROS POLÍMEROS DEL CATÁLOGO",
+    process: "PROCESO",
+    productLabel: "PRODUCTOS",
+    application: "APLICACIÓN",
+    requestLabel: "VER",
+    technicalSheets: "FICHAS TÉCNICAS",
+    variable: "VARIABLE",
+  },
+  fr: {
+    applications: "APPLICATIONS",
+    back: "RETOUR AU CATALOGUE",
+    catalog: "CATALOGUE",
+    contactSales: "Contacter les ventes",
+    denomination: "DÉNOMINATION",
+    detailCta: "Fiche",
+    footerCatalog: "PRODUITS",
+    grades: "GRADE",
+    otherProducts: "AUTRES POLYMÈRES DU CATALOGUE",
+    process: "PROCESS",
+    productLabel: "PRODUITS",
+    application: "APPLICATION",
+    requestLabel: "VOIR",
+    technicalSheets: "FICHES TECHNIQUES",
+    variable: "VARIABLE",
+  },
+  pt: {
+    applications: "APLICAÇÕES",
+    back: "VOLTAR AO CATÁLOGO",
+    catalog: "CATÁLOGO",
+    contactSales: "Contactar vendas",
+    denomination: "DENOMINAÇÃO",
+    detailCta: "Ficha",
+    footerCatalog: "PRODUTOS",
+    grades: "GRAU",
+    otherProducts: "OUTROS POLÍMEROS DO CATÁLOGO",
+    process: "PROCESSO",
+    productLabel: "PRODUTOS",
+    application: "APLICAÇÃO",
+    requestLabel: "VER",
+    technicalSheets: "FICHAS TÉCNICAS",
+    variable: "VARIÁVEL",
+  },
+};
+
 export function ProductDetailStandard({ data, locale }: Props) {
   const productsHref = buildProductsPath(locale);
   const contactHref = buildContactoPath(locale);
+  const copy = detailCopy[locale];
 
   return (
     <main className="relative bg-white">
@@ -27,13 +118,13 @@ export function ProductDetailStandard({ data, locale }: Props) {
       <div className="relative z-10 mx-auto w-full max-w-[1760px] px-5 sm:px-10 lg:px-20">
         <div className="flex items-start justify-between gap-6">
           <p className="font-mono text-[11px] tracking-[2px] text-[#6b6f82]">
-            PRODUCTOS&nbsp;&nbsp;/&nbsp;&nbsp;{data.title.toUpperCase()}&nbsp;&nbsp;({data.code})
+            {copy.productLabel}&nbsp;&nbsp;/&nbsp;&nbsp;{data.title.toUpperCase()}&nbsp;&nbsp;({data.code})
           </p>
           <Link
             href={productsHref}
             className="font-mono text-[11px] tracking-[2px] text-[#1b1c1a] transition-opacity hover:opacity-70"
           >
-            ← VOLVER A CATÁLOGO
+            ← {copy.back}
           </Link>
         </div>
 
@@ -73,7 +164,7 @@ export function ProductDetailStandard({ data, locale }: Props) {
 
         <section className="mt-[60px]">
           <p className="font-mono text-[11px] font-medium tracking-[2px] text-[#1e4bb6]">
-            GRADOS&nbsp;&nbsp;/&nbsp;&nbsp;FICHAS TÉCNICAS
+            {copy.grades}&nbsp;&nbsp;/&nbsp;&nbsp;{copy.technicalSheets}
           </p>
           <h2 className="mt-8 max-w-[980px] font-sans text-[clamp(2.25rem,5vw,3.5rem)] font-light leading-[1.05] tracking-[-1.8px] text-[#1b1c1a]">
             {data.tableTitle}
@@ -83,11 +174,11 @@ export function ProductDetailStandard({ data, locale }: Props) {
         <section className="mt-[60px]">
           <div className="h-px w-full bg-[#1b1c1a]" />
           <div className="hidden grid-cols-[140px_220px_220px_minmax(0,1fr)_220px_70px] gap-x-4 pb-7 pt-[15px] font-mono text-[10px] tracking-[2px] text-[#6b6f82] lg:grid">
-            <p>GRADO</p>
-            <p>DENOMINACIÓN</p>
-            <p>VARIABLE</p>
-            <p>APLICACIÓN</p>
-            <p>PROCESO</p>
+            <p>{copy.grades}</p>
+            <p>{copy.denomination}</p>
+            <p>{copy.variable}</p>
+            <p>{copy.application}</p>
+            <p>{copy.process}</p>
             <p />
           </div>
 
@@ -114,7 +205,7 @@ export function ProductDetailStandard({ data, locale }: Props) {
                   href={contactHref}
                   className="font-sans text-[13px] font-medium tracking-[0.2px] text-[#1e4bb6] transition-opacity hover:opacity-70"
                 >
-                  Ficha ↓
+                  {copy.detailCta} ↓
                 </Link>
               </div>
 
@@ -127,7 +218,7 @@ export function ProductDetailStandard({ data, locale }: Props) {
                     href={contactHref}
                     className="font-sans text-[13px] font-medium tracking-[0.2px] text-[#1e4bb6] transition-opacity hover:opacity-70"
                   >
-                    Ficha ↓
+                    {copy.detailCta} ↓
                   </Link>
                 </div>
                 <p className="font-sans text-[22px] font-light tracking-[-0.5px] text-[#1b1c1a]">
@@ -183,7 +274,7 @@ export function ProductDetailStandard({ data, locale }: Props) {
 
         <section className="mt-20">
           <p className="font-mono text-[11px] font-medium tracking-[2px] text-[#6b6f82]">
-            APLICACIONES
+            {copy.applications}
           </p>
           <div className="mt-[13px] h-px w-full bg-[#1b1c1a]" />
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -200,7 +291,7 @@ export function ProductDetailStandard({ data, locale }: Props) {
 
         <section className="mt-20">
           <p className="font-mono text-[11px] font-medium tracking-[2px] text-[#6b6f82]">
-            OTROS POLÍMEROS DEL CATÁLOGO
+            {copy.otherProducts}
           </p>
           <div className="mt-[13px] h-px w-full bg-[#1b1c1a]" />
           <div className="mt-[60px] grid grid-cols-1 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-5">
@@ -222,7 +313,7 @@ export function ProductDetailStandard({ data, locale }: Props) {
                   {product.grades}
                 </p>
                 <p className="mt-[36px] font-sans text-[13px] font-medium tracking-[0.2px] text-[#1b1c1a]">
-                  Ver →
+                  {copy.requestLabel} →
                 </p>
               </Link>
             ))}
@@ -244,14 +335,14 @@ export function ProductDetailStandard({ data, locale }: Props) {
                 href={contactHref}
                 className="group inline-flex flex-col gap-1 font-sans text-[16px] font-medium tracking-[0.2px] text-white"
               >
-                <span>Contactar ventas&nbsp;&nbsp;→</span>
+                <span>{copy.contactSales}&nbsp;&nbsp;→</span>
                 <span className="block h-px w-[170px] bg-white transition-opacity group-hover:opacity-70" />
               </Link>
             </div>
           </div>
           <div className="mt-12 flex flex-col gap-2 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4 lg:pb-10">
             <p className="font-mono text-[10px] tracking-[2px] text-white/50">
-              © MMXXVI ATALANT&nbsp;&nbsp;/&nbsp;&nbsp;PRODUCTOS / {data.code}
+              © MMXXVI ATALANT&nbsp;&nbsp;/&nbsp;&nbsp;{copy.footerCatalog} / {data.code}
             </p>
             <p className="font-mono text-[11px] font-medium tracking-[2px] text-white/80">
               INFO@ATALANT.COM&nbsp;&nbsp;·&nbsp;&nbsp;+34 965 66 18 28

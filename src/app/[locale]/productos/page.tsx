@@ -8,6 +8,7 @@ import {
 import { catalogCopy } from "@/lib/catalog-copy";
 import { getProductFamilies } from "@/lib/payload-data";
 import { defaultLocale, isLocale, locales, type AppLocale } from "@/lib/locales";
+import { buildFamilyPath, buildProductsPath } from "@/lib/routes";
 
 export const dynamic = "force-dynamic";
 
@@ -24,9 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     alternates: {
-      canonical: `/${validLocale}/productos`,
+      canonical: buildProductsPath(validLocale),
       languages: Object.fromEntries(
-        locales.map((entry) => [entry, `/${entry}/productos`]),
+        locales.map((entry) => [entry, buildProductsPath(entry)]),
       ),
     },
     description: copy.seoDescription,
@@ -52,7 +53,7 @@ export default async function ProductosPage({ params }: Props) {
       description: family.excerpt,
       variants: family.variants,
       recycled: family.recycled,
-      href: `/${typedLocale}/productos/${family.slug}`,
+      href: buildFamilyPath(typedLocale, family.slug),
       image:
         family.heroMedia && family.heroMedia.kind === "image"
           ? family.heroMedia.url
@@ -72,7 +73,7 @@ export default async function ProductosPage({ params }: Props) {
 
   return (
     <main className="bg-background">
-      <ProductsMorph products={products} hero={hero} />
+      <ProductsMorph products={products} hero={hero} locale={typedLocale} />
     </main>
   );
 }

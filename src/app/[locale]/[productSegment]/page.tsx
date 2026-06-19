@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { FamilyCard } from "@/components/family-card";
+import {
+  ProductsMorph,
+  type ProductsMorphHero,
+  type ProductsMorphItem,
+} from "@/components/products-morph";
 import { catalogCopy } from "@/lib/catalog-copy";
 import { getProductFamilies } from "@/lib/payload-data";
 import { defaultLocale, getProductSegment, isLocale, locales, type AppLocale } from "@/lib/locales";
-import { buildProductsPath } from "@/lib/routes";
+import { buildFamilyPath, buildProductsPath } from "@/lib/routes";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +29,7 @@ async function resolveLocaleAndSegment(params: Props["params"]) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = isLocale(locale) ? (locale as AppLocale) : defaultLocale;
-  const copy = catalogCopy[validLocale].index;
+  const copy = catalogCopy[validLocale].morph;
 
   return {
     alternates: {
@@ -40,27 +44,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductsIndexPage({ params }: Props) {
   const { locale } = await resolveLocaleAndSegment(params);
   const families = await getProductFamilies(locale);
-  const copy = catalogCopy[locale].index;
+  const products: ProductsMorphItem[] = families.slice(0, 7).map((family) => ({
+    code: family.code,
+    description: family.excerpt,
+    href: buildFamilyPath(locale, family.slug),
+    image:
+      family.heroMedia && family.heroMedia.kind === "image"
+        ? family.heroMedia.url
+        : undefined,
+    name: family.title,
+    recycled: family.recycled,
+    variants: family.variants,
+    video:
+      family.heroMedia && family.heroMedia.kind === "video"
+        ? family.heroMedia.url
+        : undefined,
+  }));
+  const hero: ProductsMorphHero | undefined = undefined;
 
   return (
-    <main className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pt-24 md:px-10 lg:px-16 lg:pt-28">
-      <div className="max-w-3xl">
-        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary-dark">
-          {copy.eyebrow}
-        </p>
-        <h1 className="mt-5 text-5xl leading-none tracking-tight text-foreground md:text-7xl">
-          {copy.title}
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg text-body">
-          {copy.body}
-        </p>
-      </div>
-
-      <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-3">
-        {families.map((family) => (
-          <FamilyCard key={family.slug} family={family} />
-        ))}
-      </div>
+    <main className="bg-background">
+      <ProductsMorph products={products} hero={hero} locale={locale} />
     </main>
   );
 }

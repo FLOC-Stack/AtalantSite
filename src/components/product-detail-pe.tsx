@@ -63,6 +63,283 @@ const RELATED = [
   { code: "PET", name: "PET", grades: "Botella · Lámina · Fibra", slug: "pet" },
 ];
 
+const PE_COPY: Record<
+  AppLocale,
+  {
+    application: string;
+    back: string;
+    contactSales: string;
+    density: string;
+    denomination: string;
+    footerProduct: string;
+    footerQuestion: string;
+    gradeLabel: string;
+    grades: Grade[];
+    gradesEyebrow: string;
+    greenlantBody: string;
+    greenlantCta: string;
+    greenlantEyebrow: string;
+    greenlantTitle: string;
+    heroLines: string[];
+    intro: string;
+    meta: Array<{ label: string; value: string }>;
+    otherProducts: string;
+    process: string;
+    productName: string;
+    products: string;
+    related: typeof RELATED;
+    requestLabel: string;
+    stats: Array<{ value: string; label: string }>;
+    tableTitle: string;
+  }
+> = {
+  en: {
+    application: "APPLICATION",
+    back: "BACK TO CATALOG",
+    contactSales: "Contact sales",
+    density: "DENSITY",
+    denomination: "DENOMINATION",
+    footerProduct: "PRODUCTS",
+    footerQuestion: "Need a PE technical sheet?",
+    gradeLabel: "GRADES",
+    grades: [
+      {
+        code: "HDPE",
+        denomination: "High-Density",
+        density: "0.941 - 0.965 g/cm³",
+        application: "Rigid containers · Pipes · Cosmetic packaging",
+        process: "Injection, extrusion, blow molding",
+      },
+      {
+        code: "MDPE",
+        denomination: "Medium-Density",
+        density: "0.926 - 0.940 g/cm³",
+        application: "Gas pipe · Industrial sacks · Reinforced film",
+        process: "Extrusion, blow molding",
+      },
+      {
+        code: "LDPE",
+        denomination: "Low-Density",
+        density: "0.910 - 0.925 g/cm³",
+        application: "Flexible film · Agricultural packaging · Flow caps",
+        process: "Film, extrusion, rotational molding",
+      },
+      {
+        code: "LLDPE",
+        denomination: "Linear Low-Density",
+        density: "0.915 - 0.925 g/cm³",
+        application: "Stretch film · Industrial sacks · Resistant agricultural film",
+        process: "Mainly film",
+      },
+    ],
+    gradesEyebrow: "GRADES / TECHNICAL SHEETS",
+    greenlantBody:
+      "Injection Greenlant grades (IN-040 RD/GR/BL), Blow Molding Greenlant (BM-025 WH/NT) and Pipe Greenlant (PE-100-BK). Post-industrial and post-consumer, with full traceability.",
+    greenlantCta: "View Greenlant",
+    greenlantEyebrow: "RECYCLED VERSION / GREENLANT",
+    greenlantTitle: "rPE, recycled polyethylene.",
+    heroLines: ["Polyethylene.", "The versatile", "polymer."],
+    intro:
+      "Four base grades cover 90% of industrial polyethylene transformation. From low-density film to rigid high-density containers, every gradient is covered in our catalog with a 24/48h response from Alicante or Valencia.",
+    meta: [
+      { label: "GRADES", value: "HDPE · MDPE · LDPE · LLDPE" },
+      { label: "TRANSFORMATION", value: "Injection · Extrusion · Blow molding · Film" },
+      { label: "DENSITY", value: "0.91 - 0.97 g/cm³" },
+      { label: "RESPONSE", value: "< 24 h from warehouse" },
+    ],
+    otherProducts: "OTHER POLYMERS IN THE CATALOG",
+    process: "PROCESS",
+    productName: "POLYETHYLENE",
+    products: "PRODUCTS",
+    related: [
+      { code: "PP", name: "Polypropylene", grades: "Homo · Copo · Random", slug: "pp" },
+      { code: "PVC", name: "Polyvinyl chloride", grades: "Rigid · Flexible", slug: "pvc" },
+      { code: "PS", name: "Polystyrene", grades: "GPPS · HIPS", slug: "ps" },
+      { code: "PET", name: "PET", grades: "Bottle · Sheet · Fiber", slug: "pet" },
+    ],
+    requestLabel: "On request",
+    stats: [
+      { value: "1997", label: "Atalant origin" },
+      { value: "3+3", label: "Active Greenlant lines" },
+      { value: "100%", label: "Post-industrial traceability" },
+    ],
+    tableTitle: "Four densities, one same chain.",
+  },
+  es: {
+    application: "APLICACIÓN",
+    back: "VOLVER A CATÁLOGO",
+    contactSales: "Contactar ventas",
+    density: "DENSIDAD",
+    denomination: "DENOMINACIÓN",
+    footerProduct: "PRODUCTOS",
+    footerQuestion: "¿Necesitas una ficha técnica PE?",
+    gradeLabel: "GRADOS",
+    grades: GRADES,
+    gradesEyebrow: "GRADOS / FICHAS TÉCNICAS",
+    greenlantBody:
+      "Grados Injection Greenlant (IN-040 RD/GR/BL), Blow Molding Greenlant (BM-025 WH/NT) y Pipe Greenlant (PE-100-BK). Post-industrial y post-consumo, trazabilidad completa.",
+    greenlantCta: "Ver Greenlant",
+    greenlantEyebrow: "VERSIÓN RECICLADA / GREENLANT",
+    greenlantTitle: "rPE — Polietileno reciclado.",
+    heroLines: ["Polietileno.", "El polímero", "versátil."],
+    intro:
+      "Cuatro grados base cubren el 90% de las transformaciones industriales del polietileno. Desde la película de baja densidad hasta los contenedores rígidos de alta densidad, todos los gradientes están cubiertos en nuestro catálogo con respuesta 24/48h desde Alicante o Valencia.",
+    meta: META,
+    otherProducts: "OTROS POLÍMEROS DEL CATÁLOGO",
+    process: "PROCESO",
+    productName: "POLIETILENO",
+    products: "PRODUCTOS",
+    related: RELATED,
+    requestLabel: "Bajo petición",
+    stats: STATS,
+    tableTitle: "Cuatro densidades, una misma cadena.",
+  },
+  fr: {
+    application: "APPLICATION",
+    back: "RETOUR AU CATALOGUE",
+    contactSales: "Contacter les ventes",
+    density: "DENSITÉ",
+    denomination: "DÉNOMINATION",
+    footerProduct: "PRODUITS",
+    footerQuestion: "Besoin d'une fiche technique PE ?",
+    gradeLabel: "GRADES",
+    grades: [
+      {
+        code: "HDPE",
+        denomination: "High-Density",
+        density: "0.941 - 0.965 g/cm³",
+        application: "Conteneurs rigides · Tuyaux · Emballage cosmétique",
+        process: "Injection, extrusion, soufflage",
+      },
+      {
+        code: "MDPE",
+        denomination: "Medium-Density",
+        density: "0.926 - 0.940 g/cm³",
+        application: "Tuyau gaz · Sacs industriels · Film renforcé",
+        process: "Extrusion, soufflage",
+      },
+      {
+        code: "LDPE",
+        denomination: "Low-Density",
+        density: "0.910 - 0.925 g/cm³",
+        application: "Film souple · Emballage agricole · Bouchons à débit",
+        process: "Film, extrusion, rotomoulage",
+      },
+      {
+        code: "LLDPE",
+        denomination: "Linear Low-Density",
+        density: "0.915 - 0.925 g/cm³",
+        application: "Film étirable · Sac industriel · Film agricole résistant",
+        process: "Principalement film",
+      },
+    ],
+    gradesEyebrow: "GRADES / FICHES TECHNIQUES",
+    greenlantBody:
+      "Grades Injection Greenlant (IN-040 RD/GR/BL), Blow Molding Greenlant (BM-025 WH/NT) et Pipe Greenlant (PE-100-BK). Post-industriel et post-consommation, avec traçabilité complète.",
+    greenlantCta: "Voir Greenlant",
+    greenlantEyebrow: "VERSION RECYCLÉE / GREENLANT",
+    greenlantTitle: "rPE, polyéthylène recyclé.",
+    heroLines: ["Polyéthylène.", "Le polymère", "polyvalent."],
+    intro:
+      "Quatre grades de base couvrent 90 % des transformations industrielles du polyéthylène. Du film basse densité aux conteneurs rigides haute densité, tous les gradients sont couverts dans notre catalogue avec une réponse en 24/48 h depuis Alicante ou Valencia.",
+    meta: [
+      { label: "GRADES", value: "HDPE · MDPE · LDPE · LLDPE" },
+      { label: "TRANSFORMATION", value: "Injection · Extrusion · Soufflage · Film" },
+      { label: "DENSITÉ", value: "0.91 - 0.97 g/cm³" },
+      { label: "RÉPONSE", value: "< 24 h depuis dépôt" },
+    ],
+    otherProducts: "AUTRES POLYMÈRES DU CATALOGUE",
+    process: "PROCESS",
+    productName: "POLYÉTHYLÈNE",
+    products: "PRODUITS",
+    related: [
+      { code: "PP", name: "Polypropylène", grades: "Homo · Copo · Random", slug: "pp" },
+      { code: "PVC", name: "Polychlorure de vinyle", grades: "Rigide · Flexible", slug: "pvc" },
+      { code: "PS", name: "Polystyrène", grades: "GPPS · HIPS", slug: "ps" },
+      { code: "PET", name: "PET", grades: "Bouteille · Feuille · Fibre", slug: "pet" },
+    ],
+    requestLabel: "Sur demande",
+    stats: [
+      { value: "1997", label: "Origine Atalant" },
+      { value: "3+3", label: "Lignes Greenlant actives" },
+      { value: "100%", label: "Traçabilité post-industrielle" },
+    ],
+    tableTitle: "Quatre densités, une même chaîne.",
+  },
+  pt: {
+    application: "APLICAÇÃO",
+    back: "VOLTAR AO CATÁLOGO",
+    contactSales: "Contactar vendas",
+    density: "DENSIDADE",
+    denomination: "DENOMINAÇÃO",
+    footerProduct: "PRODUTOS",
+    footerQuestion: "Precisa de uma ficha técnica PE?",
+    gradeLabel: "GRAUS",
+    grades: [
+      {
+        code: "HDPE",
+        denomination: "High-Density",
+        density: "0.941 - 0.965 g/cm³",
+        application: "Contentores rígidos · Tubagens · Embalagem cosmética",
+        process: "Injeção, extrusão, sopro",
+      },
+      {
+        code: "MDPE",
+        denomination: "Medium-Density",
+        density: "0.926 - 0.940 g/cm³",
+        application: "Tubagem de gás · Sacos industriais · Filme reforçado",
+        process: "Extrusão, sopro",
+      },
+      {
+        code: "LDPE",
+        denomination: "Low-Density",
+        density: "0.910 - 0.925 g/cm³",
+        application: "Filme flexível · Embalagem agrícola · Tampas de fluxo",
+        process: "Filme, extrusão, moldagem rotacional",
+      },
+      {
+        code: "LLDPE",
+        denomination: "Linear Low-Density",
+        density: "0.915 - 0.925 g/cm³",
+        application: "Filme stretch · Saco industrial · Filme agrícola resistente",
+        process: "Principalmente filme",
+      },
+    ],
+    gradesEyebrow: "GRAUS / FICHAS TÉCNICAS",
+    greenlantBody:
+      "Graus Injection Greenlant (IN-040 RD/GR/BL), Blow Molding Greenlant (BM-025 WH/NT) e Pipe Greenlant (PE-100-BK). Pós-industrial e pós-consumo, com rastreabilidade completa.",
+    greenlantCta: "Ver Greenlant",
+    greenlantEyebrow: "VERSÃO RECICLADA / GREENLANT",
+    greenlantTitle: "rPE, polietileno reciclado.",
+    heroLines: ["Polietileno.", "O polímero", "versátil."],
+    intro:
+      "Quatro graus base cobrem 90% das transformações industriais do polietileno. Do filme de baixa densidade aos contentores rígidos de alta densidade, todos os gradientes estão cobertos no nosso catálogo com resposta em 24/48 h a partir de Alicante ou Valencia.",
+    meta: [
+      { label: "GRAUS", value: "HDPE · MDPE · LDPE · LLDPE" },
+      { label: "TRANSFORMAÇÃO", value: "Injeção · Extrusão · Sopro · Filme" },
+      { label: "DENSIDADE", value: "0.91 - 0.97 g/cm³" },
+      { label: "RESPOSTA", value: "< 24 h desde armazém" },
+    ],
+    otherProducts: "OUTROS POLÍMEROS DO CATÁLOGO",
+    process: "PROCESSO",
+    productName: "POLIETILENO",
+    products: "PRODUTOS",
+    related: [
+      { code: "PP", name: "Polipropileno", grades: "Homo · Copo · Random", slug: "pp" },
+      { code: "PVC", name: "Policloreto de vinilo", grades: "Rígido · Flexível", slug: "pvc" },
+      { code: "PS", name: "Poliestireno", grades: "GPPS · HIPS", slug: "ps" },
+      { code: "PET", name: "PET", grades: "Garrafa · Lâmina · Fibra", slug: "pet" },
+    ],
+    requestLabel: "Sob pedido",
+    stats: [
+      { value: "1997", label: "Origem Atalant" },
+      { value: "3+3", label: "Linhas Greenlant ativas" },
+      { value: "100%", label: "Rastreabilidade pós-industrial" },
+    ],
+    tableTitle: "Quatro densidades, uma mesma cadeia.",
+  },
+};
+
 type Props = {
   locale: AppLocale;
 };
@@ -70,6 +347,7 @@ type Props = {
 export function ProductDetailPE({ locale }: Props) {
   const productsHref = buildProductsPath(locale);
   const contactHref = buildContactoPath(locale);
+  const copy = PE_COPY[locale];
 
   return (
     <main className="relative bg-white">
@@ -93,13 +371,13 @@ export function ProductDetailPE({ locale }: Props) {
         {/* Breadcrumb row — figma top:197 */}
         <div className="flex items-start justify-between gap-6">
           <p className="font-mono text-[11px] tracking-[2px] text-[#6b6f82]">
-            PRODUCTOS&nbsp;&nbsp;/&nbsp;&nbsp;POLIETILENO&nbsp;&nbsp;(PE)
+            {copy.products}&nbsp;&nbsp;/&nbsp;&nbsp;{copy.productName}&nbsp;&nbsp;(PE)
           </p>
           <Link
             href={productsHref}
             className="font-mono text-[11px] tracking-[2px] text-[#1b1c1a] transition-opacity hover:opacity-70"
           >
-            ← VOLVER A CATÁLOGO
+            ← {copy.back}
           </Link>
         </div>
 
@@ -113,14 +391,12 @@ export function ProductDetailPE({ locale }: Props) {
               PE
             </p>
             <div className="font-sans text-[clamp(2.25rem,4.5vw,4rem)] font-light leading-none tracking-[-3px] text-[#1b1c1a]">
-              <p>Polietileno.</p>
-              <p>El polímero</p>
-              <p>versátil.</p>
+              {copy.heroLines.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
             </div>
           <p className="max-w-[520px] font-sans text-[clamp(1rem,1.4vw,1.25rem)] font-light leading-[1.6] tracking-[-0.2px] text-[#1b1c1a]">
-            Cuatro grados base cubren el 90% de las transformaciones industriales del polietileno. Desde
-            la película de baja densidad hasta los contenedores rígidos de alta densidad, todos los
-            gradientes están cubiertos en nuestro catálogo con respuesta 24/48h desde Alicante o Valencia.
+            {copy.intro}
           </p>
         </div>
 
@@ -128,7 +404,7 @@ export function ProductDetailPE({ locale }: Props) {
         <div className="mt-4">
           <div className="h-px w-full bg-[#1b1c1a]" />
           <dl className="grid grid-cols-2 gap-x-8 gap-y-8 pb-10 pt-[22px] md:grid-cols-4">
-            {META.map((m) => (
+            {copy.meta.map((m) => (
               <div key={m.label}>
                 <dt className="font-mono text-[10px] tracking-[2px] text-[#6b6f82]">{m.label}</dt>
                 <dd className="mt-5 font-sans text-[16px] tracking-[-0.1px] text-[#1b1c1a]">
@@ -142,10 +418,10 @@ export function ProductDetailPE({ locale }: Props) {
         {/* GRADOS / FICHAS TÉCNICAS — figma top:808 */}
         <div className="mt-[60px]">
           <p className="font-mono text-[11px] font-medium tracking-[2px] text-[#1e4bb6]">
-            GRADOS&nbsp;&nbsp;/&nbsp;&nbsp;FICHAS TÉCNICAS
+            {copy.gradesEyebrow}
           </p>
           <h2 className="mt-8 font-sans text-[clamp(2.25rem,5vw,3.5rem)] font-light leading-[1.05] tracking-[-1.8px] text-[#1b1c1a]">
-            Cuatro densidades, una misma cadena.
+            {copy.tableTitle}
           </h2>
         </div>
 
@@ -156,15 +432,15 @@ export function ProductDetailPE({ locale }: Props) {
           {/* Headers — solo desktop */}
           <div className="hidden grid-cols-[140px_220px_180px_minmax(0,1fr)_200px_70px] gap-x-4 pb-7 pt-[15px] font-mono text-[10px] tracking-[2px] text-[#6b6f82] lg:grid">
             <p>GRADO</p>
-            <p>DENOMINACIÓN</p>
-            <p>DENSIDAD</p>
-            <p>APLICACIÓN</p>
-            <p>PROCESO</p>
+            <p>{copy.denomination}</p>
+            <p>{copy.density}</p>
+            <p>{copy.application}</p>
+            <p>{copy.process}</p>
             <p />
           </div>
 
           {/* Filas */}
-          {GRADES.map((g, i) => (
+          {copy.grades.map((g, i) => (
             <div key={g.code}>
               {i > 0 ? <div className="h-px w-full bg-[rgba(27,28,26,0.15)]" /> : null}
               {/* Desktop grid */}
@@ -178,7 +454,7 @@ export function ProductDetailPE({ locale }: Props) {
                 <div>
                   <p className="font-mono text-[13px] tracking-[0.3px] text-[#1b1c1a]">{g.density}</p>
                   <p className="mt-[11px] font-mono text-[9px] tracking-[1.5px] text-[#6b6f82]">
-                    GRADOS
+                    {copy.gradeLabel}
                   </p>
                 </div>
                 <p className="font-sans text-[14px] font-light leading-[20px] tracking-[-0.1px] text-[#1b1c1a]">
@@ -188,7 +464,7 @@ export function ProductDetailPE({ locale }: Props) {
                   {g.process}
                 </p>
                 <p className="font-sans text-[13px] font-medium tracking-[0.2px] text-[#1e4bb6]">
-                  Bajo petición
+                  {copy.requestLabel}
                 </p>
               </div>
               {/* Mobile/tablet stack */}
@@ -198,7 +474,7 @@ export function ProductDetailPE({ locale }: Props) {
                     {g.code}
                   </p>
                   <p className="font-sans text-[13px] font-medium tracking-[0.2px] text-[#1e4bb6]">
-                    Bajo petición
+                    {copy.requestLabel}
                   </p>
                 </div>
                 <p className="font-sans text-[22px] font-light tracking-[-0.5px] text-[#1b1c1a]">
@@ -220,22 +496,21 @@ export function ProductDetailPE({ locale }: Props) {
         {/* Greenlant rPE */}
         <div className="mt-20">
           <p className="font-mono text-[11px] font-medium tracking-[2px] text-[#00a772]">
-            VERSIÓN RECICLADA&nbsp;&nbsp;/&nbsp;&nbsp;GREENLANT
+            {copy.greenlantEyebrow}
           </p>
           <div className="relative mt-[14px] overflow-hidden bg-[rgba(30,182,134,0.1)] lg:h-[220px]">
             <div className="absolute left-0 top-0 h-full w-1 bg-[#00a772]" aria-hidden="true" />
             <div className="flex h-full flex-col gap-8 px-6 py-10 sm:px-10 lg:flex-row lg:items-center lg:gap-[140px]">
               <div className="flex flex-col gap-4 lg:w-[900px]">
                 <p className="font-sans text-[clamp(2rem,3.5vw,3rem)] font-light leading-[1.12] tracking-[-1.2px] text-[#1b1c1a]">
-                  rPE — Polietileno reciclado.
+                  {copy.greenlantTitle}
                 </p>
                 <p className="font-sans text-[16px] font-light leading-[24px] tracking-[-0.1px] text-[#6b6f82]">
-                  Grados Injection Greenlant (IN-040 RD/GR/BL), Blow Molding Greenlant (BM-025 WH/NT) y
-                  Pipe Greenlant (PE-100-BK). Post-industrial y post-consumo, trazabilidad completa.
+                  {copy.greenlantBody}
                 </p>
               </div>
               <dl className="flex flex-col gap-2 lg:w-[329px]">
-                {STATS.map((s) => (
+                {copy.stats.map((s) => (
                   <div key={s.value} className="flex items-center gap-10 lg:justify-between">
                     <dt className="font-sans text-[32px] font-light leading-none tracking-[-0.8px] text-[#1b1c1a]">
                       {s.value}
@@ -249,7 +524,7 @@ export function ProductDetailPE({ locale }: Props) {
               href={buildFamilyPath(locale, "recycled")}
               className="absolute right-6 top-6 font-sans text-[15px] font-medium tracking-[0.2px] text-[#1eb686] transition-opacity hover:opacity-70 sm:right-10 lg:top-1/2 lg:-translate-y-1/2"
             >
-              Ver Greenlant&nbsp;&nbsp;→
+              {copy.greenlantCta}&nbsp;&nbsp;→
             </Link>
           </div>
         </div>
@@ -257,11 +532,11 @@ export function ProductDetailPE({ locale }: Props) {
         {/* Otros polímeros del catálogo */}
         <div className="mt-20">
           <p className="font-mono text-[11px] font-medium tracking-[2px] text-[#6b6f82]">
-            OTROS POLÍMEROS DEL CATÁLOGO
+            {copy.otherProducts}
           </p>
           <div className="mt-[13px] h-px w-full bg-[#1b1c1a]" />
           <div className="mt-[60px] grid grid-cols-1 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-5">
-            {RELATED.map((r, i) => (
+            {copy.related.map((r, i) => (
               <Link
                 key={r.code}
                 href={buildFamilyPath(locale, r.slug)}
@@ -277,7 +552,7 @@ export function ProductDetailPE({ locale }: Props) {
                   {r.grades}
                 </p>
                 <p className="mt-[36px] font-sans text-[13px] font-medium tracking-[0.2px] text-[#1b1c1a]">
-                  Ver →
+                  {locale === "en" ? "View" : locale === "fr" ? "Voir" : "Ver"} →
                 </p>
               </Link>
             ))}
@@ -294,21 +569,21 @@ export function ProductDetailPE({ locale }: Props) {
           <div className="hidden h-px w-full bg-white/20 lg:block" />
           <div className="lg:relative lg:h-[240px] lg:pt-[32px]">
             <h2 className="font-sans text-[clamp(2.25rem,5vw,4rem)] font-light leading-[1.12] tracking-[-2px] text-white/95 lg:max-w-[1240px]">
-              ¿Necesitas una ficha técnica PE?
+              {copy.footerQuestion}
             </h2>
             <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:gap-12 lg:absolute lg:left-0 lg:top-[140px] lg:mt-0">
               <Link
                 href={contactHref}
                 className="group inline-flex flex-col gap-1 font-sans text-[16px] font-medium tracking-[0.2px] text-white"
               >
-                <span>Contactar ventas&nbsp;&nbsp;→</span>
+                <span>{copy.contactSales}&nbsp;&nbsp;→</span>
                 <span className="block h-px w-[170px] bg-white transition-opacity group-hover:opacity-70" />
               </Link>
             </div>
           </div>
           <div className="mt-12 flex flex-col gap-2 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4 lg:pb-10">
             <p className="font-mono text-[10px] tracking-[2px] text-white/50">
-              © MMXXVI ATALANT&nbsp;&nbsp;/&nbsp;&nbsp;PRODUCTOS / PE
+              © MMXXVI ATALANT&nbsp;&nbsp;/&nbsp;&nbsp;{copy.footerProduct} / PE
             </p>
             <p className="font-mono text-[11px] font-medium tracking-[2px] text-white/80">
               INFO@ATALANT.COM&nbsp;&nbsp;·&nbsp;&nbsp;+34 965 66 18 28

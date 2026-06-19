@@ -467,36 +467,104 @@ const staticPages = {
     copy: FINANCIACION_COPY,
     pageType: "financiacion",
     seo: {
-      description:
-        "Sistema de crédito interno de Atalant para reforzar y hacer crecer tu negocio, con clientes asegurados mundialmente.",
-      title: "Financiación · Crédito interno — Atalant",
+      en: {
+        description:
+          "Atalant internal credit system to strengthen and grow your business, with customers insured worldwide.",
+        title: "Financing · Internal credit — Atalant",
+      },
+      es: {
+        description:
+          "Sistema de crédito interno de Atalant para reforzar y hacer crecer tu negocio, con clientes asegurados mundialmente.",
+        title: "Financiación · Crédito interno — Atalant",
+      },
+      fr: {
+        description:
+          "Système de crédit interne d'Atalant pour renforcer et développer votre activité, avec des clients assurés dans le monde entier.",
+        title: "Financement · Crédit interne — Atalant",
+      },
+      pt: {
+        description:
+          "Sistema de crédito interno da Atalant para reforçar e fazer crescer o seu negócio, com clientes assegurados a nível mundial.",
+        title: "Financiamento · Crédito interno — Atalant",
+      },
     },
   },
   logistica: {
     copy: LOGISTICA_COPY,
     pageType: "logistica",
     seo: {
-      description:
-        "Logística integrada de Atalant con flota propia, trazabilidad completa, centros logísticos y principales hubs europeos.",
-      title: "Logística integrada — Atalant",
+      en: {
+        description:
+          "Atalant integrated logistics with its own fleet, full traceability, logistics centers, and main European hubs.",
+        title: "Integrated logistics — Atalant",
+      },
+      es: {
+        description:
+          "Logística integrada de Atalant con flota propia, trazabilidad completa, centros logísticos y principales hubs europeos.",
+        title: "Logística integrada — Atalant",
+      },
+      fr: {
+        description:
+          "Logistique intégrée d'Atalant avec flotte propre, traçabilité complète, centres logistiques et hubs européens principaux.",
+        title: "Logistique intégrée — Atalant",
+      },
+      pt: {
+        description:
+          "Logística integrada da Atalant com frota própria, rastreabilidade completa, centros logísticos e principais hubs europeus.",
+        title: "Logística integrada — Atalant",
+      },
     },
   },
   nosotros: {
     copy: NOSOTROS_COPY,
     pageType: "nosotros",
     seo: {
-      description:
-        "Treinta años conectando polímeros y personas. Atalant ofrece materias primas plásticas de máxima calidad con red logística propia en Iberia y Europa.",
-      title: "Nosotros · Socio estratégico — Atalant",
+      en: {
+        description:
+          "Thirty years connecting polymers and people. Atalant provides top-quality plastic raw materials with its own logistics network in Iberia and Europe.",
+        title: "About · Strategic partner — Atalant",
+      },
+      es: {
+        description:
+          "Treinta años conectando polímeros y personas. Atalant ofrece materias primas plásticas de máxima calidad con red logística propia en Iberia y Europa.",
+        title: "Nosotros · Socio estratégico — Atalant",
+      },
+      fr: {
+        description:
+          "Trente ans à relier polymères et personnes. Atalant fournit des matières premières plastiques de qualité maximale avec son propre réseau logistique en Ibérie et en Europe.",
+        title: "À propos · Partenaire stratégique — Atalant",
+      },
+      pt: {
+        description:
+          "Trinta anos a unir polímeros e pessoas. A Atalant oferece matérias-primas plásticas de máxima qualidade com rede logística própria na Ibéria e na Europa.",
+        title: "Sobre nós · Parceiro estratégico — Atalant",
+      },
     },
   },
   sostenibilidad: {
     copy: SUSTAINABILITY_COPY,
     pageType: "sostenibilidad",
     seo: {
-      description:
-        "Sostenibilidad industrial en Atalant: ISO 14001, generación de energía propia mediante módulos solares, silo trucks eléctricos y materiales reciclados.",
-      title: "Sostenibilidad industrial — Atalant",
+      en: {
+        description:
+          "Industrial sustainability at Atalant: ISO 14001, own energy generation through solar modules, electric silo trucks, and recycled materials.",
+        title: "Industrial sustainability — Atalant",
+      },
+      es: {
+        description:
+          "Sostenibilidad industrial en Atalant: ISO 14001, generación de energía propia mediante módulos solares, silo trucks eléctricos y materiales reciclados.",
+        title: "Sostenibilidad industrial — Atalant",
+      },
+      fr: {
+        description:
+          "Durabilité industrielle chez Atalant : ISO 14001, production d'énergie propre par modules solaires, silo trucks électriques et matériaux recyclés.",
+        title: "Durabilité industrielle — Atalant",
+      },
+      pt: {
+        description:
+          "Sustentabilidade industrial na Atalant: ISO 14001, geração de energia própria através de módulos solares, silo trucks elétricos e materiais reciclados.",
+        title: "Sustentabilidade industrial — Atalant",
+      },
     },
   },
 } as const;
@@ -536,7 +604,7 @@ async function seedStaticPages(locale: AppLocale) {
       },
       pageType: page.pageType,
       media: getStaticPageMedia(slug, mediaByFilename),
-      seo: page.seo,
+      seo: page.seo[locale],
       slug,
     };
 
