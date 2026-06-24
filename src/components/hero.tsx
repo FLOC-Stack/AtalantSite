@@ -19,7 +19,7 @@ const FALLBACK_HERO: HomeHero = {
   eyebrow: "Distribución de polímeros",
   headline: "Una evolución en la cadena de suministro.",
   body:
-    "Distribución de materia prima plástica y polímeros reciclados.\nMade for responding: Hechos para mantener tu producción",
+    "Distribución de materia prima plástica y polímeros reciclados.\nDiseñado para mantener tu producción en marcha",
   primaryLabel: "Catálogo de productos",
   secondaryLabel: "Nuestras soluciones",
 };

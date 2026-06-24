@@ -92,33 +92,33 @@ const staticPageMediaBySlug: Record<string, Record<string, string>> = {
 const homeNewsBlock: Omit<NewsBlock, "type"> = {
   anchorId: "news",
   body:
-    "Publicaciones recientes de Atalant. Contenido editorial y novedades de compañía gestionadas desde CMS.",
+    "Publicaciones recientes de Atalant. Novedades y contenidos editoriales.",
   ctaLabel: "Ver publicación",
   eyebrow: "LinkedIn",
   items: [
     {
-      date: "15 ABR 2026",
+      date: "25/06/2026",
       excerpt:
-        "Ampliamos capacidad operativa y reducimos los tiempos de entrega en el norte de Europa.",
+        "New website design to enhance the customer experience. Try to explore every corner",
       href: "https://www.linkedin.com/company/atalant-europe/",
-      imageAlt: "Polímeros Atalant",
-      title: "Nuevo hub logístico en Países Bajos",
+      imageAlt: "Atalant website",
+      title: "New Atalant's website!",
     },
     {
-      date: "02 ABR 2026",
+      date: "25/03/2026",
       excerpt:
-        "Nuestra línea de reciclados consolida su trazabilidad y calidad bajo estándar europeo.",
+        "Connecting with talented students at the University of Alicante Employment Marathon",
       href: "https://www.linkedin.com/company/atalant-europe/",
-      imageAlt: "Reciclados Greenlant Atalant",
-      title: "Greenlant alcanza certificación EuCertPlast",
+      imageAlt: "Alicante employment marathon",
+      title: "XXVII Alicante's Employment Marathon",
     },
     {
-      date: "20 MAR 2026",
+      date: "12/02/2026",
       excerpt:
-        "Reforzamos la oferta de polímeros técnicos con un nuevo contrato de suministro estable.",
+        "Atalant Europe expands its fleet with new trucks for efficient, reliable deliveries",
       href: "https://www.linkedin.com/company/atalant-europe/",
-      imageAlt: "Polímeros técnicos Atalant",
-      title: "Acuerdo con productor europeo de PP técnico",
+      imageAlt: "Atalant greener fleet",
+      title: "Transportation update for a professional greener future",
     },
   ],
   sectionLabel: "PUBLICACIONES RECIENTES",

@@ -162,7 +162,7 @@ const COPY_EN: LogisticaCopy = {
     {
       number: "03",
       title: "Lower costs and higher efficiency",
-      body: "Fewer intermediaries and optimized routes for more competitive pricing.",
+      body: "Fewer intermediaries and optimised routes for more competitive pricing.",
     },
     {
       number: "04",
@@ -292,7 +292,7 @@ const COPY_PT: LogisticaCopy = {
   networkLegend: "●  CENTRO / HUB      ○  REDE / DISTRIBUIÇÃO",
   processEyebrow: "PROCESSO  /  PORTA A PORTA",
   process: [
-    { roman: "01", title: "Origem", body: "Petroquímicas mundiais com a tecnologia mais recente disponível." },
+    { roman: "01", title: "Origem", body: "Petroquímicas mundiais equipadas com a última tecnologia" },
     { roman: "02", title: "Importação", body: "Importação através do nosso sistema integrado." },
     { roman: "03", title: "Armazenagem", body: "Armazenagem em locais estratégicos." },
     { roman: "04", title: "Entrega", body: "Entrega ao cliente com rastreabilidade." },

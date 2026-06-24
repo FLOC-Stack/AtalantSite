@@ -116,7 +116,7 @@ const HERO_BY_LOCALE: Record<AppLocale, ProductsMorphHero> = {
     eyebrow: "Catalogue produit",
     title: "Polymères de haute qualité\npour votre production.",
     body:
-      "Découvrez toutes nos familles de produits et procédés de transformation. Stock permanent en Europe, traçabilité par lot et conseil technique pour chaque application.",
+      "Découvrez toutes nos familles de produits et procédés de transformation. Stocks permanents en Europe, traçabilité par lot et conseils techniques pour chaque application.",
   },
   pt: {
     eyebrow: "Catálogo de produto",

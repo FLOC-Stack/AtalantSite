@@ -262,7 +262,7 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
     ],
     hero: {
       body:
-        "Distribution of plastic raw materials and recycled polymers.\nMade for responding: built to keep your production moving",
+        "Distribution of plastic raw materials and recycled polymers.\nBuilt to keep your production moving",
       eyebrow: "Polymer distribution",
       headline: "An evolution in the supply chain.",
       primaryLabel: "Explore product families",
@@ -337,7 +337,7 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
     ],
     hero: {
       body:
-        "Distribución de materia prima plástica y polímeros reciclados.\nMade for responding: Hechos para mantener tu producción",
+        "Distribución de materia prima plástica y polímeros reciclados.\nDiseñado para mantener tu producción en marcha",
       eyebrow: "Distribución de polímeros",
       headline: "Una evolución en la cadena de suministro.",
       primaryLabel: "Explorar productos",
@@ -373,7 +373,7 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
       },
       {
         anchorId: "financing",
-        body: "Nous apportons flexibilité, conseil et moins d'incertitude dans votre chaîne d'approvisionnement. Nous vous accompagnons tout au long du processus.",
+        body: "Nous apportons flexibilité, agilité, conseils et réduisons l'incertitude de votre chaîne d'approvisionnement. Atalant, c'est avant tout un accompagnement à chaque étape.",
         eyebrow: "Financement",
         title: "Nous maintenons votre flux d'approvisionnement constant",
         type: "section",
@@ -412,7 +412,7 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
     ],
     hero: {
       body:
-        "Distribution de matières premières plastiques et de polymères recyclés.\nConçu pour répondre : maintenir votre production en mouvement",
+        "Distribution de matières premières plastiques et de polymères recyclés.\nNotre philosophie : maintenir votre production en mouvement",
       eyebrow: "Distribution de polymères",
       headline: "Une évolution dans la chaîne d'approvisionnement.",
       primaryLabel: "Explorer les familles de produits",
@@ -487,7 +487,7 @@ export const fallbackHomePages: Record<AppLocale, HomePageData> = {
     ],
     hero: {
       body:
-        "Distribuição de matéria-prima plástica e polímeros reciclados.\nMade for responding: feitos para manter a sua produção em marcha",
+        "Distribuição de matéria-prima plástica e polímeros reciclados.\nConcebido para manter a sua produção em movimento",
       eyebrow: "Distribuição de polímeros",
       headline: "Uma evolução na cadeia de fornecimento.",
       primaryLabel: "Explorar famílias de produto",

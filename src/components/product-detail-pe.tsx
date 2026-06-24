@@ -239,9 +239,9 @@ const PE_COPY: Record<
     greenlantCta: "Voir Greenlant",
     greenlantEyebrow: "VERSION RECYCLÉE / GREENLANT",
     greenlantTitle: "rPE, polyéthylène recyclé.",
-    heroLines: ["Polyéthylène.", "Le polymère", "polyvalent."],
-    intro:
-      "Quatre grades de base couvrent 90 % des transformations industrielles du polyéthylène. Du film basse densité aux conteneurs rigides haute densité, tous les gradients sont couverts dans notre catalogue avec une réponse en 24/48 h depuis Alicante ou Valencia.",
+  	    heroLines: ["Polyéthylène.", "Le polymère", "polyvalent."],
+      intro:
+      "Quatre grades de base couvrent 90 % des transformations industrielles du polyéthylène. Du film basse densité aux conteneurs rigides haute densité, tous les grades sont couverts dans notre catalogue. Toutes les demandes peuvent être traitées sous 24/48h depuis nos dépôts d'Alicante ou de Valence.",
     meta: [
       { label: "GRADES", value: "HDPE · MDPE · LDPE · LLDPE" },
       { label: "TRANSFORMATION", value: "Injection · Extrusion · Soufflage · Film" },
@@ -313,7 +313,7 @@ const PE_COPY: Record<
     greenlantTitle: "rPE, polietileno reciclado.",
     heroLines: ["Polietileno.", "O polímero", "versátil."],
     intro:
-      "Quatro graus base cobrem 90% das transformações industriais do polietileno. Do filme de baixa densidade aos contentores rígidos de alta densidade, todos os gradientes estão cobertos no nosso catálogo com resposta em 24/48 h a partir de Alicante ou Valencia.",
+      "Quatro graus base cobrem 90% das transformações industriais do Polietileno. Desde o filme de baixa densidade até aos contentores rígidos de alta densidade, todas as aplicações estão cobertas pela gama de materiais disponíveis no nosso catálogo, com resposta em 24/48 horas a partir de Alicante ao Valência.",
     meta: [
       { label: "GRAUS", value: "HDPE · MDPE · LDPE · LLDPE" },
       { label: "TRANSFORMAÇÃO", value: "Injeção · Extrusão · Sopro · Filme" },

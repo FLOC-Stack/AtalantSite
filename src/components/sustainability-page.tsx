@@ -160,7 +160,7 @@ const COPY_EN: SustainabilityCopy = {
       number: "06",
       title: "Green hydrogen R&D",
       body:
-        "Investment and leadership in projects based on green hydrogen technologies for fuel cells and electrolyzers.",
+        "Investment and leadership in projects based on green hydrogen technologies for fuel cells and electrolysers.",
     },
   ],
   introEyebrow: "APPROACH  /  EFFICIENCY AND RESPONSIBILITY",
@@ -205,11 +205,11 @@ const COPY_FR: SustainabilityCopy = {
       body:
         "Système déployé dans tous les centres pour gérer, réduire et améliorer en continu l'impact environnemental de l'entreprise.",
     },
-    {
-      number: "02",
-      title: "Matériaux recyclés",
-      body:
-        "L'intégration de matériaux recyclés de haute qualité marque un précédent dans le plan de durabilité d'Atalant.",
+      {
+        number: "02",
+        title: "Matériaux recyclés",
+        body:
+        "L'intégration de matériaux recyclés de haute qualité crée une référence dans le plan de durabilité d'Atalant.",
     },
     {
       number: "03",
@@ -239,7 +239,7 @@ const COPY_FR: SustainabilityCopy = {
   introEyebrow: "APPROCHE  /  EFFICACITÉ ET RESPONSABILITÉ",
   introTitle: "Réduire l'impact sans réduire la réponse.",
   introBody:
-    "L'un des défis industriels les plus complexes consiste à être durable tout en conservant un travail efficace. La stratégie d'Atalant part d'une idée concrète : chaque amélioration environnementale doit s'intégrer au système opérationnel, et non vivre séparée de la réalité logistique et commerciale.",
+    "La durabilité exige de concilier efficacité, capacité et continuité. Atalant adapte ses opérations afin de réduire son empreinte environnementale tout en maintenant ces standards au cœur de son fonctionnement.",
   meta: [
     { label: "CERTIFICATION", value: "ISO 14001" },
     { label: "ÉNERGIE", value: "Production d'énergie propre grâce à des modules solaires" },
@@ -257,7 +257,7 @@ const COPY_FR: SustainabilityCopy = {
   systemsEyebrow: "SYSTÈME  /  AMÉLIORATION CONTINUE",
   systemsTitle: "La durabilité comme infrastructure, pas comme campagne.",
   systemsBody:
-    "La gestion environnementale relie achats, stockage, transport, énergie et R&D. Cette intégration permet de progresser dans la réduction d'impact sans perdre capacités industrielles ni vitesse de réponse.",
+    "La gestion environnementale relie achats, stockage, transport, énergie et R&D. Cette intégration permet de progresser dans la réduction d'impact écologique sans perdre en capacités industrielles ni en réactivité.",
 };
 
 const COPY_PT: SustainabilityCopy = {
@@ -278,17 +278,17 @@ const COPY_PT: SustainabilityCopy = {
       body:
         "Sistema implementado em todos os centros para gerir, reduzir e melhorar de forma constante o impacto ambiental da empresa.",
     },
-    {
-      number: "02",
-      title: "Materiais reciclados",
-      body:
-        "A inclusão de materiais reciclados de alta qualidade cria um precedente no plano de sustentabilidade da Atalant.",
-    },
-    {
-      number: "03",
-      title: "Energia solar",
-      body:
-        "Painéis solares em pontos logísticos para operar com menor dependência da rede elétrica e avançar para maior autossuficiência operacional.",
+      {
+        number: "02",
+        title: "Materiais reciclados",
+        body:
+        "A inclusão de materiais reciclados de alta qualidade cria um marco no plano de sustentabilidade da Atalant.",
+      },
+      {
+        number: "03",
+        title: "Energia solar",
+        body:
+        "Painéis solares instalados nos centros logísticos para operar com menor dependência da rede elétrica e avançar para maior autossuficiência operacional.",
     },
     {
       number: "04",
@@ -312,7 +312,7 @@ const COPY_PT: SustainabilityCopy = {
   introEyebrow: "ENFOQUE  /  EFICIÊNCIA E RESPONSABILIDADE",
   introTitle: "Reduzir impacto sem reduzir resposta.",
   introBody:
-    "Um dos desafios industriais mais complexos é ser sustentável mantendo um trabalho eficiente. A estratégia da Atalant parte de uma ideia concreta: cada melhoria ambiental deve integrar-se no sistema operativo, não viver separada da realidade logística e comercial.",
+    "Um dos desafios industriais mais complexos é ser sustentável mantendo um trabalho eficiente. A estratégia da Atalant parte de uma ideia concreta: cada melhoria ambiental deve ser integrada no seu todo, não viver separada da realidade logística e comercial.",
   meta: [
     { label: "CERTIFICAÇÃO", value: "ISO 14001" },
     { label: "ENERGIA", value: "Geração de energia própria através de módulos solares" },

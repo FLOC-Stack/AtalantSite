@@ -108,6 +108,7 @@ export default async function LocaleHomePage({ params }: Props) {
           ctaHref={financingBlock?.ctaHref}
         />
         <HomeNews
+          locale={typedLocale}
           title={newsBlock?.title}
           body={newsBlock?.body}
           sectionLabel={newsBlock?.sectionLabel}
