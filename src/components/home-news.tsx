@@ -186,7 +186,14 @@ const FALLBACK_NEWS_BY_LOCALE: Record<AppLocale, NewsCopy> = {
   },
 };
 
-const LEGACY_NEWS_INDICATORS = {
+const LEGACY_NEWS_INDICATORS: Partial<Record<AppLocale, {
+  title: string;
+  body: string;
+  sectionLabel: string;
+  indexLabel: string;
+  ctaLabel: string;
+  itemTitles: readonly string[];
+}>> = {
   es: {
     title: "Últimas\npublicaciones.",
     body: "Publicaciones recientes de Atalant. Contenido editorial y novedades de compañía gestionadas desde CMS.",
@@ -199,7 +206,7 @@ const LEGACY_NEWS_INDICATORS = {
       "Acuerdo con productor europeo de PP técnico",
     ],
   },
-} as const;
+};
 
 function normalizeText(text?: string) {
   return (text ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
