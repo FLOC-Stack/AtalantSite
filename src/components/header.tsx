@@ -169,9 +169,9 @@ export function Header({
   const pathname = usePathname() ?? "";
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  // Pill compacto sii la página está scrolleada. El hover ya no re-expande
-  // (patrón new.studio): solo el click en hamburger abre el drawer dentro
-  // del propio pill.
+  // El pill es compacto cuando hay scroll; en la zona de final de home
+  // (penúltimo bloque / footer), lo dejamos expandido para que el menú
+  // general siga visible en pantallas grandes.
   const isCompact = collapsed;
 
   // Refs para la coreografía de entrada de los elementos del nav cuando
@@ -196,6 +196,26 @@ export function Header({
   const resolvedCtaLabel = ctaLabel ?? fallbackStrings[locale].contact;
   const resolvedCtaHref = ctaHref ?? buildContactoPath(locale);
 
+  const isHomePath = pathname === `/${locale}` || pathname === `/${locale}/`;
+
+  const shouldForceExpandNearBottom = (scrollY: number) => {
+    if (!isHomePath) return false;
+    if (window.innerWidth < 1024) return false;
+
+    const footer = document.querySelector("footer");
+    const viewportHeight = window.innerHeight || 0;
+    const footerVisibleThreshold = viewportHeight * 1.25;
+
+    if (footer) {
+      const footerTop = footer.getBoundingClientRect().top;
+      return footerTop <= footerVisibleThreshold;
+    }
+
+    const remainingDistance = document.documentElement.scrollHeight - (scrollY + viewportHeight);
+    const expandDistance = viewportHeight;
+    return remainingDistance <= expandDistance;
+  };
+
   // Scroll listener con requestAnimationFrame: el handler solo corre una
   // vez por frame aunque el evento dispare 100+ veces por segundo.
   useEffect(() => {
@@ -204,9 +224,11 @@ export function Header({
       if (frame !== null) return;
       frame = requestAnimationFrame(() => {
         frame = null;
-        const next = window.scrollY > 80;
-        setCollapsed(next);
-        if (next) setOpen(false);
+        const scrollY = window.scrollY;
+        const isScrolled = scrollY > 80;
+        const forceExpanded = shouldForceExpandNearBottom(scrollY);
+        setCollapsed(isScrolled && !forceExpanded);
+        if (isScrolled) setOpen(false);
       });
     };
     onScroll();
