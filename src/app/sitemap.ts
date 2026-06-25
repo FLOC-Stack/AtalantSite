@@ -2,8 +2,12 @@ import type { MetadataRoute } from "next";
 import { locales } from "@/lib/locales";
 import { getPublishedFamilySitemapEntries } from "@/lib/payload-data";
 import {
+  buildAboutPath,
   buildFamilyPath,
+  buildContactoPath,
   buildCookiesPath,
+  buildFinancingPath,
+  buildLogisticsPath,
   buildLegalNoticePath,
   buildLocalePath,
   buildPrivacyPath,
@@ -33,6 +37,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
       url: `${baseURL}${buildProductsPath(locale)}`,
     });
+
+    for (const businessPath of [
+      buildFinancingPath(locale),
+      buildLogisticsPath(locale),
+      buildAboutPath(locale),
+      buildContactoPath(locale),
+    ]) {
+      routes.push({
+        changeFrequency: "monthly",
+        lastModified: new Date(),
+        priority: 0.7,
+        url: `${baseURL}${businessPath}`,
+      });
+    }
 
     routes.push({
       changeFrequency: "monthly",

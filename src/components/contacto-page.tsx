@@ -1,28 +1,12 @@
 import Link from "next/link";
 import type { AppLocale } from "@/lib/locales";
+import type { ContactoCopy } from "@/lib/content-types";
 import { NosotrosGrid } from "@/components/nosotros-grid";
 import { ContactoForm } from "@/components/contacto-form";
 
 type Props = {
+  copy?: ContactoCopy;
   locale: AppLocale;
-};
-
-type ContactoCopy = {
-  breadcrumb: string;
-  back: string;
-  monogram: string;
-  heroTitle: string;
-  heroBody: string;
-  metaLabels: { respuesta: string; horario: string; sede: string };
-  metaValues: { respuesta: string; horario: string; sede: string };
-  formEyebrow: string;
-  formTitle: string;
-  formBody: string;
-  ctaTitle: string;
-  ctaSubject: string;
-  ctaAction: string;
-  ctaFootnote: string;
-  phone: string;
 };
 
 const COPY_ES: ContactoCopy = {
@@ -137,7 +121,7 @@ const COPY_PT: ContactoCopy = {
   phone: "+34 965 66 18 28",
 };
 
-const COPY: Record<AppLocale, ContactoCopy> = {
+export const CONTACTO_COPY: Record<AppLocale, ContactoCopy> = {
   es: COPY_ES,
   en: COPY_EN,
   pt: COPY_PT,
@@ -152,8 +136,8 @@ function renderMultiline(text: string) {
   ));
 }
 
-export function ContactoPage({ locale }: Props) {
-  const copy = COPY[locale];
+export function ContactoPage({ copy: providedCopy, locale }: Props) {
+  const copy = providedCopy ?? CONTACTO_COPY[locale];
   const homeHref = `/${locale}`;
 
   return (

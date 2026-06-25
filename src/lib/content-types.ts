@@ -171,3 +171,36 @@ export type ProductFamilyData = {
   detail?: ProductFamilyDetailData;
   seo: SeoData;
 };
+
+export type ContactoCopy = {
+  breadcrumb: string;
+  back: string;
+  monogram: string;
+  heroTitle: string;
+  heroBody: string;
+  metaLabels: { respuesta: string; horario: string; sede: string };
+  metaValues: { respuesta: string; horario: string; sede: string };
+  formEyebrow: string;
+  formTitle: string;
+  formBody: string;
+  ctaTitle: string;
+  ctaSubject: string;
+  ctaAction: string;
+  ctaFootnote: string;
+  phone: string;
+};
+
+export type LegalPageKind = "privacy" | "cookies" | "legal";
+
+export type LegalCopy = {
+  back: string;
+  breadcrumb: string;
+  eyebrow: string;
+  intro: string;
+  title: string;
+  updated: string;
+  sections: Array<{
+    title: string;
+    body: string;
+  }>;
+};

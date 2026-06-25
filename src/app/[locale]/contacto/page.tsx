@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ContactoPage } from "@/components/contacto-page";
+import type { SeoData } from "@/lib/content-types";
 import { isLocale, type AppLocale } from "@/lib/locales";
+import { getContactoPageCopy, getPageSeo } from "@/lib/payload-data";
+import { buildContactoPath } from "@/lib/routes";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +14,7 @@ type Props = {
   }>;
 };
 
-const metadataByLocale: Record<AppLocale, Metadata> = {
+const seoByLocale: Record<AppLocale, SeoData> = {
   en: {
     title: "Contact · Atalant",
     description:
@@ -37,11 +40,23 @@ const metadataByLocale: Record<AppLocale, Metadata> = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
-  return metadataByLocale[locale as AppLocale];
+  const typedLocale = locale as AppLocale;
+  const seo = await getPageSeo("contacto", typedLocale, seoByLocale[typedLocale]);
+
+  return {
+    alternates: {
+      canonical: buildContactoPath(typedLocale),
+    },
+    description: seo.description,
+    title: seo.title,
+  };
 }
 
 export default async function ContactoRoute({ params }: Props) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  return <ContactoPage locale={locale as AppLocale} />;
+  const typedLocale = locale as AppLocale;
+  const copy = await getContactoPageCopy(typedLocale);
+
+  return <ContactoPage copy={copy} locale={typedLocale} />;
 }

@@ -1,7 +1,9 @@
 import configPromise from "@payload-config";
 import { cache } from "react";
+import { CONTACTO_COPY } from "@/components/contacto-page";
 import type { FinanciacionCopy } from "@/components/financiacion-page";
 import { FINANCIACION_COPY } from "@/components/financiacion-page";
+import { LEGAL_COPY } from "@/components/legal-page";
 import type { LogisticaCopy } from "@/components/logistica-page";
 import { LOGISTICA_COPY } from "@/components/logistica-page";
 import type { NosotrosCopy } from "@/components/nosotros-page";
@@ -9,13 +11,17 @@ import { NOSOTROS_COPY } from "@/components/nosotros-page";
 import type { SustainabilityCopy } from "@/components/sustainability-page";
 import { SUSTAINABILITY_COPY } from "@/components/sustainability-page";
 import type {
+  ContactoCopy,
   HomeBlock,
   HomePageData,
+  LegalCopy,
+  LegalPageKind,
   NewsBlock,
   ProductPreviewBlock,
   ProductFamilyDetailData,
   ProductFamilyData,
   ProductFamilyMedia,
+  SeoData,
   SiteSettingsData,
 } from "@/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "@/lib/fallback-content";
@@ -49,6 +55,13 @@ export type StaticPageSlug =
   | "nosotros"
   | "sostenibilidad";
 
+export type ContentPageSlug =
+  | StaticPageSlug
+  | "contacto"
+  | "privacidad"
+  | "cookies"
+  | "aviso-legal";
+
 type StaticPageCopyMap = {
   financiacion: FinanciacionCopy;
   logistica: LogisticaCopy;
@@ -63,6 +76,12 @@ const staticPageFallbacks: {
   logistica: LOGISTICA_COPY,
   nosotros: NOSOTROS_COPY,
   sostenibilidad: SUSTAINABILITY_COPY,
+};
+
+const legalSlugByKind: Record<LegalPageKind, Extract<ContentPageSlug, "privacidad" | "cookies" | "aviso-legal">> = {
+  cookies: "cookies",
+  legal: "aviso-legal",
+  privacy: "privacidad",
 };
 
 type ProductFamilySitemapEntry = {
@@ -553,6 +572,158 @@ export const getStaticPageCopy = cache(async function getStaticPageCopy<
         ? { ctaHref: normalizeContactHref(ctaHref, locale) }
         : {}),
     } as StaticPageCopyMap[Slug];
+  }
+});
+
+export const getPageSeo = cache(async function getPageSeo(
+  slug: ContentPageSlug,
+  locale: AppLocale,
+  fallback: SeoData,
+): Promise<SeoData> {
+  if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`seo:${slug}:${locale}`, "DATABASE_URL unavailable or production build");
+    return fallback;
+  }
+
+  try {
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "pages",
+      depth: 0,
+      draft: false,
+      limit: 1,
+      locale,
+      pagination: false,
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+    });
+
+    const page = result.docs[0] as PageDoc | undefined;
+
+    return {
+      description: page?.seo?.description || fallback.description,
+      title: page?.seo?.title || fallback.title,
+    };
+  } catch (error) {
+    warnPayloadFallback(`seo:${slug}:${locale}`, error);
+    return fallback;
+  }
+});
+
+function mergeContactoCopy(
+  fallback: ContactoCopy,
+  pageData: Record<string, unknown> | null,
+): ContactoCopy {
+  if (!pageData) return fallback;
+
+  return {
+    ...fallback,
+    ...pageData,
+    metaLabels: {
+      ...fallback.metaLabels,
+      ...asRecord(pageData.metaLabels),
+    },
+    metaValues: {
+      ...fallback.metaValues,
+      ...asRecord(pageData.metaValues),
+    },
+  } as ContactoCopy;
+}
+
+export const getContactoPageCopy = cache(async function getContactoPageCopy(
+  locale: AppLocale,
+): Promise<ContactoCopy> {
+  const fallback = CONTACTO_COPY[locale];
+
+  if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`contacto:${locale}`, "DATABASE_URL unavailable or production build");
+    return fallback;
+  }
+
+  try {
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "pages",
+      depth: 1,
+      draft: false,
+      limit: 1,
+      locale,
+      pagination: false,
+      where: {
+        slug: {
+          equals: "contacto",
+        },
+      },
+    });
+
+    const page = result.docs[0] as PageDoc | undefined;
+    return mergeContactoCopy(fallback, asRecord(page?.pageData));
+  } catch (error) {
+    warnPayloadFallback(`contacto:${locale}`, error);
+    return fallback;
+  }
+});
+
+function mergeLegalCopy(
+  fallback: LegalCopy,
+  pageData: Record<string, unknown> | null,
+): LegalCopy {
+  if (!pageData) return fallback;
+
+  const sections = Array.isArray(pageData.sections)
+    ? pageData.sections
+        .map((section) => {
+          const record = asRecord(section);
+          return typeof record?.title === "string" && typeof record.body === "string"
+            ? { body: record.body, title: record.title }
+            : null;
+        })
+        .filter(Boolean)
+    : fallback.sections;
+
+  return {
+    ...fallback,
+    ...pageData,
+    sections: sections.length ? (sections as LegalCopy["sections"]) : fallback.sections,
+  } as LegalCopy;
+}
+
+export const getLegalPageCopy = cache(async function getLegalPageCopy(
+  kind: LegalPageKind,
+  locale: AppLocale,
+): Promise<LegalCopy> {
+  const slug = legalSlugByKind[kind];
+  const fallback = LEGAL_COPY[locale][kind];
+
+  if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`${slug}:${locale}`, "DATABASE_URL unavailable or production build");
+    return fallback;
+  }
+
+  try {
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "pages",
+      depth: 1,
+      draft: false,
+      limit: 1,
+      locale,
+      pagination: false,
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+    });
+
+    const page = result.docs[0] as PageDoc | undefined;
+    return mergeLegalCopy(fallback, asRecord(page?.pageData));
+  } catch (error) {
+    warnPayloadFallback(`${slug}:${locale}`, error);
+    return fallback;
   }
 });
 

@@ -209,7 +209,16 @@ export interface Media {
 export interface Page {
   id: number;
   slug: string;
-  pageType: 'home' | 'logistica' | 'nosotros' | 'sostenibilidad' | 'financiacion';
+  pageType:
+    | 'home'
+    | 'logistica'
+    | 'nosotros'
+    | 'sostenibilidad'
+    | 'financiacion'
+    | 'contacto'
+    | 'privacidad'
+    | 'cookies'
+    | 'aviso-legal';
   hero: {
     eyebrow?: string | null;
     headline: string;

@@ -1,8 +1,10 @@
+import { CONTACTO_COPY } from "../src/components/contacto-page";
 import { FINANCIACION_COPY } from "../src/components/financiacion-page";
+import { LEGAL_COPY } from "../src/components/legal-page";
 import { LOGISTICA_COPY } from "../src/components/logistica-page";
 import { NOSOTROS_COPY } from "../src/components/nosotros-page";
 import { SUSTAINABILITY_COPY } from "../src/components/sustainability-page";
-import type { HomeBlock, NewsBlock } from "../src/lib/content-types";
+import type { HomeBlock, LegalPageKind, NewsBlock } from "../src/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "../src/lib/fallback-content";
 import { locales, type AppLocale } from "../src/lib/locales";
 import {
@@ -672,7 +674,116 @@ const staticPages = {
       },
     },
   },
+  contacto: {
+    copy: CONTACTO_COPY,
+    pageType: "contacto",
+    seo: {
+      en: {
+        description:
+          "Tell Atalant your polymer sourcing, financing, or logistics needs. The team responds in less than 24 working hours.",
+        title: "Contact Atalant — Polymer sourcing and logistics",
+      },
+      es: {
+        description:
+          "Cuéntale a Atalant tus necesidades de polímeros, financiación o logística. El equipo responde en menos de 24 horas laborables.",
+        title: "Contacto Atalant — Polímeros y logística",
+      },
+      fr: {
+        description:
+          "Présentez à Atalant vos besoins en polymères, financement ou logistique. L'équipe répond sous 24 heures ouvrables.",
+        title: "Contact Atalant — Polymères et logistique",
+      },
+      pt: {
+        description:
+          "Indique à Atalant as suas necessidades de polímeros, financiamento ou logística. A equipa responde em menos de 24 horas úteis.",
+        title: "Contacto Atalant — Polímeros e logística",
+      },
+    },
+  },
 } as const;
+
+const legalPages: Record<
+  "privacidad" | "cookies" | "aviso-legal",
+  {
+    kind: LegalPageKind;
+    pageType: "privacidad" | "cookies" | "aviso-legal";
+    seo: Record<AppLocale, { description: string; title: string }>;
+  }
+> = {
+  privacidad: {
+    kind: "privacy",
+    pageType: "privacidad",
+    seo: {
+      en: {
+        description: "Atalant privacy policy. Placeholder text pending legal review.",
+        title: "Privacy — Atalant",
+      },
+      es: {
+        description:
+          "Política de privacidad de Atalant. Texto placeholder pendiente de revisión legal.",
+        title: "Privacidad — Atalant",
+      },
+      fr: {
+        description:
+          "Politique de confidentialité d'Atalant. Texte placeholder en attente de révision juridique.",
+        title: "Confidentialité — Atalant",
+      },
+      pt: {
+        description:
+          "Política de privacidade da Atalant. Texto placeholder pendente de revisão jurídica.",
+        title: "Privacidade — Atalant",
+      },
+    },
+  },
+  cookies: {
+    kind: "cookies",
+    pageType: "cookies",
+    seo: {
+      en: {
+        description: "Atalant cookie policy. Placeholder text pending legal review.",
+        title: "Cookies — Atalant",
+      },
+      es: {
+        description:
+          "Política de cookies de Atalant. Texto placeholder pendiente de revisión legal.",
+        title: "Cookies — Atalant",
+      },
+      fr: {
+        description:
+          "Politique de cookies d'Atalant. Texte placeholder en attente de révision juridique.",
+        title: "Cookies — Atalant",
+      },
+      pt: {
+        description:
+          "Política de cookies da Atalant. Texto placeholder pendente de revisão jurídica.",
+        title: "Cookies — Atalant",
+      },
+    },
+  },
+  "aviso-legal": {
+    kind: "legal",
+    pageType: "aviso-legal",
+    seo: {
+      en: {
+        description: "Atalant legal notice. Placeholder text pending legal review.",
+        title: "Legal notice — Atalant",
+      },
+      es: {
+        description: "Aviso legal de Atalant. Texto placeholder pendiente de revisión legal.",
+        title: "Aviso legal — Atalant",
+      },
+      fr: {
+        description:
+          "Mentions légales d'Atalant. Texte placeholder en attente de révision juridique.",
+        title: "Mentions légales — Atalant",
+      },
+      pt: {
+        description: "Aviso legal da Atalant. Texto placeholder pendente de revisão jurídica.",
+        title: "Aviso legal — Atalant",
+      },
+    },
+  },
+};
 
 async function seedStaticPages(locale: AppLocale) {
   const payload = await getSeedPayload();
@@ -709,6 +820,54 @@ async function seedStaticPages(locale: AppLocale) {
       },
       pageType: page.pageType,
       media: getStaticPageMedia(slug, mediaByFilename),
+      seo: page.seo[locale],
+      slug,
+    };
+
+    if (existing.docs[0]) {
+      await payload.update({
+        collection: "pages",
+        data,
+        draft: false,
+        id: existing.docs[0].id,
+        locale,
+      });
+      continue;
+    }
+
+    await payload.create({
+      collection: "pages",
+      data,
+      draft: false,
+      locale,
+    });
+  }
+
+  for (const [slug, page] of Object.entries(legalPages)) {
+    const copy = LEGAL_COPY[locale][page.kind];
+    const existing = await payload.find({
+      collection: "pages",
+      limit: 1,
+      locale,
+      pagination: false,
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+    });
+
+    const data = {
+      _status: "published" as const,
+      hero: {
+        body: copy.intro,
+        eyebrow: copy.eyebrow,
+        headline: copy.title,
+        primaryLabel: copy.updated,
+        secondaryLabel: copy.back,
+      },
+      pageData: copy,
+      pageType: page.pageType,
       seo: page.seo[locale],
       slug,
     };

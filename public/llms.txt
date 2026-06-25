@@ -1,0 +1,30 @@
+# Atalant
+
+Atalant is a European industrial polymer partner for manufacturing buyers. The company supplies virgin, technical, and recycled plastic raw materials, with integrated logistics, internal financing support, and sustainability programs.
+
+## Core topics
+
+- Polymer sourcing and distribution in Europe.
+- Product families: EVA, PE, PET, PP, PS, PVC, recycled polymers, and technical polymers.
+- Integrated logistics with European hubs, bonded warehouses, fleet coordination, and traceability.
+- Internal credit and financing support for qualified industrial customers.
+- Sustainability initiatives including recycled materials, ISO 14001, renewable energy, and lower-impact logistics.
+
+## Key pages
+
+- Home: /
+- Products: /es/productos, /en/products, /fr/produits, /pt/produtos
+- Logistics: /es/logistica, /en/logistica, /fr/logistica, /pt/logistica
+- Financing: /es/financiacion, /en/financiacion, /fr/financiacion, /pt/financiacion
+- Sustainability: /es/sostenibilidad, /en/sostenibilidad, /fr/sostenibilidad, /pt/sostenibilidad
+- Contact: /es/contacto, /en/contacto, /fr/contacto, /pt/contacto
+
+## Commercial contact
+
+- Email: logistics@atalant.com
+- Phone: +34 965 66 18 28
+- Headquarters: Alicante, Spain
+
+## Content governance
+
+Primary website content is managed through Payload CMS collections and globals: pages, product families, media, and site settings. Legal page text may still require final legal validation before launch.
