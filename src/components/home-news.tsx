@@ -46,27 +46,27 @@ const FALLBACK_NEWS_BY_LOCALE: Record<AppLocale, NewsCopy> = {
     items: [
       {
         date: "25/06/2026",
-        title: "New Atalant's website!",
+        title: "¡Nuevo sitio web de Atalant!",
         excerpt:
-          "New website design to enhance the customer experience. Try to explore every corner",
+          "Nuevo diseño de sitio web para mejorar la experiencia de compra. Explora cada rincón",
         href: LINKEDIN_URL,
         image: "/imgsrc/atalant-post-1.webp",
         imageAlt: "Atalant website",
       },
       {
         date: "25/03/2026",
-        title: "XXVII Alicante's Employment Marathon",
+        title: "Maratón de Empleo de Alicante XXIVII",
         excerpt:
-          "Connecting with talented students at the University of Alicante Employment Marathon",
+          "Conexión con estudiantes y talento en el Maratón de Empleo de la Universidad de Alicante",
         href: LINKEDIN_URL,
         image: "/imgsrc/atalant-post-2.webp",
         imageAlt: "Alicante employment marathon",
       },
       {
         date: "12/02/2026",
-        title: "Transportation update for a professional greener future",
+        title: "Actualización de transporte para un futuro más verde",
         excerpt:
-          "Atalant Europe expands its fleet with new trucks for efficient, reliable deliveries",
+          "Atalant Europe amplía su flota con nuevos camiones para entregas más eficientes y seguras",
         href: LINKEDIN_URL,
         image: "/imgsrc/atalant-post-3.webp",
         imageAlt: "Atalant greener fleet",
@@ -194,6 +194,18 @@ const LEGACY_NEWS_INDICATORS: Partial<Record<AppLocale, {
   ctaLabel: string;
   itemTitles: readonly string[];
 }>> = {
+  en: {
+    title: "Latest\nupdates.",
+    body: "Latest posts from Atalant with company news and editorial updates.",
+    sectionLabel: "RECENT POSTS",
+    indexLabel: "NO. 05 — NEWS / UPDATES",
+    ctaLabel: "Open publication",
+    itemTitles: [
+      "New logistics routes across Europe",
+      "Recycled materials sustainability update",
+      "New technical resins supply agreement",
+    ],
+  },
   es: {
     title: "Últimas\npublicaciones.",
     body: "Publicaciones recientes de Atalant. Contenido editorial y novedades de compañía gestionadas desde CMS.",
@@ -204,6 +216,30 @@ const LEGACY_NEWS_INDICATORS: Partial<Record<AppLocale, {
       "Nuevo hub logístico en Países Bajos",
       "Greenlant alcanza certificación EuCertPlast",
       "Acuerdo con productor europeo de PP técnico",
+    ],
+  },
+  fr: {
+    title: "Dernières\npublications.",
+    body: "Publications récentes Atalant : actualités d'entreprise et contenus éditoriaux.",
+    sectionLabel: "PUBLICATIONS RÉCENTES",
+    indexLabel: "N° 05 — COMMUNICATION / ACTUALITÉS",
+    ctaLabel: "Voir la publication",
+    itemTitles: [
+      "Nouvelles routes logistiques en Europe",
+      "Avancée durable sur les matériaux recyclés",
+      "Nouveau partenariat avec fournisseurs techniques",
+    ],
+  },
+  pt: {
+    title: "Últimas\npublicações.",
+    body: "Publicações recentes da Atalant: novidades e conteúdos editoriais.",
+    sectionLabel: "PUBLICAÇÕES RECENTES",
+    indexLabel: "N° 05 — COMUNICAÇÃO / NOVAS",
+    ctaLabel: "Ver publicação",
+    itemTitles: [
+      "Novas rotas logísticas na Europa",
+      "Avanço sustentável em reciclados",
+      "Acordo com novos fornecedores técnicos",
     ],
   },
 };
@@ -257,6 +293,22 @@ function isLegacyNewsCopy(
   );
 }
 
+function isLocaleNewsCopySwapped(
+  locale: AppLocale,
+  props: {
+    indexLabel?: string;
+    title?: string;
+    body?: string;
+    sectionLabel?: string;
+    ctaLabel?: string;
+    items?: NewsItem[];
+  },
+) {
+  return Object.entries(LEGACY_NEWS_INDICATORS).some(([otherLocale]) => {
+    return otherLocale !== locale && isLegacyNewsCopy(otherLocale as AppLocale, props);
+  });
+}
+
 function renderMultiline(text: string) {
   return text.split("\n").map((line, i) => (
     <span key={i} className="block">
@@ -277,8 +329,15 @@ export function HomeNews({
 }: Props = {}) {
   const fallback = FALLBACK_NEWS_BY_LOCALE[locale];
   const useFallback =
-    locale === "es" &&
     isLegacyNewsCopy(locale, {
+      indexLabel,
+      title,
+      body,
+      sectionLabel,
+      ctaLabel,
+      items,
+    }) ||
+    isLocaleNewsCopySwapped(locale, {
       indexLabel,
       title,
       body,

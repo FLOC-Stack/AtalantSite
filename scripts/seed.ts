@@ -89,40 +89,144 @@ const staticPageMediaBySlug: Record<string, Record<string, string>> = {
   },
 };
 
-const homeNewsBlock: Omit<NewsBlock, "type"> = {
-  anchorId: "news",
-  body:
-    "Publicaciones recientes de Atalant. Novedades y contenidos editoriales.",
-  ctaLabel: "Ver publicación",
-  eyebrow: "LinkedIn",
-  items: [
-    {
-      date: "25/06/2026",
-      excerpt:
-        "New website design to enhance the customer experience. Try to explore every corner",
-      href: "https://www.linkedin.com/company/atalant-europe/",
-      imageAlt: "Atalant website",
-      title: "New Atalant's website!",
-    },
-    {
-      date: "25/03/2026",
-      excerpt:
-        "Connecting with talented students at the University of Alicante Employment Marathon",
-      href: "https://www.linkedin.com/company/atalant-europe/",
-      imageAlt: "Alicante employment marathon",
-      title: "XXVII Alicante's Employment Marathon",
-    },
-    {
-      date: "12/02/2026",
-      excerpt:
-        "Atalant Europe expands its fleet with new trucks for efficient, reliable deliveries",
-      href: "https://www.linkedin.com/company/atalant-europe/",
-      imageAlt: "Atalant greener fleet",
-      title: "Transportation update for a professional greener future",
-    },
-  ],
-  sectionLabel: "PUBLICACIONES RECIENTES",
-  title: "Últimas\npublicaciones.",
+const homeNewsBlock: Record<AppLocale, Omit<NewsBlock, "type">> = {
+  en: {
+    anchorId: "news",
+    body: "Latest posts from Atalant with company news and editorial updates.",
+    ctaLabel: "Open publication",
+    eyebrow: "LinkedIn",
+    items: [
+      {
+        date: "APR 15, 2026",
+        excerpt: "We increased operational capacity and strengthened coverage across key hubs.",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Atalant polymers",
+        title: "New logistics routes across Europe",
+      },
+      {
+        date: "APR 2, 2026",
+        excerpt:
+          "We reinforce traceability and quality with advanced circularity standards.",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Atalant recycled materials",
+        title: "Recycled materials sustainability update",
+      },
+      {
+        date: "MAR 20, 2026",
+        excerpt:
+          "Our technical polymers portfolio is supported by a more stable supply chain.",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Atalant technical polymers",
+        title: "New technical resins supply agreement",
+      },
+    ],
+    sectionLabel: "RECENT POSTS",
+    title: "Latest\nupdates.",
+  },
+  es: {
+    anchorId: "news",
+    body:
+      "Publicaciones recientes de Atalant. Novedades y contenidos editoriales.",
+    ctaLabel: "Ver publicación",
+    eyebrow: "LinkedIn",
+    items: [
+      {
+        date: "25/06/2026",
+        excerpt:
+          "Nuevo diseño de sitio web para mejorar la experiencia de compra. Explora cada rincón",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Atalant website",
+        title: "¡Nuevo sitio web de Atalant!",
+      },
+      {
+        date: "25/03/2026",
+        excerpt:
+          "Conexión con estudiantes y talento en el Maratón de Empleo de la Universidad de Alicante",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Alicante employment marathon",
+        title: "XXVII Maratón de Empleo de Alicante",
+      },
+      {
+        date: "12/02/2026",
+        excerpt:
+          "Atalant Europe amplía su flota con nuevos camiones para entregas más eficientes y seguras",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Atalant greener fleet",
+        title: "Actualización de transporte para un futuro más verde",
+      },
+    ],
+    sectionLabel: "PUBLICACIONES RECIENTES",
+    title: "Últimas\npublicaciones.",
+  },
+  fr: {
+    anchorId: "news",
+    body:
+      "Publications récentes Atalant : actualités d'entreprise et contenus éditoriaux.",
+    ctaLabel: "Voir la publication",
+    eyebrow: "LinkedIn",
+    items: [
+      {
+        date: "15 AVR 2026",
+        excerpt:
+          "Nous avons renforcé la capacité opérationnelle et élargi la couverture en Europe.",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Polymères Atalant",
+        title: "Nouvelles routes logistiques en Europe",
+      },
+      {
+        date: "02 AVR 2026",
+        excerpt:
+          "Nous consolidons la traçabilité et la qualité selon des standards européens.",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Matériaux recyclés Greenlant Atalant",
+        title: "Avancée durable sur les matériaux recyclés",
+      },
+      {
+        date: "20 MARS 2026",
+        excerpt:
+          "Nous consolidons l'offre de polymères techniques avec une chaîne d'approvisionnement plus stable.",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Polymères techniques Atalant",
+        title: "Nouveau partenariat avec fournisseurs techniques",
+      },
+    ],
+    sectionLabel: "PUBLICATIONS RÉCENTES",
+    title: "Dernières\npublications.",
+  },
+  pt: {
+    anchorId: "news",
+    body: "Publicações recentes da Atalant: novidades e conteúdos editoriais.",
+    ctaLabel: "Ver publicação",
+    eyebrow: "LinkedIn",
+    items: [
+      {
+        date: "15 ABR 2026",
+        excerpt:
+          "Aumentámos a capacidade operacional e reforçámos a cobertura regional.",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Polímeros Atalant",
+        title: "Novas rotas logísticas na Europa",
+      },
+      {
+        date: "02 ABR 2026",
+        excerpt:
+          "Consolidámos a rastreabilidade e a qualidade sob padrões europeus de circularidade.",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Reciclados Greenlant Atalant",
+        title: "Avanço sustentável em reciclados",
+      },
+      {
+        date: "20 MAR 2026",
+        excerpt:
+          "Reforçámos a oferta de polímeros técnicos com uma cadeia de fornecimento mais estável.",
+        href: "https://www.linkedin.com/company/atalant-europe/",
+        imageAlt: "Polímeros técnicos Atalant",
+        title: "Acordo com novos fornecedores técnicos",
+      },
+    ],
+    sectionLabel: "PUBLICAÇÕES RECENTES",
+    title: "Últimas\npublicações.",
+  },
 };
 
 const homeNewsImageFilenames = [
@@ -252,14 +356,15 @@ function getStaticPageMedia(slug: string, mediaByFilename: Map<string | null | u
   );
 }
 
-function serializeNewsBlock(mediaByFilename: Map<string | null | undefined, number>) {
+function serializeNewsBlock(mediaByFilename: Map<string | null | undefined, number>, locale: AppLocale) {
+  const homeNewsBlockLocale = homeNewsBlock[locale];
   return {
-    anchorId: homeNewsBlock.anchorId,
+    anchorId: homeNewsBlockLocale.anchorId,
     blockType: "news" as const,
-    body: homeNewsBlock.body,
-    ctaLabel: homeNewsBlock.ctaLabel,
-    eyebrow: homeNewsBlock.eyebrow,
-    items: homeNewsBlock.items.map((item, index) => ({
+    body: homeNewsBlockLocale.body,
+    ctaLabel: homeNewsBlockLocale.ctaLabel,
+    eyebrow: homeNewsBlockLocale.eyebrow,
+    items: homeNewsBlockLocale.items.map((item, index) => ({
       date: item.date,
       excerpt: item.excerpt,
       href: item.href,
@@ -267,8 +372,8 @@ function serializeNewsBlock(mediaByFilename: Map<string | null | undefined, numb
       imageAlt: item.imageAlt,
       title: item.title,
     })),
-    sectionLabel: homeNewsBlock.sectionLabel,
-    title: homeNewsBlock.title,
+    sectionLabel: homeNewsBlockLocale.sectionLabel,
+    title: homeNewsBlockLocale.title,
   };
 }
 
@@ -434,7 +539,7 @@ async function seedHomePage(locale: AppLocale) {
     },
     layoutBlocks: [
       ...serializeBlocks(data.blocks, locale),
-      serializeNewsBlock(mediaByFilename),
+      serializeNewsBlock(mediaByFilename, locale),
     ],
     media: compactMediaFields({
       homeProductsVideo: mediaByFilename.get("video-morp-atalant.mp4"),
