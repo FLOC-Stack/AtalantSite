@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,7 +18,6 @@ import {
   buildSustainabilityPath,
   buildSectionPath,
   switchLocalePath,
-  withPageTopAnchor,
 } from "@/lib/routes";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
@@ -92,11 +91,11 @@ const fallbackStrings: Record<AppLocale, FallbackStrings> = {
 function buildFallbackNav(locale: AppLocale): HeaderLink[] {
   const t = fallbackStrings[locale];
   return [
-    { label: t.products, href: withPageTopAnchor(buildProductsPath(locale)) },
-    { label: t.logistics, href: withPageTopAnchor(buildLogisticsPath(locale)) },
-    { label: t.financing, href: withPageTopAnchor(buildFinancingPath(locale)) },
-    { label: t.sustainability, href: withPageTopAnchor(buildSustainabilityPath(locale)) },
-    { label: t.about, href: withPageTopAnchor(buildAboutPath(locale)) },
+    { label: t.products, href: buildProductsPath(locale) },
+    { label: t.logistics, href: buildLogisticsPath(locale) },
+    { label: t.financing, href: buildFinancingPath(locale) },
+    { label: t.sustainability, href: buildSustainabilityPath(locale) },
+    { label: t.about, href: buildAboutPath(locale) },
   ];
 }
 
@@ -173,20 +172,20 @@ function resolveSectionPath(sectionId: string, label: string, locale: AppLocale)
 }
 
 function resolveHref(item: NavItem, locale: AppLocale): string {
-  if (item.kind === "products") return withPageTopAnchor(buildProductsPath(locale));
-  if (item.kind === "logistics") return withPageTopAnchor(buildLogisticsPath(locale));
+  if (item.kind === "products") return buildProductsPath(locale);
+  if (item.kind === "logistics") return buildLogisticsPath(locale);
   if (item.kind === "external") {
     const href = (typeof item.href === "string" ? item.href : "").trim();
     if (href && href !== "#" && !href.startsWith("#") && href !== "/#") {
       return href;
     }
-    return withPageTopAnchor(resolveSectionPath(item.sectionId ?? item.label, item.label, locale));
+    return resolveSectionPath(item.sectionId ?? item.label, item.label, locale);
   }
   if (item.kind === "section") {
-    return withPageTopAnchor(resolveSectionPath(item.sectionId ?? "", item.label, locale));
+    return resolveSectionPath(item.sectionId ?? "", item.label, locale);
   }
-  if (isAboutNavItem(item)) return withPageTopAnchor(buildAboutPath(locale));
-  return withPageTopAnchor(buildSectionPath(locale, normalizeSectionToken(item.sectionId ?? item.label)));
+  if (isAboutNavItem(item)) return buildAboutPath(locale);
+  return buildSectionPath(locale, normalizeSectionToken(item.sectionId ?? item.label));
 }
 
 // Un link se considera "activo" solo si apunta a una página entera
@@ -194,6 +193,11 @@ function resolveHref(item: NavItem, locale: AppLocale): string {
 // Los links a secciones con hash se omiten hasta que haya scroll-spy.
 function isActiveLink(href: string, pathname: string): boolean {
   return href.split("#", 1)[0] === pathname;
+}
+
+function scrollCurrentPageToTop() {
+  document.documentElement.classList.remove("home-scroll-snap-enabled");
+  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 }
 
 export function Header({
@@ -231,7 +235,17 @@ export function Header({
       )
     : buildFallbackNav(locale);
   const resolvedCtaLabel = ctaLabel ?? fallbackStrings[locale].contact;
-  const resolvedCtaHref = withPageTopAnchor(ctaHref ?? buildContactoPath(locale));
+  const resolvedCtaHref = ctaHref ?? buildContactoPath(locale);
+
+  const handleInternalLinkClick = (
+    href: string,
+    event: MouseEvent<HTMLAnchorElement>,
+  ) => {
+    setOpen(false);
+    if (href.split("#", 1)[0] !== pathname) return;
+    event.preventDefault();
+    scrollCurrentPageToTop();
+  };
 
   const isHomePath = pathname === `/${locale}` || pathname === `/${locale}/`;
 
@@ -410,8 +424,8 @@ export function Header({
             }`}
           >
             <Link
-              href={withPageTopAnchor(`/${locale}`)}
-              onClick={() => setOpen(false)}
+              href={`/${locale}`}
+              onClick={(event) => handleInternalLinkClick(`/${locale}`, event)}
               className="shrink-0 cursor-pointer"
               aria-label={`${brandName} home`}
             >
@@ -442,6 +456,7 @@ export function Header({
                       <Link
                         aria-current={active ? "page" : undefined}
                         href={link.href}
+                        onClick={(event) => handleInternalLinkClick(link.href, event)}
                         className={`font-sans text-[14px] transition-colors hover:text-primary ${
                           active ? "text-primary-dark" : "text-foreground"
                         }`}
@@ -465,6 +480,7 @@ export function Header({
               <Link
                 ref={ctaRef}
                 href={resolvedCtaHref}
+                onClick={(event) => handleInternalLinkClick(resolvedCtaHref, event)}
                 className={`h-9 items-center overflow-hidden rounded bg-primary text-white ${
                   isCompact ? "hidden" : "hidden sm:flex"
                 }`}
@@ -529,7 +545,7 @@ export function Header({
                         <Link
                           aria-current={active ? "page" : undefined}
                           href={link.href}
-                          onClick={() => setOpen(false)}
+                          onClick={(event) => handleInternalLinkClick(link.href, event)}
                           className={`block font-sans text-[15px] transition-opacity hover:opacity-70 ${
                             active ? "text-primary-dark" : "text-foreground"
                           }`}
@@ -562,7 +578,7 @@ export function Header({
                 <div className="mt-4">
                   <Link
                     href={resolvedCtaHref}
-                    onClick={() => setOpen(false)}
+                    onClick={(event) => handleInternalLinkClick(resolvedCtaHref, event)}
                     className="flex h-9 items-center justify-between overflow-hidden rounded bg-primary text-white"
                   >
                     <span className="px-5 font-mono text-[12px] uppercase tracking-[2px]">

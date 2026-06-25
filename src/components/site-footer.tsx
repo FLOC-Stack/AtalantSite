@@ -13,7 +13,6 @@ import {
   buildAboutPath,
   buildSectionPath,
   buildSustainabilityPath,
-  withPageTopAnchor,
 } from "@/lib/routes";
 import { fallbackSiteSettings } from "@/lib/fallback-content";
 import { FooterEmailCopy } from "@/components/footer-email-copy";
@@ -90,28 +89,28 @@ const footerCopy: Record<
 
 const fallbackLinks: Record<AppLocale, FooterLink[]> = {
   en: [
-    { label: "Products", href: withPageTopAnchor(buildProductsPath("en")) },
-    { label: "Logistics", href: withPageTopAnchor(buildLogisticsPath("en")) },
-    { label: "Financing", href: withPageTopAnchor(buildFinancingPath("en")) },
-    { label: "Sustainability", href: withPageTopAnchor(buildSustainabilityPath("en")) },
+    { label: "Products", href: buildProductsPath("en") },
+    { label: "Logistics", href: buildLogisticsPath("en") },
+    { label: "Financing", href: buildFinancingPath("en") },
+    { label: "Sustainability", href: buildSustainabilityPath("en") },
   ],
   es: [
-    { label: "Productos", href: withPageTopAnchor(buildProductsPath("es")) },
-    { label: "Logística", href: withPageTopAnchor(buildLogisticsPath("es")) },
-    { label: "Financiación", href: withPageTopAnchor(buildFinancingPath("es")) },
-    { label: "Sostenibilidad", href: withPageTopAnchor(buildSustainabilityPath("es")) },
+    { label: "Productos", href: buildProductsPath("es") },
+    { label: "Logística", href: buildLogisticsPath("es") },
+    { label: "Financiación", href: buildFinancingPath("es") },
+    { label: "Sostenibilidad", href: buildSustainabilityPath("es") },
   ],
   fr: [
-    { label: "Produits", href: withPageTopAnchor(buildProductsPath("fr")) },
-    { label: "Logistique", href: withPageTopAnchor(buildLogisticsPath("fr")) },
-    { label: "Financement", href: withPageTopAnchor(buildFinancingPath("fr")) },
-    { label: "Durabilité", href: withPageTopAnchor(buildSustainabilityPath("fr")) },
+    { label: "Produits", href: buildProductsPath("fr") },
+    { label: "Logistique", href: buildLogisticsPath("fr") },
+    { label: "Financement", href: buildFinancingPath("fr") },
+    { label: "Durabilité", href: buildSustainabilityPath("fr") },
   ],
   pt: [
-    { label: "Produtos", href: withPageTopAnchor(buildProductsPath("pt")) },
-    { label: "Logística", href: withPageTopAnchor(buildLogisticsPath("pt")) },
-    { label: "Financiamento", href: withPageTopAnchor(buildFinancingPath("pt")) },
-    { label: "Sustentabilidade", href: withPageTopAnchor(buildSustainabilityPath("pt")) },
+    { label: "Produtos", href: buildProductsPath("pt") },
+    { label: "Logística", href: buildLogisticsPath("pt") },
+    { label: "Financiamento", href: buildFinancingPath("pt") },
+    { label: "Sustentabilidade", href: buildSustainabilityPath("pt") },
   ],
 };
 
@@ -149,19 +148,19 @@ function resolveFooterSectionPath(sectionId: string, label: string, locale: AppL
 }
 
 function resolveFooterHref(item: NavItem, locale: AppLocale): string {
-  if (item.kind === "products") return withPageTopAnchor(buildProductsPath(locale));
-  if (item.kind === "logistics") return withPageTopAnchor(buildLogisticsPath(locale));
+  if (item.kind === "products") return buildProductsPath(locale);
+  if (item.kind === "logistics") return buildLogisticsPath(locale);
   if (item.kind === "external") {
     const href = typeof item.href === "string" ? item.href.trim() : "";
     if (href && href !== "#" && !href.startsWith("#") && href !== "/#") {
       return href;
     }
-    return withPageTopAnchor(resolveFooterSectionPath(item.sectionId ?? "", item.label, locale));
+    return resolveFooterSectionPath(item.sectionId ?? "", item.label, locale);
   }
   if (item.kind === "section") {
-    return withPageTopAnchor(resolveFooterSectionPath(item.sectionId ?? "", item.label, locale));
+    return resolveFooterSectionPath(item.sectionId ?? "", item.label, locale);
   }
-  return withPageTopAnchor(resolveFooterSectionPath(item.sectionId ?? "", item.label, locale));
+  return resolveFooterSectionPath(item.sectionId ?? "", item.label, locale);
 }
 
 function getColumns(locale: AppLocale, settings: SiteSettingsData): FooterColumn[] {

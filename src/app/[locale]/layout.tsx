@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { Header } from "@/components/header";
+import { RouteScrollReset } from "@/components/route-scroll-reset";
 import { SiteFooter } from "@/components/site-footer";
 import { getSiteSettings } from "@/lib/payload-data";
 import { isLocale, type AppLocale } from "@/lib/locales";
@@ -30,7 +31,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <>
-      <div id="page-top" aria-hidden="true" className="sr-only" />
+      <RouteScrollReset />
       <Header
         locale={typedLocale}
         brandName={settings?.brandName}
