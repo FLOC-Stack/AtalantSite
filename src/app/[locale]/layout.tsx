@@ -30,6 +30,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <>
+      <div id="page-top" aria-hidden="true" className="sr-only" />
       <Header
         locale={typedLocale}
         brandName={settings?.brandName}

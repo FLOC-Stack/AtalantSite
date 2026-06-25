@@ -18,6 +18,7 @@ import {
   buildSustainabilityPath,
   buildSectionPath,
   switchLocalePath,
+  withPageTopAnchor,
 } from "@/lib/routes";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
@@ -91,11 +92,11 @@ const fallbackStrings: Record<AppLocale, FallbackStrings> = {
 function buildFallbackNav(locale: AppLocale): HeaderLink[] {
   const t = fallbackStrings[locale];
   return [
-    { label: t.products, href: buildProductsPath(locale) },
-    { label: t.logistics, href: buildLogisticsPath(locale) },
-    { label: t.financing, href: buildFinancingPath(locale) },
-    { label: t.sustainability, href: buildSustainabilityPath(locale) },
-    { label: t.about, href: buildAboutPath(locale) },
+    { label: t.products, href: withPageTopAnchor(buildProductsPath(locale)) },
+    { label: t.logistics, href: withPageTopAnchor(buildLogisticsPath(locale)) },
+    { label: t.financing, href: withPageTopAnchor(buildFinancingPath(locale)) },
+    { label: t.sustainability, href: withPageTopAnchor(buildSustainabilityPath(locale)) },
+    { label: t.about, href: withPageTopAnchor(buildAboutPath(locale)) },
   ];
 }
 
@@ -172,28 +173,27 @@ function resolveSectionPath(sectionId: string, label: string, locale: AppLocale)
 }
 
 function resolveHref(item: NavItem, locale: AppLocale): string {
-  if (item.kind === "products") return buildProductsPath(locale);
-  if (item.kind === "logistics") return buildLogisticsPath(locale);
+  if (item.kind === "products") return withPageTopAnchor(buildProductsPath(locale));
+  if (item.kind === "logistics") return withPageTopAnchor(buildLogisticsPath(locale));
   if (item.kind === "external") {
     const href = (typeof item.href === "string" ? item.href : "").trim();
     if (href && href !== "#" && !href.startsWith("#") && href !== "/#") {
       return href;
     }
-    return resolveSectionPath(item.sectionId ?? item.label, item.label, locale);
+    return withPageTopAnchor(resolveSectionPath(item.sectionId ?? item.label, item.label, locale));
   }
   if (item.kind === "section") {
-    return resolveSectionPath(item.sectionId ?? "", item.label, locale);
+    return withPageTopAnchor(resolveSectionPath(item.sectionId ?? "", item.label, locale));
   }
-  if (isAboutNavItem(item)) return buildAboutPath(locale);
-  return buildSectionPath(locale, normalizeSectionToken(item.sectionId ?? item.label));
+  if (isAboutNavItem(item)) return withPageTopAnchor(buildAboutPath(locale));
+  return withPageTopAnchor(buildSectionPath(locale, normalizeSectionToken(item.sectionId ?? item.label)));
 }
 
 // Un link se considera "activo" solo si apunta a una página entera
 // (sin hash) y su href coincide exactamente con el pathname actual.
 // Los links a secciones con hash se omiten hasta que haya scroll-spy.
 function isActiveLink(href: string, pathname: string): boolean {
-  if (href.includes("#")) return false;
-  return href === pathname;
+  return href.split("#", 1)[0] === pathname;
 }
 
 export function Header({
@@ -231,7 +231,7 @@ export function Header({
       )
     : buildFallbackNav(locale);
   const resolvedCtaLabel = ctaLabel ?? fallbackStrings[locale].contact;
-  const resolvedCtaHref = ctaHref ?? buildContactoPath(locale);
+  const resolvedCtaHref = withPageTopAnchor(ctaHref ?? buildContactoPath(locale));
 
   const isHomePath = pathname === `/${locale}` || pathname === `/${locale}/`;
 
@@ -410,7 +410,7 @@ export function Header({
             }`}
           >
             <Link
-              href={`/${locale}`}
+              href={withPageTopAnchor(`/${locale}`)}
               onClick={() => setOpen(false)}
               className="shrink-0 cursor-pointer"
               aria-label={`${brandName} home`}

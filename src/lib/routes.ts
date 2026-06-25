@@ -49,6 +49,10 @@ export function buildSectionPath(locale: AppLocale, sectionId: string) {
   return `${buildLocalePath(locale)}#${sectionId}`;
 }
 
+export function withPageTopAnchor(href: string) {
+  return href.includes("#") ? href : `${href}#page-top`;
+}
+
 export function switchLocalePath(pathname: string, nextLocale: AppLocale) {
   const segments = pathname.split("/").filter(Boolean);
 
