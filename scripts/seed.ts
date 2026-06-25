@@ -755,7 +755,7 @@ async function seedFamilies(locale: AppLocale) {
       applications: family.applications.map((value) => ({ value })),
       body: family.body,
       code: family.code,
-      detail: serializeProductDetail(productDetailData[family.slug]),
+      detail: serializeProductDetail(productDetailData[locale][family.slug]),
       excerpt: family.excerpt,
       featured: family.featured,
       heroMedia: mediaByFilename.get(productHeroMediaByCode[family.code]),
