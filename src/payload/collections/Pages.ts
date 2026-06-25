@@ -63,6 +63,7 @@ export const Pages: CollectionConfig = {
         { label: "Nosotros", value: "nosotros" },
         { label: "Sostenibilidad", value: "sostenibilidad" },
         { label: "Financiacion", value: "financiacion" },
+        { label: "Productos", value: "productos" },
         { label: "Contacto", value: "contacto" },
         { label: "Privacidad", value: "privacidad" },
         { label: "Cookies", value: "cookies" },

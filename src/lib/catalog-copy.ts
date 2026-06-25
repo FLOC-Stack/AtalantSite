@@ -1,6 +1,6 @@
 import type { AppLocale } from "@/lib/locales";
 
-type CatalogIndexCopy = {
+export type CatalogIndexCopy = {
   eyebrow: string;
   title: string;
   body: string;
@@ -8,7 +8,7 @@ type CatalogIndexCopy = {
   seoTitle: string;
 };
 
-type CatalogFamilyCopy = {
+export type CatalogFamilyCopy = {
   applications: string;
   backToCatalog: string;
   overview: string;
@@ -18,12 +18,17 @@ type CatalogFamilyCopy = {
   variants: string;
 };
 
-type CatalogMorphCopy = {
+export type CatalogMorphCopy = {
+  body: string;
+  characteristics: string;
+  eyebrow: string;
+  recycled: string;
   seoDescription: string;
   seoTitle: string;
+  title: string;
 };
 
-type CatalogCopy = {
+export type CatalogCopy = {
   family: CatalogFamilyCopy;
   index: CatalogIndexCopy;
   morph: CatalogMorphCopy;
@@ -49,9 +54,15 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
       title: "Published product families.",
     },
     morph: {
+      body:
+        "Explore all our product families and transformation processes. Permanent stock in Europe, batch traceability, and technical advice for every application.",
+      characteristics: "View characteristics",
+      eyebrow: "Product catalog",
+      recycled: "Recycled",
       seoDescription:
         "High-quality polymers for production, with permanent European stock, batch traceability and technical advice for every application.",
       seoTitle: "Polymer catalog — Atalant",
+      title: "High-quality polymers\nfor your production.",
     },
   },
   es: {
@@ -73,9 +84,15 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
       title: "Familias de producto publicadas.",
     },
     morph: {
+      body:
+        "Descubre todas nuestras familias de productos y procesos de transformación. Stock permanente en Europa, trazabilidad por lote y asesoría técnica en cada aplicación.",
+      characteristics: "Ver características",
+      eyebrow: "Catálogo de producto",
+      recycled: "Reciclado",
       seoDescription:
         "Polímeros de alta calidad para producción, con stock permanente en Europa, trazabilidad por lote y asesoría técnica en cada aplicación.",
       seoTitle: "Catálogo de polímeros — Atalant",
+      title: "Polímeros de alta calidad\npara tu producción.",
     },
   },
   fr: {
@@ -97,9 +114,15 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
       title: "Familles de produit publiées.",
     },
     morph: {
+      body:
+        "Découvrez toutes nos familles de produits et procédés de transformation. Stocks permanents en Europe, traçabilité par lot et conseils techniques pour chaque application.",
+      characteristics: "Voir caractéristiques",
+      eyebrow: "Catalogue produit",
+      recycled: "Recyclé",
       seoDescription:
         "Polymères de haute qualité pour la production, avec stock permanent en Europe, traçabilité par lot et conseil technique pour chaque application.",
       seoTitle: "Catalogue de polymères — Atalant",
+      title: "Polymères de haute qualité\npour votre production.",
     },
   },
   pt: {
@@ -121,9 +144,15 @@ export const catalogCopy: Record<AppLocale, CatalogCopy> = {
       title: "Famílias de produto publicadas.",
     },
     morph: {
+      body:
+        "Descubra todas as nossas famílias de produtos e processos de transformação. Stock permanente na Europa, rastreabilidade por lote e assessoria técnica em cada aplicação.",
+      characteristics: "Ver características",
+      eyebrow: "Catálogo de produto",
+      recycled: "Reciclado",
       seoDescription:
         "Polímeros de alta qualidade para produção, com stock permanente na Europa, rastreabilidade por lote e assessoria técnica em cada aplicação.",
       seoTitle: "Catálogo de polímeros — Atalant",
+      title: "Polímeros de alta qualidade\npara a sua produção.",
     },
   },
 };

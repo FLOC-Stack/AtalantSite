@@ -215,6 +215,7 @@ export interface Page {
     | 'nosotros'
     | 'sostenibilidad'
     | 'financiacion'
+    | 'productos'
     | 'contacto'
     | 'privacidad'
     | 'cookies'

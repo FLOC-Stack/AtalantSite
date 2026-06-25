@@ -348,6 +348,7 @@ const PRODUCT_MORPH_COPY: Record<AppLocale, { characteristics: string; recycled:
 };
 
 type Props = {
+  copy?: { characteristics: string; recycled: string };
   products?: ProductsMorphItem[];
   hero?: ProductsMorphHero;
   locale?: AppLocale;
@@ -517,10 +518,10 @@ function ProductImageReveal({
   );
 }
 
-export function ProductsMorph({ products, hero, locale = FALLBACK_LOCALE }: Props = {}) {
+export function ProductsMorph({ copy: providedCopy, products, hero, locale = FALLBACK_LOCALE }: Props = {}) {
   const safeLocale = locale ?? FALLBACK_LOCALE;
   const resolvedHero = hero ?? HERO_BY_LOCALE[safeLocale];
-  const copy = PRODUCT_MORPH_COPY[safeLocale];
+  const copy = providedCopy ?? PRODUCT_MORPH_COPY[safeLocale];
   const fallbackProducts = FALLBACK_PRODUCTS[safeLocale].map(({ slug, ...product }) => ({
     ...product,
     href: buildFamilyPath(safeLocale, slug),

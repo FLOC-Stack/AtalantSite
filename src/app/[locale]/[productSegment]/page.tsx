@@ -5,8 +5,7 @@ import {
   type ProductsMorphHero,
   type ProductsMorphItem,
 } from "@/components/products-morph";
-import { catalogCopy } from "@/lib/catalog-copy";
-import { getProductFamilies } from "@/lib/payload-data";
+import { getCatalogCopy, getProductFamilies } from "@/lib/payload-data";
 import { defaultLocale, getProductSegment, isLocale, locales, type AppLocale } from "@/lib/locales";
 import { buildFamilyPath, buildProductsPath } from "@/lib/routes";
 
@@ -29,7 +28,7 @@ async function resolveLocaleAndSegment(params: Props["params"]) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = isLocale(locale) ? (locale as AppLocale) : defaultLocale;
-  const copy = catalogCopy[validLocale].morph;
+  const copy = (await getCatalogCopy(validLocale)).morph;
 
   return {
     alternates: {
@@ -43,6 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductsIndexPage({ params }: Props) {
   const { locale } = await resolveLocaleAndSegment(params);
+  const catalog = await getCatalogCopy(locale);
   const families = await getProductFamilies(locale);
   const products: ProductsMorphItem[] = families.slice(0, 7).map((family) => ({
     code: family.code,
@@ -60,11 +60,20 @@ export default async function ProductsIndexPage({ params }: Props) {
         ? family.heroMedia.url
         : undefined,
   }));
-  const hero: ProductsMorphHero | undefined = undefined;
+  const hero: ProductsMorphHero = {
+    body: catalog.morph.body,
+    eyebrow: catalog.morph.eyebrow,
+    title: catalog.morph.title,
+  };
 
   return (
     <main className="bg-background">
-      <ProductsMorph products={products} hero={hero} locale={locale} />
+      <ProductsMorph
+        copy={catalog.morph}
+        products={products}
+        hero={hero}
+        locale={locale}
+      />
     </main>
   );
 }

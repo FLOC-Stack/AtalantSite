@@ -24,6 +24,7 @@ import type {
   SeoData,
   SiteSettingsData,
 } from "@/lib/content-types";
+import { catalogCopy, type CatalogCopy } from "@/lib/catalog-copy";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "@/lib/fallback-content";
 import type { AppLocale } from "@/lib/locales";
 import { productDetailData } from "@/lib/product-detail-data";
@@ -57,6 +58,7 @@ export type StaticPageSlug =
 
 export type ContentPageSlug =
   | StaticPageSlug
+  | "productos"
   | "contacto"
   | "privacidad"
   | "cookies"
@@ -663,6 +665,57 @@ export const getContactoPageCopy = cache(async function getContactoPageCopy(
     return mergeContactoCopy(fallback, asRecord(page?.pageData));
   } catch (error) {
     warnPayloadFallback(`contacto:${locale}`, error);
+    return fallback;
+  }
+});
+
+export const getCatalogCopy = cache(async function getCatalogCopy(
+  locale: AppLocale,
+): Promise<CatalogCopy> {
+  const fallback = catalogCopy[locale];
+
+  if (!hasPayloadDatabase()) {
+    warnPayloadFallback(`productos:${locale}`, "DATABASE_URL unavailable or production build");
+    return fallback;
+  }
+
+  try {
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "pages",
+      depth: 1,
+      draft: false,
+      limit: 1,
+      locale,
+      pagination: false,
+      where: {
+        slug: {
+          equals: "productos",
+        },
+      },
+    });
+
+    const page = result.docs[0] as PageDoc | undefined;
+    const pageData = asRecord(page?.pageData);
+
+    if (!pageData) return fallback;
+
+    return {
+      family: {
+        ...fallback.family,
+        ...asRecord(pageData.family),
+      },
+      index: {
+        ...fallback.index,
+        ...asRecord(pageData.index),
+      },
+      morph: {
+        ...fallback.morph,
+        ...asRecord(pageData.morph),
+      },
+    };
+  } catch (error) {
+    warnPayloadFallback(`productos:${locale}`, error);
     return fallback;
   }
 });

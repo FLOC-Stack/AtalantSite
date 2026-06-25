@@ -5,8 +5,7 @@ import {
   type ProductsMorphItem,
   type ProductsMorphHero,
 } from "@/components/products-morph";
-import { catalogCopy } from "@/lib/catalog-copy";
-import { getProductFamilies } from "@/lib/payload-data";
+import { getCatalogCopy, getProductFamilies } from "@/lib/payload-data";
 import { defaultLocale, isLocale, locales, type AppLocale } from "@/lib/locales";
 import { buildFamilyPath, buildProductsPath } from "@/lib/routes";
 
@@ -21,7 +20,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = isLocale(locale) ? (locale as AppLocale) : defaultLocale;
-  const copy = catalogCopy[validLocale].morph;
+  const copy = (await getCatalogCopy(validLocale)).morph;
 
   return {
     alternates: {
@@ -43,6 +42,7 @@ export default async function ProductosPage({ params }: Props) {
   }
 
   const typedLocale = locale as AppLocale;
+  const catalog = await getCatalogCopy(typedLocale);
   let products: ProductsMorphItem[] | undefined;
 
   try {
@@ -67,13 +67,20 @@ export default async function ProductosPage({ params }: Props) {
     // Fallback a los 6 hardcodeados en el componente
   }
 
-  // Hero se deja en fallback del componente; cuando haya copy en Payload
-  // para la propia página Productos se pasa aquí como prop `hero`.
-  const hero: ProductsMorphHero | undefined = undefined;
+  const hero: ProductsMorphHero = {
+    body: catalog.morph.body,
+    eyebrow: catalog.morph.eyebrow,
+    title: catalog.morph.title,
+  };
 
   return (
     <main className="bg-background">
-      <ProductsMorph products={products} hero={hero} locale={typedLocale} />
+      <ProductsMorph
+        copy={catalog.morph}
+        products={products}
+        hero={hero}
+        locale={typedLocale}
+      />
     </main>
   );
 }

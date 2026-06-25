@@ -6,6 +6,7 @@ import { NOSOTROS_COPY } from "../src/components/nosotros-page";
 import { SUSTAINABILITY_COPY } from "../src/components/sustainability-page";
 import type { HomeBlock, LegalPageKind, NewsBlock } from "../src/lib/content-types";
 import { fallbackFamilies, fallbackHomePages, fallbackSiteSettings } from "../src/lib/fallback-content";
+import { catalogCopy } from "../src/lib/catalog-copy";
 import { locales, type AppLocale } from "../src/lib/locales";
 import {
   buildContactoPath,
@@ -674,6 +675,28 @@ const staticPages = {
       },
     },
   },
+  productos: {
+    copy: catalogCopy,
+    pageType: "productos",
+    seo: {
+      en: {
+        description: catalogCopy.en.morph.seoDescription,
+        title: catalogCopy.en.morph.seoTitle,
+      },
+      es: {
+        description: catalogCopy.es.morph.seoDescription,
+        title: catalogCopy.es.morph.seoTitle,
+      },
+      fr: {
+        description: catalogCopy.fr.morph.seoDescription,
+        title: catalogCopy.fr.morph.seoTitle,
+      },
+      pt: {
+        description: catalogCopy.pt.morph.seoDescription,
+        title: catalogCopy.pt.morph.seoTitle,
+      },
+    },
+  },
   contacto: {
     copy: CONTACTO_COPY,
     pageType: "contacto",
@@ -802,22 +825,38 @@ async function seedStaticPages(locale: AppLocale) {
       },
     });
 
+    const localeCopy = page.copy[locale];
+    const isCatalogPage = slug === "productos";
+    const hero = isCatalogPage
+      ? {
+          body: catalogCopy[locale].morph.body,
+          eyebrow: catalogCopy[locale].morph.eyebrow,
+          headline: catalogCopy[locale].morph.title,
+          primaryLabel: catalogCopy[locale].morph.characteristics,
+          secondaryLabel: catalogCopy[locale].morph.recycled,
+        }
+      : {
+          body: "heroBody" in localeCopy ? localeCopy.heroBody : "",
+          eyebrow: "breadcrumb" in localeCopy ? localeCopy.breadcrumb : "",
+          headline: "heroTitle" in localeCopy ? localeCopy.heroTitle : "",
+          primaryLabel:
+            "ctaAction" in localeCopy
+              ? localeCopy.ctaAction
+              : "dataEyebrow" in localeCopy
+                ? localeCopy.dataEyebrow
+                : "",
+          secondaryLabel: "back" in localeCopy ? localeCopy.back : "",
+        };
+
     const data = {
       _status: "published" as const,
-      hero: {
-        body: page.copy[locale].heroBody,
-        eyebrow: page.copy[locale].breadcrumb,
-        headline: page.copy[locale].heroTitle,
-        primaryLabel:
-          "ctaAction" in page.copy[locale]
-            ? page.copy[locale].ctaAction
-            : page.copy[locale].dataEyebrow,
-        secondaryLabel: page.copy[locale].back,
-      },
-      pageData: {
-        ...page.copy[locale],
-        backHref: `/${locale}`,
-      },
+      hero,
+      pageData: isCatalogPage
+        ? localeCopy
+        : {
+            ...localeCopy,
+            backHref: `/${locale}`,
+          },
       pageType: page.pageType,
       media: getStaticPageMedia(slug, mediaByFilename),
       seo: page.seo[locale],

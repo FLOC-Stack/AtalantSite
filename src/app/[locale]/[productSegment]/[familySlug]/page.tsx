@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ProductDetailPE } from "@/components/product-detail-pe";
 import { ProductDetailStandard } from "@/components/product-detail-standard";
 import { ProductHeroParticles } from "@/components/product-hero-particles";
-import { catalogCopy } from "@/lib/catalog-copy";
-import { getProductFamilyBySlug } from "@/lib/payload-data";
+import { getCatalogCopy, getProductFamilyBySlug } from "@/lib/payload-data";
 import { productDetailData } from "@/lib/product-detail-data";
 import { defaultLocale, getProductSegment, isLocale, locales, type AppLocale } from "@/lib/locales";
 import { buildContactoPath, buildFamilyPath, buildProductsPath } from "@/lib/routes";
@@ -24,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { familySlug, locale } = await params;
   const validLocale = isLocale(locale) ? (locale as AppLocale) : defaultLocale;
   const family = await getProductFamilyBySlug(validLocale, familySlug);
-  const copy = catalogCopy[validLocale].family;
+  const copy = (await getCatalogCopy(validLocale)).family;
 
   return {
     alternates: {
@@ -50,14 +48,10 @@ export default async function ProductFamilyPage({ params }: Props) {
   }
 
   const family = await getProductFamilyBySlug(locale, familySlug);
-  const copy = catalogCopy[locale].family;
+  const copy = (await getCatalogCopy(locale)).family;
 
   if (!family) {
     notFound();
-  }
-
-  if (familySlug === "pe") {
-    return <ProductDetailPE locale={locale} />;
   }
 
   const fallbackDetail = productDetailData[locale][familySlug];
