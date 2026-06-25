@@ -738,7 +738,7 @@ function mapFamily(locale: AppLocale, doc: Record<string, unknown>): ProductFami
 
   const variants = mapStringArray(doc.variants);
   const applications = mapStringArray(doc.applications);
-  const fallbackDetail = productDetailData[doc.slug];
+  const fallbackDetail = productDetailData[locale][doc.slug];
 
   return {
     applications: applications as string[],

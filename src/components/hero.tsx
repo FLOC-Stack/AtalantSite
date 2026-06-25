@@ -5,31 +5,92 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { LogoParticles } from "./logo-particles";
 import type { HomeHero, StatsBlock } from "@/lib/content-types";
+import { buildProductsPath } from "@/lib/routes";
+import type { AppLocale } from "@/lib/locales";
 
 type HeroStat = { label: string; value: string };
 
 type Props = {
   hero?: HomeHero;
   stats?: HeroStat[] | StatsBlock["stats"];
+  locale?: AppLocale;
   primaryHref?: string;
   secondaryHref?: string;
 };
 
-const FALLBACK_HERO: HomeHero = {
-  eyebrow: "Distribución de polímeros",
-  headline: "Una evolución en la cadena de suministro.",
-  body:
-    "Distribución de materia prima plástica y polímeros reciclados.\nDiseñado para mantener tu producción en marcha",
-  primaryLabel: "Catálogo de productos",
-  secondaryLabel: "Nuestras soluciones",
+const FALLBACK_HERO_BY_LOCALE: Record<AppLocale, HomeHero> = {
+  en: {
+    eyebrow: "Polymer distribution",
+    headline: "An evolution in the supply chain.",
+    body: "Distribution of plastic raw materials and recycled polymers.\nBuilt to keep your production moving",
+    primaryLabel: "Product catalog",
+    secondaryLabel: "Our solutions",
+  },
+  es: {
+    eyebrow: "Distribución de polímeros",
+    headline: "Una evolución en la cadena de suministro.",
+    body:
+      "Distribución de materia prima plástica y polímeros reciclados.\nDiseñado para mantener tu producción en marcha",
+    primaryLabel: "Catálogo de productos",
+    secondaryLabel: "Nuestras soluciones",
+  },
+  fr: {
+    eyebrow: "Distribution de polymères",
+    headline: "Une évolution dans la chaîne d'approvisionnement.",
+    body:
+      "Distribution de matières premières plastiques et de polymères recyclés.\nConçu pour maintenir votre production en mouvement",
+    primaryLabel: "Catalogue de produits",
+    secondaryLabel: "Nos solutions",
+  },
+  pt: {
+    eyebrow: "Distribuição de polímeros",
+    headline: "Uma evolução na cadeia de abastecimento.",
+    body:
+      "Distribuição de matérias-primas plásticas e polímeros reciclados.\nDesenvolvido para manter a sua produção em movimento",
+    primaryLabel: "Catálogo de produtos",
+    secondaryLabel: "Nossas soluções",
+  },
 };
 
-const FALLBACK_STATS: HeroStat[] = [
-  { label: "Cobertura", value: "18 países UE" },
-  { label: "Respuesta", value: "< 24 h" },
-  { label: "Portfolio", value: "+300 productos" },
-  { label: "Packaging", value: "Adaptable al cliente" },
-];
+const FALLBACK_STATS_BY_LOCALE: Record<AppLocale, HeroStat[]> = {
+  en: [
+    { label: "Coverage", value: "18 EU countries" },
+    { label: "Response", value: "< 24 h" },
+    { label: "Portfolio", value: "+300 products" },
+    { label: "Packaging", value: "Customer-adaptable" },
+  ],
+  es: [
+    { label: "Cobertura", value: "18 países UE" },
+    { label: "Respuesta", value: "< 24 h" },
+    { label: "Portfolio", value: "+300 productos" },
+    { label: "Packaging", value: "Adaptable al cliente" },
+  ],
+  fr: [
+    { label: "Couverture", value: "18 pays UE" },
+    { label: "Réponse", value: "< 24 h" },
+    { label: "Portfolio", value: "+300 produits" },
+    { label: "Emballage", value: "Adaptable au client" },
+  ],
+  pt: [
+    { label: "Cobertura", value: "18 países da UE" },
+    { label: "Resposta", value: "< 24 h" },
+    { label: "Portfolio", value: "+300 produtos" },
+    { label: "Embalagem", value: "Adaptável ao cliente" },
+  ],
+};
+
+const FALLBACK_LOCALE: AppLocale = "es";
+
+function getLocaleProps(locale: AppLocale = FALLBACK_LOCALE) {
+  return {
+    fallbackHero: FALLBACK_HERO_BY_LOCALE[locale],
+    fallbackStats: FALLBACK_STATS_BY_LOCALE[locale],
+  };
+}
+
+function normalizeLocale(locale?: AppLocale) {
+  return locale ?? FALLBACK_LOCALE;
+}
 
 function renderMultiline(text: string) {
   const lines = text.split("\n");
@@ -42,13 +103,21 @@ function renderMultiline(text: string) {
 }
 
 export function Hero({
-  hero = FALLBACK_HERO,
-  stats = FALLBACK_STATS,
-  primaryHref = "/es/productos",
-  secondaryHref = "#soluciones",
+  hero,
+  stats,
+  locale = FALLBACK_LOCALE,
+  primaryHref,
+  secondaryHref,
 }: Props = {}) {
+  const safeLocale = normalizeLocale(locale);
+  const { fallbackHero, fallbackStats } = getLocaleProps(safeLocale);
+  const resolvedHero = hero ?? fallbackHero;
+  const resolvedStats = stats?.length ? stats : fallbackStats;
+  const resolvedPrimaryHref = primaryHref ?? buildProductsPath(safeLocale);
+  const resolvedSecondaryHref = secondaryHref ?? "#contact";
+
   const sectionRef = useRef<HTMLElement>(null);
-  const statsList = stats.length ? stats : FALLBACK_STATS;
+  const statsList = resolvedStats;
 
   return (
     <section
@@ -68,7 +137,7 @@ export function Hero({
       {/* Overline */}
       <div className="relative z-10 flex items-center gap-3 pb-4 sm:gap-6 sm:pb-5">
         <span className="font-mono text-[8px] uppercase tracking-[2px] text-primary-dark sm:text-[10px] sm:tracking-[3px]">
-          {hero.eyebrow}
+          {resolvedHero.eyebrow}
         </span>
         <div className="hidden h-px w-16 bg-primary-dark/20 sm:block" />
         <span className="hidden font-mono text-[10px] text-muted sm:inline">EST. 1997</span>
@@ -77,25 +146,25 @@ export function Hero({
       {/* Headline */}
       <div className="relative z-10 pb-6 sm:pb-8 lg:pb-10">
         <h1 className="max-w-[1404px] font-sans text-[clamp(2.5rem,8vw,8.125rem)] font-normal leading-[0.95] tracking-tight text-foreground lg:tracking-[-2.76px]">
-          {renderMultiline(hero.headline)}
+          {renderMultiline(resolvedHero.headline)}
         </h1>
       </div>
 
       {/* Body */}
       <div className="relative z-10 pb-8 sm:pb-10">
         <p className="max-w-[500px] font-sans text-base font-light leading-snug text-body sm:text-lg md:text-xl md:max-w-[480px] lg:max-w-[720px] lg:text-2xl lg:leading-[1.1]">
-          {renderMultiline(hero.body)}
+          {renderMultiline(resolvedHero.body)}
         </p>
       </div>
 
       {/* CTAs */}
       <div className="relative z-10 flex flex-col items-start gap-3 pb-10 sm:flex-row sm:gap-6">
         <Link
-          href={primaryHref}
+          href={resolvedPrimaryHref}
           className="flex h-12 items-center rounded bg-primary text-white transition-opacity hover:opacity-90 sm:h-14"
         >
           <span className="border-r border-white/10 px-6 font-mono text-[10px] uppercase tracking-[2px] sm:px-10 sm:text-[11px] sm:tracking-[2.2px]">
-            {hero.primaryLabel}
+            {resolvedHero.primaryLabel}
           </span>
           <span className="flex items-center justify-center px-4 sm:px-5">
             <ArrowRight className="h-3.5 w-3.5" />
@@ -103,11 +172,11 @@ export function Hero({
         </Link>
 
         <Link
-          href={secondaryHref}
+          href={resolvedSecondaryHref}
           className="glass flex h-12 items-center rounded transition-opacity hover:opacity-70 sm:h-14"
         >
           <span className="px-6 font-mono text-[10px] uppercase tracking-[2px] text-foreground sm:px-10 sm:text-[11px] sm:tracking-[2.2px]">
-            {hero.secondaryLabel}
+            {resolvedHero.secondaryLabel}
           </span>
         </Link>
       </div>

@@ -19,6 +19,7 @@ type ContactoCopy = {
   formTitle: string;
   formBody: string;
   ctaTitle: string;
+  ctaSubject: string;
   ctaAction: string;
   ctaFootnote: string;
   phone: string;
@@ -46,6 +47,7 @@ const COPY_ES: ContactoCopy = {
   formBody:
     "Selecciona el asunto que mejor encaje y te pondremos en contacto con la persona del equipo que mejor pueda responderte.",
   ctaTitle: "¿Prefieres llamar\no escribirnos directamente?",
+  ctaSubject: "Contacto Atalant",
   ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
   phone: "+34 965 66 18 28",
@@ -73,6 +75,7 @@ const COPY_EN: ContactoCopy = {
   formBody:
     "Pick the topic that fits your enquiry and we'll route you to the right person on our team.",
   ctaTitle: "Prefer to call\nor email us directly?",
+  ctaSubject: "Contact Atalant",
   ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
   phone: "+34 965 66 18 28",
@@ -100,6 +103,7 @@ const COPY_FR: ContactoCopy = {
   formBody:
     "Sélectionnez le sujet le plus adapté et nous vous mettrons en contact avec la personne de l'équipe la mieux placée pour vous répondre.",
   ctaTitle: "Vous préférez appeler\nou nous écrire directement ?",
+  ctaSubject: "Contact Atalant",
   ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
   phone: "+34 965 66 18 28",
@@ -127,6 +131,7 @@ const COPY_PT: ContactoCopy = {
   formBody:
     "Selecione o assunto que melhor se ajusta e colocá-lo-emos em contacto com a pessoa da equipa que melhor pode responder.",
   ctaTitle: "Prefere ligar\nou escrever-nos diretamente?",
+  ctaSubject: "Contacte a Atalant",
   ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
   phone: "+34 965 66 18 28",
@@ -258,7 +263,7 @@ export function ContactoPage({ locale }: Props) {
           {renderMultiline(copy.ctaTitle)}
         </h2>
         <Link
-          href={`mailto:logistics@atalant.com?subject=${encodeURIComponent("Contacto Atalant")}`}
+          href={`mailto:logistics@atalant.com?subject=${encodeURIComponent(copy.ctaSubject)}`}
           className="mt-10 inline-flex flex-col items-start text-white transition-opacity hover:opacity-80"
         >
           <span className="font-sans text-[15px] font-medium tracking-[0.2px] sm:text-[16px]">

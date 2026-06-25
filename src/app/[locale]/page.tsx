@@ -15,7 +15,7 @@ import type {
   StatsBlock,
 } from "@/lib/content-types";
 import { isLocale, type AppLocale } from "@/lib/locales";
-import { buildContactoPath } from "@/lib/routes";
+import { buildContactoPath, buildLogisticsPath, buildProductsPath } from "@/lib/routes";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +49,8 @@ export default async function LocaleHomePage({ params }: Props) {
   }
 
   const typedLocale = locale as AppLocale;
-  const productsHref = `/${typedLocale}/productos`;
+  const productsHref = buildProductsPath(typedLocale);
+  const logisticsHref = buildLogisticsPath(typedLocale);
 
   let heroProps;
   let statsProps;
@@ -79,6 +80,7 @@ export default async function LocaleHomePage({ params }: Props) {
       <HomeScrollSnap />
       <main className="home-snap-scroll">
         <Hero
+          locale={typedLocale}
           hero={heroProps}
           stats={statsProps}
           primaryHref={heroProps?.primaryHref ?? productsHref}
@@ -94,11 +96,12 @@ export default async function LocaleHomePage({ params }: Props) {
           videoPoster={productsBlock?.videoPoster}
         />
         <HomeLogistics
+          locale={typedLocale}
           background={<AtalantGlobe style="dotted" />}
           title={logisticsBlock?.title}
           body={logisticsBlock?.body}
           ctaLabel={logisticsBlock?.ctaLabel}
-          ctaHref={logisticsBlock?.ctaHref ?? `/${typedLocale}/logistica`}
+          ctaHref={logisticsBlock?.ctaHref ?? logisticsHref}
         />
         <HomeFinancing
           locale={typedLocale}

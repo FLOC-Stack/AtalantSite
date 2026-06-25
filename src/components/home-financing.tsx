@@ -29,36 +29,151 @@ type Props = {
   principles?: FinancingPrinciple[];
 };
 
-const FALLBACK_TITLE = "Mantenemos tu flujo\nde suministro constante.";
+const FALLBACK_LOCALE: AppLocale = "es";
 
-const FALLBACK_BODY =
-  "Aportamos flexibilidad, asesoramiento y reducimos tu incertidumbre en la cadena de suministro. Te acompañamos en todo el proceso de aprovisionamiento.";
-
-const FALLBACK_QUOTE =
-  "En Atalant potenciamos tu negocio y lo hacemos a través de nuestros valores.";
-
-const FALLBACK_PRINCIPLES: FinancingPrinciple[] = [
+const FALLBACK_BY_LOCALE: Record<
+  AppLocale,
   {
-    numeral: "01",
-    title: "Compromiso",
-    body: "Ampliar nuestro espíritu de servicio para dar lo mejor con cada solución.",
+    indexLabel: string;
+    counter: string;
+    title: string;
+    body: string;
+    ctaLabel: string;
+    quote: string;
+    quoteLabel: string;
+    principlesLabel: string;
+    principles: FinancingPrinciple[];
+  }
+> = {
+  en: {
+    indexLabel: "NO. 04 — CREDIT / PRINCIPLES",
+    counter: "04 / 05",
+    title: "We keep your supply chain moving.",
+    body: "We provide flexibility, advisory support, and reduce uncertainty in your supply chain. We guide you through every step of procurement.",
+    ctaLabel: "Discover how",
+    quote: "At Atalant, we power your business through our core values.",
+    quoteLabel: "WORKING PRINCIPLES — ATALANT",
+    principlesLabel: "FOUR PRINCIPLES",
+    principles: [
+      {
+        numeral: "01",
+        title: "Commitment",
+        body: "Expanding our service mindset to deliver the best outcome in every solution.",
+      },
+      {
+        numeral: "02",
+        title: "Adaptability",
+        body: "Adapting to the reality of each customer and supplier with active listening.",
+      },
+      {
+        numeral: "03",
+        title: "Agility",
+        body: "Responding with energy and efficiency to deliver solutions that keep evolving.",
+      },
+      {
+        numeral: "04",
+        title: "Reliability",
+        body: "Being the safest option in every case through expertise in distribution.",
+      },
+    ],
   },
-  {
-    numeral: "02",
-    title: "Nos adaptamos",
-    body: "Adaptarnos a la realidad de nuestros clientes y proveedores escuchando activamente sus necesidades.",
+  es: {
+    indexLabel: "N° 04 — CRÉDITO / PRINCIPIOS",
+    counter: "04 / 05",
+    title: "Mantenemos tu flujo\nde suministro constante.",
+    body: "Aportamos flexibilidad, asesoramiento y reducimos tu incertidumbre en la cadena de suministro. Te acompañamos en todo el proceso de aprovisionamiento.",
+    ctaLabel: "Descubre cómo",
+    quote: "En Atalant potenciamos tu negocio y lo hacemos a través de nuestros valores.",
+    quoteLabel: "PRINCIPIOS DE TRABAJO — ATALANT",
+    principlesLabel: "CUATRO PRINCIPIOS",
+    principles: [
+      {
+        numeral: "01",
+        title: "Compromiso",
+        body: "Ampliar nuestro espíritu de servicio para dar lo mejor con cada solución.",
+      },
+      {
+        numeral: "02",
+        title: "Nos adaptamos",
+        body: "Adaptarnos a la realidad de nuestros clientes y proveedores escuchando activamente sus necesidades.",
+      },
+      {
+        numeral: "03",
+        title: "Agilidad",
+        body: "Responder con energía y eficacia para ofrecer soluciones en constante evolución.",
+      },
+      {
+        numeral: "04",
+        title: "Fiabilidad",
+        body: "Convertirse en la opción más segura en cada ocasión como expertos en la distribución.",
+      },
+    ],
   },
-  {
-    numeral: "03",
-    title: "Agilidad",
-    body: "Responder con energía y eficacia para ofrecer soluciones en constante evolución.",
+  fr: {
+    indexLabel: "N° 04 — CRÉDIT / PRINCIPES",
+    counter: "04 / 05",
+    title: "Nous maintenons votre chaîne d'approvisionnement en mouvement.",
+    body: "Nous offrons flexibilité, conseil et réduisons votre incertitude dans la chaîne d'approvisionnement. Nous vous accompagnons à chaque étape d'approvisionnement.",
+    ctaLabel: "Découvrez comment",
+    quote: "Chez Atalant, nous faisons progresser votre entreprise grâce à nos valeurs.",
+    quoteLabel: "PRINCIPES DE TRAVAIL — ATALANT",
+    principlesLabel: "QUATRE PRINCIPES",
+    principles: [
+      {
+        numeral: "01",
+        title: "Engagement",
+        body: "Renforcer l'esprit de service pour offrir le meilleur dans chaque solution.",
+      },
+      {
+        numeral: "02",
+        title: "Adaptation",
+        body: "S'adapter à la réalité de nos clients et fournisseurs en écoutant activement leurs besoins.",
+      },
+      {
+        numeral: "03",
+        title: "Agilité",
+        body: "Réagir avec énergie et efficacité pour proposer des solutions en constante évolution.",
+      },
+      {
+        numeral: "04",
+        title: "Fiabilité",
+        body: "Être l'option la plus sûre à chaque étape en tant qu'experts de la distribution.",
+      },
+    ],
   },
-  {
-    numeral: "04",
-    title: "Fiabilidad",
-    body: "Convertirse en la opción más segura en cada ocasión como expertos en la distribución.",
+  pt: {
+    indexLabel: "N° 04 — CRÉDITO / PRINCÍPIOS",
+    counter: "04 / 05",
+    title: "Mantemos o fluxo\nde abastecimento constante.",
+    body: "Oferecemos flexibilidade, aconselhamento e reduzimos a sua incerteza na cadeia de abastecimento. Acompanhamo-lo em todo o processo de aquisição.",
+    ctaLabel: "Descubra como",
+    quote: "Na Atalant potencializamos o seu negócio através dos nossos valores.",
+    quoteLabel: "PRINCÍPIOS DE TRABALHO — ATALANT",
+    principlesLabel: "QUATRO PRINCÍPIOS",
+    principles: [
+      {
+        numeral: "01",
+        title: "Compromisso",
+        body: "Ampliar nosso espírito de serviço para dar o melhor em cada solução.",
+      },
+      {
+        numeral: "02",
+        title: "Adaptamos-nos",
+        body: "Adaptar-nos à realidade dos nossos clientes e fornecedores ouvindo ativamente as suas necessidades.",
+      },
+      {
+        numeral: "03",
+        title: "Agilidade",
+        body: "Responder com energia e eficácia para fornecer soluções em constante evolução.",
+      },
+      {
+        numeral: "04",
+        title: "Confiabilidade",
+        body: "Ser a opção mais segura em cada ocasião como especialistas em distribuição.",
+      },
+    ],
   },
-];
+};
 
 function renderMultiline(text: string) {
   return text.split("\n").map((line, i) => (
@@ -69,20 +184,33 @@ function renderMultiline(text: string) {
 }
 
 export function HomeFinancing({
-  locale = "es",
-  indexLabel = "N° 04 — CRÉDITO / PRINCIPIOS",
-  counter = "04 / 05",
-  title = FALLBACK_TITLE,
-  body = FALLBACK_BODY,
-  ctaLabel = "Descubre cómo",
+  locale = FALLBACK_LOCALE,
+  indexLabel,
+  counter,
+  title,
+  body,
+  /** Etiqueta del CTA primary que enlaza a la página interna */
+  ctaLabel,
   ctaHref,
-  quote = FALLBACK_QUOTE,
-  quoteLabel = "PRINCIPIOS DE TRABAJO — ATALANT",
-  principlesLabel = "CUATRO PRINCIPIOS",
-  principles = FALLBACK_PRINCIPLES,
+  quote,
+  quoteLabel,
+  principlesLabel,
+  principles,
 }: Props = {}) {
+  const safeLocale = locale;
+  const fallback = FALLBACK_BY_LOCALE[safeLocale];
   const sectionRef = useRef<HTMLElement>(null);
-  const resolvedCtaHref = ctaHref ?? buildFinancingPath(locale);
+
+  const resolvedIndexLabel = indexLabel ?? fallback.indexLabel;
+  const resolvedCounter = counter ?? fallback.counter;
+  const resolvedTitle = title ?? fallback.title;
+  const resolvedBody = body ?? fallback.body;
+  const resolvedCtaLabel = ctaLabel ?? fallback.ctaLabel;
+  const resolvedCtaHref = ctaHref ?? buildFinancingPath(safeLocale);
+  const resolvedQuote = quote ?? fallback.quote;
+  const resolvedQuoteLabel = quoteLabel ?? fallback.quoteLabel;
+  const resolvedPrinciplesLabel = principlesLabel ?? fallback.principlesLabel;
+  const resolvedPrinciples = principles?.length ? principles : fallback.principles;
 
   return (
     <section
@@ -120,10 +248,10 @@ export function HomeFinancing({
         {/* Top header row */}
         <div className="flex items-start justify-between gap-4">
           <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary">
-            {indexLabel}
+            {resolvedIndexLabel}
           </p>
           <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-            {counter}
+            {resolvedCounter}
           </p>
         </div>
         <div className="mt-5 h-px w-full bg-foreground" aria-hidden="true" />
@@ -136,11 +264,11 @@ export function HomeFinancing({
               id="home-financing-title"
               className="max-w-[980px] font-sans text-[clamp(2.5rem,7vw,5.5rem)] font-light leading-[1] tracking-[-2px] text-foreground lg:tracking-[-3px]"
             >
-              {renderMultiline(title)}
+              {renderMultiline(resolvedTitle)}
             </h2>
 
             <p className="mt-6 max-w-[560px] font-sans text-[17px] font-light leading-[1.55] tracking-[-0.15px] text-foreground sm:text-lg lg:text-[17px] lg:leading-[26px]">
-              {body}
+              {resolvedBody}
             </p>
 
             <div className="mt-6">
@@ -149,7 +277,7 @@ export function HomeFinancing({
                 className="inline-flex h-12 items-center rounded bg-primary text-white transition-opacity hover:opacity-90 sm:h-14"
               >
                 <span className="border-r border-white/10 px-6 font-mono text-[10px] uppercase tracking-[2px] sm:px-10 sm:text-[11px] sm:tracking-[2.2px]">
-                  {ctaLabel}
+                  {resolvedCtaLabel}
                 </span>
                 <span className="flex items-center justify-center px-4 sm:px-5">
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -159,11 +287,11 @@ export function HomeFinancing({
 
             <div className="mt-10 max-w-[520px]">
               <p className="font-sans text-[clamp(1.375rem,2.1vw,2rem)] font-light leading-[1.2] tracking-[-0.8px] text-foreground">
-                {quote}
+                {resolvedQuote}
               </p>
               <div className="mt-5 h-px w-12 bg-primary" aria-hidden="true" />
               <p className="mt-3 font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-                {quoteLabel}
+                {resolvedQuoteLabel}
               </p>
             </div>
           </div>
@@ -173,11 +301,11 @@ export function HomeFinancing({
         <div className="relative z-20 -mx-10 mt-10 bg-background px-10 sm:-mx-14 sm:px-14 lg:-mx-20 lg:px-20">
           <div className="h-px w-full bg-foreground" aria-hidden="true" />
           <p className="mt-3 font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-            {principlesLabel}
+            {resolvedPrinciplesLabel}
           </p>
 
           <ol className="mt-5 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-10">
-            {principles.map((p, idx) => (
+            {resolvedPrinciples.map((p, idx) => (
               <li
                 key={p.numeral}
                 className={

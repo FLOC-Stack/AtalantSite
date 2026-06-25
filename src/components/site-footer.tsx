@@ -7,6 +7,7 @@ import {
   buildLegalNoticePath,
   buildLocalePath,
   buildLogisticsPath,
+  buildContactoPath,
   buildPrivacyPath,
   buildProductsPath,
   buildAboutPath,
@@ -86,26 +87,80 @@ const footerCopy: Record<
   },
 };
 
+const fallbackLinks: Record<AppLocale, FooterLink[]> = {
+  en: [
+    { label: "Products", href: buildProductsPath("en") },
+    { label: "Logistics", href: buildLogisticsPath("en") },
+    { label: "Financing", href: buildFinancingPath("en") },
+    { label: "Sustainability", href: buildSustainabilityPath("en") },
+  ],
+  es: [
+    { label: "Productos", href: buildProductsPath("es") },
+    { label: "Logística", href: buildLogisticsPath("es") },
+    { label: "Financiación", href: buildFinancingPath("es") },
+    { label: "Sostenibilidad", href: buildSustainabilityPath("es") },
+  ],
+  fr: [
+    { label: "Produits", href: buildProductsPath("fr") },
+    { label: "Logistique", href: buildLogisticsPath("fr") },
+    { label: "Financement", href: buildFinancingPath("fr") },
+    { label: "Durabilité", href: buildSustainabilityPath("fr") },
+  ],
+  pt: [
+    { label: "Produtos", href: buildProductsPath("pt") },
+    { label: "Logística", href: buildLogisticsPath("pt") },
+    { label: "Financiamento", href: buildFinancingPath("pt") },
+    { label: "Sustentabilidade", href: buildSustainabilityPath("pt") },
+  ],
+};
+
+function normalizeSectionToken(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function resolveFooterSectionPath(sectionId: string, label: string, locale: AppLocale): string {
+  const section = normalizeSectionToken(sectionId || label);
+
+  if (["logistica", "logistics", "logistic", "distribucion"].includes(section)) {
+    return buildLogisticsPath(locale);
+  }
+  if (["financing", "financiacion", "financement", "financiamento"].includes(section)) {
+    return buildFinancingPath(locale);
+  }
+  if (["sostenibilidad", "durabilidad", "durability", "sustainability"].includes(section)) {
+    return buildSustainabilityPath(locale);
+  }
+  if (["team", "equipo", "nosotros", "about", "sobre", "sobre nos", "a propos", "a-propos"].includes(section)) {
+    return buildAboutPath(locale);
+  }
+  if (["contact", "contacto", "contato"].includes(section)) {
+    return buildContactoPath(locale);
+  }
+  if (section) {
+    return buildSectionPath(locale, section);
+  }
+
+  return buildProductsPath(locale);
+}
+
 function resolveFooterHref(item: NavItem, locale: AppLocale): string {
   if (item.kind === "products") return buildProductsPath(locale);
   if (item.kind === "logistics") return buildLogisticsPath(locale);
-  if (item.kind === "external") return item.href ?? "#";
-  if (
-    ["sustainability", "sostenibilidad"].includes((item.sectionId ?? "").toLowerCase())
-  ) {
-    return buildSustainabilityPath(locale);
+  if (item.kind === "external") {
+    const href = typeof item.href === "string" ? item.href.trim() : "";
+    if (href && href !== "#" && !href.startsWith("#") && href !== "/#") {
+      return href;
+    }
+    return resolveFooterSectionPath(item.sectionId ?? "", item.label, locale);
   }
-  if (
-    ["financing", "financiacion", "financement", "financiamento"].includes(
-      (item.sectionId ?? "").toLowerCase(),
-    )
-  ) {
-    return buildFinancingPath(locale);
+  if (item.kind === "section") {
+    return resolveFooterSectionPath(item.sectionId ?? "", item.label, locale);
   }
-  if (["team", "equipo", "nosotros", "about"].includes((item.sectionId ?? "").toLowerCase())) {
-    return buildAboutPath(locale);
-  }
-  return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
+  return resolveFooterSectionPath(item.sectionId ?? "", item.label, locale);
 }
 
 function getColumns(locale: AppLocale, settings: SiteSettingsData): FooterColumn[] {
@@ -118,10 +173,7 @@ function getColumns(locale: AppLocale, settings: SiteSettingsData): FooterColumn
         label: item.label,
       }))
     : [
-        { label: "Productos", href: products },
-        { label: "Logística", href: buildLogisticsPath(locale) },
-        { label: "Financiación", href: financing },
-        { label: "Sostenibilidad", href: sustainability },
+        ...fallbackLinks[locale],
       ];
 
   // Solo la columna de enlaces. La columna "Contacto" se renderiza aparte

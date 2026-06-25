@@ -60,7 +60,7 @@ export default async function ProductFamilyPage({ params }: Props) {
     return <ProductDetailPE locale={locale} />;
   }
 
-  const fallbackDetail = productDetailData[familySlug];
+  const fallbackDetail = productDetailData[locale][familySlug];
   const detailData = family.detail
     ? {
         ...family.detail,

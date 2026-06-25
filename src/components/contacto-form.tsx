@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { AppLocale } from "@/lib/locales";
+import { buildContactoPath } from "@/lib/routes";
 import { CONTACT_TOPICS, type ContactTopic } from "@/lib/contact-topics";
 
 type Strings = {
@@ -205,7 +206,7 @@ export function ContactoForm({ locale }: Props) {
           website,
           elapsedMs: Date.now() - mountedAt.current,
           locale,
-          sourcePath: pathname || `/${locale}/contacto`,
+          sourcePath: pathname || buildContactoPath(locale),
         }),
       });
 

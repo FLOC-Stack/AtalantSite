@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import type { AppLocale } from "@/lib/locales";
 
 export type HomeProductsIntroStat = {
   label: string;
@@ -16,20 +17,75 @@ type Props = {
   stats?: HomeProductsIntroStat[];
   videoSrc?: string;
   videoPoster?: string;
-  locale?: string;
+  locale?: AppLocale;
 };
 
-const FALLBACK_TITLE = "Polímeros\nde alta calidad.";
+const FALLBACK_BY_LOCALE: Record<
+  AppLocale,
+  {
+    indexLabel: string;
+    counter: string;
+    title: string;
+    body: string;
+    primaryCtaLabel: string;
+    stats: HomeProductsIntroStat[];
+  }
+> = {
+  en: {
+    indexLabel: "NO. 02 — SOLUTIONS / CATALOG",
+    counter: "02 / 05",
+    title: "High quality\npolymers.",
+    body: "Discover our product families, including PE, PP, PVC, PS, EVA and PA.",
+    primaryCtaLabel: "See products",
+    stats: [
+      { label: "Grades", value: "+300 references" },
+      { label: "Compliance", value: "Standards-friendly" },
+      { label: "Product", value: "Latest generation" },
+      { label: "Laboratory", value: "In-house" },
+    ],
+  },
+  es: {
+    indexLabel: "N° 02 — SOLUCIONES / CATÁLOGO",
+    counter: "02 / 05",
+    title: "Polímeros\nde alta calidad.",
+    body: "Descubre nuestra familia de productos entre los que destacan: PE, PP, PVC, PS, EVA y PA.",
+    primaryCtaLabel: "Ver productos",
+    stats: [
+      { label: "Grados", value: "+300 referencias" },
+      { label: "Cumplimiento", value: "Adaptado a normativa" },
+      { label: "Producto", value: "Última generación" },
+      { label: "Laboratorio", value: "Propio" },
+    ],
+  },
+  fr: {
+    indexLabel: "N° 02 — SOLUTIONS / CATALOGUE",
+    counter: "02 / 05",
+    title: "Polymères\nde haute qualité.",
+    body: "Découvrez nos familles de produits, notamment PE, PP, PVC, PS, EVA et PA.",
+    primaryCtaLabel: "Voir les produits",
+    stats: [
+      { label: "Grades", value: "+300 références" },
+      { label: "Conformité", value: "Adaptée à la norme" },
+      { label: "Produit", value: "Génération récente" },
+      { label: "Laboratoire", value: "Interne" },
+    ],
+  },
+  pt: {
+    indexLabel: "N° 02 — SOLUÇÕES / CATÁLOGO",
+    counter: "02 / 05",
+    title: "Polímeros\nde alta qualidade.",
+    body: "Descubra as nossas famílias de produtos, incluindo PE, PP, PVC, PS, EVA e PA.",
+    primaryCtaLabel: "Ver produtos",
+    stats: [
+      { label: "Graus", value: "+300 referências" },
+      { label: "Conformidade", value: "Adaptado a normas" },
+      { label: "Produto", value: "Última geração" },
+      { label: "Laboratório", value: "Próprio" },
+    ],
+  },
+};
 
-const FALLBACK_BODY =
-  "Descubre nuestra familia de productos entre los que destacan: PE, PP, PVC, PS, EVA y PA.";
-
-const FALLBACK_STATS: HomeProductsIntroStat[] = [
-  { label: "Grados", value: "+300 referencias" },
-  { label: "Cumplimiento", value: "Adaptado a normativa" },
-  { label: "Producto", value: "Última generación" },
-  { label: "Laboratorio", value: "Propio" },
-];
+const FALLBACK_LOCALE: AppLocale = "es";
 
 function renderMultiline(text: string) {
   return text.split("\n").map((line, i) => (
@@ -77,17 +133,26 @@ function MediaLayer({
 }
 
 export function HomeProductsIntro({
-  indexLabel = "N° 02 — SOLUCIONES / CATÁLOGO",
-  counter = "02 / 05",
-  title = FALLBACK_TITLE,
-  body = FALLBACK_BODY,
-  primaryCtaLabel = "Ver productos",
+  indexLabel,
+  counter,
+  title,
+  body,
+  primaryCtaLabel,
   primaryCtaHref = "#",
-  stats = FALLBACK_STATS,
+  stats,
   videoSrc,
   videoPoster,
   locale = "es",
 }: Props = {}) {
+  const safeLocale: AppLocale = locale ?? FALLBACK_LOCALE;
+  const fallback = FALLBACK_BY_LOCALE[safeLocale];
+  const resolvedIndexLabel = indexLabel ?? fallback.indexLabel;
+  const resolvedCounter = counter ?? fallback.counter;
+  const resolvedTitle = title ?? fallback.title;
+  const resolvedBody = body ?? fallback.body;
+  const resolvedPrimaryCtaLabel = primaryCtaLabel ?? fallback.primaryCtaLabel;
+  const resolvedStats = stats?.length ? stats : fallback.stats;
+
   return (
     <section
       aria-labelledby="home-products-intro-title"
@@ -98,10 +163,10 @@ export function HomeProductsIntro({
         {/* Header: index + counter */}
         <div className="flex items-start justify-between gap-4">
           <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary-dark">
-            {indexLabel}
+            {resolvedIndexLabel}
           </p>
           <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-            {counter}
+            {resolvedCounter}
           </p>
         </div>
 
@@ -113,12 +178,12 @@ export function HomeProductsIntro({
           id="home-products-intro-title"
           className="mt-8 font-sans text-[clamp(2.25rem,6vw,4.75rem)] font-light leading-[1] tracking-[-1.5px] text-foreground lg:tracking-[-2.5px]"
         >
-          {renderMultiline(title)}
+          {renderMultiline(resolvedTitle)}
         </h2>
 
         {/* Body */}
         <p className="mt-7 max-w-[680px] font-sans text-[17px] font-light leading-[1.55] tracking-[-0.15px] text-foreground sm:text-lg lg:text-[17px] lg:leading-[26px]">
-          {body}
+            {resolvedBody}
         </p>
 
         {/* CTAs */}
@@ -128,7 +193,7 @@ export function HomeProductsIntro({
             className="flex h-12 items-center rounded bg-primary text-white transition-opacity hover:opacity-90 sm:h-14"
           >
             <span className="border-r border-white/10 px-6 font-mono text-[10px] uppercase tracking-[2px] sm:px-10 sm:text-[11px] sm:tracking-[2.2px]">
-              {primaryCtaLabel}
+              {resolvedPrimaryCtaLabel}
             </span>
             <span className="flex items-center justify-center px-4 sm:px-5">
               <ArrowRight className="h-3.5 w-3.5" />
@@ -144,7 +209,7 @@ export function HomeProductsIntro({
 
         {/* Stats row — 2x2 en desktop para dar aire a los valores largos */}
         <dl className="mt-6 grid grid-cols-2 gap-x-8 gap-y-7">
-          {stats.map((stat) => (
+            {resolvedStats.map((stat) => (
             <div key={stat.label} className="flex flex-col gap-2">
               <dt className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
                 {stat.label}

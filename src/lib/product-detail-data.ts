@@ -1,4 +1,5 @@
 import type { ProductFamilyDetailData } from "@/lib/content-types";
+import type { AppLocale } from "@/lib/locales";
 
 export type ProductDetailData = ProductFamilyDetailData & {
   code: string;
@@ -21,7 +22,9 @@ function relatedFor(slug: string) {
   return related.filter((entry) => entry.slug !== slug).slice(0, 4);
 }
 
-export const productDetailData: Record<string, ProductDetailData> = {
+const productDetailDataByLocale: Record<AppLocale, Record<string, ProductDetailData>> = {
+  en: {},
+  es: {
   pe: {
     applications: [
       "Contenedores rígidos",
@@ -404,4 +407,9 @@ export const productDetailData: Record<string, ProductDetailData> = {
     tableTitle: "Cuatro corrientes recicladas para integrar con criterio industrial.",
     title: "Polímeros reciclados",
   },
+  },
+  fr: {},
+  pt: {},
 };
+
+export const productDetailData = productDetailDataByLocale;

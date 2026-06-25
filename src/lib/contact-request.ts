@@ -1,4 +1,5 @@
 import { isLocale, type AppLocale } from "@/lib/locales";
+import { buildContactoPath } from "@/lib/routes";
 import { isContactTopic, type ContactTopic } from "@/lib/contact-topics";
 
 export const CONTACT_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -72,7 +73,7 @@ export function normalizeContactSubmission(
     name,
     phone,
     role,
-    sourcePath: sourcePathRaw || `/${localeRaw}/contacto`,
+    sourcePath: sourcePathRaw || buildContactoPath(localeRaw),
     topic: topicRaw,
   };
 }

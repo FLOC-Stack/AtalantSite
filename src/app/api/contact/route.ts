@@ -51,18 +51,19 @@ function buildEmailHtml(input: {
   topic: ContactTopic;
   topicLabel: string;
   message: string;
-  locale: string;
+  locale: AppLocale;
   sourcePath: string;
 }): string {
+  const labels = CONTACT_EMAIL_LABELS[input.locale];
   const rows: Array<[string, string]> = [
-    ["Nombre", input.name],
-    ["Rol", input.role || "—"],
-    ["Teléfono", input.phone || "—"],
-    ["Email", input.email],
-    ["Empresa", input.company || "—"],
-    ["Asunto", input.topicLabel],
-    ["Idioma", input.locale],
-    ["Origen", input.sourcePath],
+    [labels.name, input.name],
+    [labels.role, input.role || "—"],
+    [labels.phone, input.phone || "—"],
+    [labels.email, input.email],
+    [labels.company, input.company || "—"],
+    [labels.topic, input.topicLabel],
+    [labels.language, input.locale],
+    [labels.source, input.sourcePath],
   ];
 
   const rowsHtml = rows
@@ -75,9 +76,9 @@ function buildEmailHtml(input: {
   return `<!doctype html><html><body style="margin:0;padding:24px;background:#f6f7fd;">
     <table style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #e6e8f1;border-radius:12px;padding:24px;font-family:system-ui,sans-serif;">
       <tr><td>
-        <h1 style="font-size:18px;font-weight:600;color:#1e4bb6;margin:0 0 16px;">Nueva consulta de contacto</h1>
+        <h1 style="font-size:18px;font-weight:600;color:#1e4bb6;margin:0 0 16px;">${escapeHtml(labels.title)}</h1>
         <table style="border-collapse:collapse;width:100%;">${rowsHtml}</table>
-        <h2 style="font-size:14px;font-weight:600;color:#111;margin:20px 0 8px;">Mensaje</h2>
+        <h2 style="font-size:14px;font-weight:600;color:#111;margin:20px 0 8px;">${escapeHtml(labels.messageTitle)}</h2>
         <p style="white-space:pre-wrap;font-size:14px;line-height:1.6;color:#333;margin:0;">${escapeHtml(input.message)}</p>
       </td></tr>
     </table>
@@ -176,6 +177,71 @@ const AUTO_REPLY_COPY: Record<AppLocale, AutoReplyStrings> = {
   },
 };
 
+const CONTACT_EMAIL_LABELS: Record<
+  AppLocale,
+  {
+    company: string;
+    email: string;
+    language: string;
+    messageTitle: string;
+    name: string;
+    phone: string;
+    role: string;
+    source: string;
+    title: string;
+    topic: string;
+  }
+> = {
+  es: {
+    company: "Empresa",
+    email: "Email",
+    language: "Idioma",
+    messageTitle: "Mensaje",
+    name: "Nombre",
+    phone: "Teléfono",
+    role: "Rol",
+    source: "Origen",
+    title: "Nueva consulta de contacto",
+    topic: "Asunto",
+  },
+  en: {
+    company: "Company",
+    email: "Email",
+    language: "Language",
+    messageTitle: "Message",
+    name: "Name",
+    phone: "Phone",
+    role: "Role",
+    source: "Source",
+    title: "New enquiry received",
+    topic: "Subject",
+  },
+  fr: {
+    company: "Société",
+    email: "Email",
+    language: "Langue",
+    messageTitle: "Message",
+    name: "Nom",
+    phone: "Téléphone",
+    role: "Poste",
+    source: "Origine",
+    title: "Nouvelle demande reçue",
+    topic: "Sujet",
+  },
+  pt: {
+    company: "Empresa",
+    email: "Email",
+    language: "Idioma",
+    messageTitle: "Mensagem",
+    name: "Nome",
+    phone: "Telefone",
+    role: "Função",
+    source: "Origem",
+    title: "Nova consulta recebida",
+    topic: "Assunto",
+  },
+};
+
 function buildAutoReplyHtml(input: {
   locale: AppLocale;
   name: string;
@@ -241,8 +307,7 @@ export async function POST(request: Request) {
       sourcePath,
       topic,
     } = submission;
-    const topicLabel =
-      CONTACT_TOPICS.find((t) => t.value === topic)?.label.es ?? topic;
+    const topicLabel = CONTACT_TOPICS.find((t) => t.value === topic)?.label[localeRaw] ?? topic;
 
     // Si la BD no está configurada, devolvemos un error explícito en vez
     // de explotar dentro de Payload con un stack confuso.

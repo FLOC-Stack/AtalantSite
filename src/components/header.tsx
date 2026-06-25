@@ -31,6 +31,15 @@ type Props = {
   ctaHref?: string;
 };
 
+function normalizeSectionToken(value: string | undefined): string {
+  if (!value) return "";
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
 // Copia de fallback por locale. Los IDs de sección (logistica, financiacion,
 // sostenibilidad, equipo, contacto) son identificadores técnicos estables
 // que viven en español para casar con los anchors reales del DOM; los labels
@@ -83,7 +92,7 @@ function buildFallbackNav(locale: AppLocale): HeaderLink[] {
   const t = fallbackStrings[locale];
   return [
     { label: t.products, href: buildProductsPath(locale) },
-    { label: t.logistics, href: buildSectionPath(locale, "logistica") },
+    { label: t.logistics, href: buildLogisticsPath(locale) },
     { label: t.financing, href: buildFinancingPath(locale) },
     { label: t.sustainability, href: buildSustainabilityPath(locale) },
     { label: t.about, href: buildAboutPath(locale) },
@@ -108,11 +117,12 @@ function dedupeNav(items: NavItem[], locale: AppLocale): NavItem[] {
 // Filtro defensivo: si Payload devuelve un item "Contacto" en el nav, lo
 // eliminamos — el CTA ya cubre esa acción y duplicarlo ensucia la barra.
 function isContactNavItem(item: NavItem): boolean {
-  const sectionId = item.kind === "section" ? (item.sectionId ?? "").toLowerCase() : "";
-  const label = item.label.toLowerCase();
+  const sectionId = normalizeSectionToken(item.kind === "section" ? item.sectionId : item.label);
+  const label = normalizeSectionToken(item.label);
   return (
     sectionId === "contact" ||
     sectionId === "contacto" ||
+    sectionId === "contato" ||
     label === "contact" ||
     label === "contacto" ||
     label === "contato"
@@ -123,32 +133,59 @@ function isContactNavItem(item: NavItem): boolean {
 // porque la copia de Payload puede llegar como "equipo", "nosotros",
 // "about", "sobre nós", "à propos", etc.
 function isAboutNavItem(item: NavItem): boolean {
-  const sectionId = item.kind === "section" ? (item.sectionId ?? "").toLowerCase() : "";
-  const label = item.label.toLowerCase();
-  const aboutTokens = ["equipo", "nosotros", "about", "sobre", "sobre nós", "à propos", "a propos"];
+  const sectionId = normalizeSectionToken(item.kind === "section" ? item.sectionId : item.label);
+  const label = normalizeSectionToken(item.label);
+  const aboutTokens = ["team", "equipo", "nosotros", "about", "sobre", "sobre nos", "a propos", "a-propos"];
   return aboutTokens.includes(sectionId) || aboutTokens.includes(label);
+}
+
+function resolveSectionPath(sectionId: string, label: string, locale: AppLocale): string {
+  const normalizedSection = normalizeSectionToken(sectionId);
+  const normalizedLabel = normalizeSectionToken(label);
+  const section = normalizedSection || normalizedLabel;
+
+  if (["logistica", "logistics", "logistic", "distribucion"].includes(section)) {
+    return buildLogisticsPath(locale);
+  }
+  if (["financiacion", "financing", "financement", "financiamento"].includes(section)) {
+    return buildFinancingPath(locale);
+  }
+  if (["sostenibilidad", "durabilidad", "durability", "sustainability"].includes(section)) {
+    return buildSustainabilityPath(locale);
+  }
+  if (
+    ["team", "equipo", "nosotros", "about", "sobre", "sobre nos", "a propos", "a-propos"].includes(
+      section,
+    )
+  ) {
+    return buildAboutPath(locale);
+  }
+  if (["contact", "contacto", "contato"].includes(section)) {
+    return buildContactoPath(locale);
+  }
+
+  if (normalizedLabel === section && sectionId.trim()) {
+    return buildSectionPath(locale, section);
+  }
+
+  return buildProductsPath(locale);
 }
 
 function resolveHref(item: NavItem, locale: AppLocale): string {
   if (item.kind === "products") return buildProductsPath(locale);
   if (item.kind === "logistics") return buildLogisticsPath(locale);
-  if (item.kind === "external") return item.href ?? "#";
-  if (
-    item.kind === "section" &&
-    ["sustainability", "sostenibilidad"].includes((item.sectionId ?? "").toLowerCase())
-  ) {
-    return buildSustainabilityPath(locale);
+  if (item.kind === "external") {
+    const href = (typeof item.href === "string" ? item.href : "").trim();
+    if (href && href !== "#" && !href.startsWith("#") && href !== "/#") {
+      return href;
+    }
+    return resolveSectionPath(item.sectionId ?? item.label, item.label, locale);
   }
-  if (
-    item.kind === "section" &&
-    ["financing", "financiacion", "financement", "financiamento"].includes(
-      (item.sectionId ?? "").toLowerCase(),
-    )
-  ) {
-    return buildFinancingPath(locale);
+  if (item.kind === "section") {
+    return resolveSectionPath(item.sectionId ?? "", item.label, locale);
   }
   if (isAboutNavItem(item)) return buildAboutPath(locale);
-  return buildSectionPath(locale, item.sectionId ?? item.label.toLowerCase());
+  return buildSectionPath(locale, normalizeSectionToken(item.sectionId ?? item.label));
 }
 
 // Un link se considera "activo" solo si apunta a una página entera

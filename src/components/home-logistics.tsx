@@ -1,7 +1,9 @@
+import type { AppLocale } from "@/lib/locales";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { MilestoneCarousel } from "./milestone-carousel";
+import { buildLogisticsPath } from "@/lib/routes";
 
 export type LogisticsMilestone = {
   year: string;
@@ -14,6 +16,7 @@ export type LogisticsMilestone = {
 };
 
 type Props = {
+  locale?: AppLocale;
   indexLabel?: string;
   counter?: string;
   title?: string;
@@ -29,62 +32,256 @@ type Props = {
   background?: ReactNode;
 };
 
-const FALLBACK_TITLE = "Del Mediterráneo\nal resto de Europa.";
+type FallbackLocaleCopy = {
+  indexLabel: string;
+  counter: string;
+  title: string;
+  body: string;
+  ctaLabel: string;
+  timelineLabel: string;
+  milestones: LogisticsMilestone[];
+};
 
-const FALLBACK_BODY =
-  "Recibe tus pedidos en nuestra propia flota de transporte con una trazabilidad completa desde el primer momento. Un solo interlocutor para el flujo completo: importación, almacenaje, entrega y financiación.";
+const FALLBACK_LOCALE: AppLocale = "es";
 
-const FALLBACK_MILESTONES: LogisticsMilestone[] = [
-  {
-    year: "1997",
-    label: "Origen",
-    title: "Plast Alacant",
-    location: "Alicante · España",
-    body: "Fundación como proveedor de PE y PP para el mercado español.",
+const FALLBACK_BY_LOCALE: Record<AppLocale, FallbackLocaleCopy> = {
+  en: {
+    indexLabel: "NO. 03 — ROUTES / DEPOTS",
+    counter: "03 / 05",
+    title: "From the Mediterranean\nacross Europe.",
+    body: "Receive your orders through our own transport fleet with full traceability from day one. One partner for the full chain: import, storage, delivery and financing.",
+    ctaLabel: "See depots",
+    timelineLabel: "Atalant evolution",
+    milestones: [
+      {
+        year: "1997",
+        label: "Origins",
+        title: "Plast Alacant",
+        location: "Alicante · Spain",
+        body: "Founded as a provider of PE and PP for the Spanish market.",
+      },
+      {
+        year: "2000/05",
+        label: "Iberia",
+        title: "Iberian market",
+        location: "Spain + Portugal",
+        body: "Expanded distribution coverage across the peninsula.",
+      },
+      {
+        year: "2006/09",
+        label: "Logistics",
+        title: "Own facilities",
+        location: "Valencia · Alicante",
+        body: "Logistics consolidation with our own warehouses on the Mediterranean coast.",
+      },
+      {
+        year: "2010/14",
+        label: "Europe + NAF",
+        title: "European hubs",
+        location: "UK · FR · NL · LU · BE",
+        body: "Export to Brazil and other parts of South America, plus North Africa.",
+      },
+      {
+        year: "2019",
+        label: "AEO",
+        title: "Authorized Economic Operator",
+        location: "",
+        body: "Certificate awarded.",
+      },
+      {
+        year: "2024",
+        label: "Network",
+        title: "Personal logistics network",
+        location: "Europe",
+        body: "Expanded our European distribution network.",
+      },
+      {
+        year: "2026",
+        label: "Facilities",
+        title: "New logistics centers",
+        location: "",
+        body: "Design and construction of support centers.",
+      },
+    ],
   },
-  {
-    year: "2000/05",
-    label: "Ibérica",
-    title: "Mercado ibérico",
-    location: "España + Portugal",
-    body: "Expansión del territorio de distribución a la Península.",
+  es: {
+    indexLabel: "N° 03 — RUTAS / DEPÓSITOS",
+    counter: "03 / 05",
+    title: "Del Mediterráneo\nal resto de Europa.",
+    body: "Recibe tus pedidos en nuestra propia flota de transporte con una trazabilidad completa desde el primer momento. Un solo interlocutor para el flujo completo: importación, almacenaje, entrega y financiación.",
+    ctaLabel: "Ver depósitos",
+    timelineLabel: "Evolución Atalant",
+    milestones: [
+      {
+        year: "1997",
+        label: "Origen",
+        title: "Plast Alacant",
+        location: "Alicante · España",
+        body: "Fundación como proveedor de PE y PP para el mercado español.",
+      },
+      {
+        year: "2000/05",
+        label: "Ibérica",
+        title: "Mercado ibérico",
+        location: "España + Portugal",
+        body: "Expansión del territorio de distribución a la Península.",
+      },
+      {
+        year: "2006/09",
+        label: "Logística",
+        title: "Centros propios",
+        location: "Valencia · Alicante",
+        body: "Consolidación logística con almacenes propios en la costa mediterránea.",
+      },
+      {
+        year: "2010/14",
+        label: "Europa + NAF",
+        title: "Hubs europeos",
+        location: "UK · FR · NL · LU · BE",
+        body: "Exportación a Brasil y resto de Sudamérica, además del Norte de África.",
+      },
+      {
+        year: "2019",
+        label: "OEA",
+        title: "Operador Económico Autorizado",
+        location: "",
+        body: "Obtención del certificado oficial.",
+      },
+      {
+        year: "2024",
+        label: "Red personal",
+        title: "Logística personal europea",
+        location: "Europa",
+        body: "Ampliación de la red de distribución a nivel europeo.",
+      },
+      {
+        year: "2026",
+        label: "Centros",
+        title: "Nuevos centros logísticos",
+        location: "",
+        body: "Diseño y construcción de centros de apoyo.",
+      },
+    ],
   },
-  {
-    year: "2006/09",
-    label: "Logística",
-    title: "Centros propios",
-    location: "Valencia · Alicante",
-    body: "Consolidación logística con almacenes propios en la costa mediterránea.",
+  fr: {
+    indexLabel: "N° 03 — ROUTES / DÉPÔTS",
+    counter: "03 / 05",
+    title: "De la Méditerranée\nà l'Europe.",
+    body: "Recevez vos commandes avec notre propre flotte de transport, avec une traçabilité complète dès le premier moment. Un seul interlocuteur pour la chaîne complète : importation, stockage, livraison et financement.",
+    ctaLabel: "Voir dépôts",
+    timelineLabel: "Évolution Atalant",
+    milestones: [
+      {
+        year: "1997",
+        label: "Origines",
+        title: "Plast Alacant",
+        location: "Alicante · Espagne",
+        body: "Fondation comme fournisseur de PE et PP pour le marché espagnol.",
+      },
+      {
+        year: "2000/05",
+        label: "Ibérique",
+        title: "Marché ibérique",
+        location: "Espagne + Portugal",
+        body: "Expansion du territoire de distribution vers la péninsule.",
+      },
+      {
+        year: "2006/09",
+        label: "Logistique",
+        title: "Centres propres",
+        location: "Valence · Alicante",
+        body: "Consolidation logistique avec entrepôts propres sur la côte méditerranéenne.",
+      },
+      {
+        year: "2010/14",
+        label: "Europe + ANAF",
+        title: "Hubs européens",
+        location: "UK · FR · NL · LU · BE",
+        body: "Exportation vers le Brésil et le reste de l'Amérique du Sud, ainsi que l'Afrique du Nord.",
+      },
+      {
+        year: "2019",
+        label: "AEO",
+        title: "Operateur économique agréé",
+        location: "",
+        body: "Obtention du certificat officiel.",
+      },
+      {
+        year: "2024",
+        label: "Réseau",
+        title: "Logistique personnelle européenne",
+        location: "Europe",
+        body: "Expansion du réseau de distribution à l'échelle européenne.",
+      },
+      {
+        year: "2026",
+        label: "Centres",
+        title: "Nouveaux centres logistiques",
+        location: "",
+        body: "Conception et construction de centres de soutien.",
+      },
+    ],
   },
-  {
-    year: "2010/14",
-    label: "Europa + NAF",
-    title: "Hubs europeos",
-    location: "UK · FR · NL · LU · BE",
-    body: "Exportación a Brasil y resto de Sudamérica, además del Norte de África.",
+  pt: {
+    indexLabel: "N° 03 — ROTAS / DEPÓSITOS",
+    counter: "03 / 05",
+    title: "Do Mediterrâneo\npara o resto da Europa.",
+    body: "Receba seus pedidos com nossa própria frota de transporte com rastreabilidade completa desde o primeiro momento. Um único interlocutor para o fluxo completo: importação, armazenagem, entrega e financiamento.",
+    ctaLabel: "Ver depósitos",
+    timelineLabel: "Evolução Atalant",
+    milestones: [
+      {
+        year: "1997",
+        label: "Origem",
+        title: "Plast Alacant",
+        location: "Alicante · Espanha",
+        body: "Fundação como fornecedor de PE e PP para o mercado espanhol.",
+      },
+      {
+        year: "2000/05",
+        label: "Ibérica",
+        title: "Mercado ibérico",
+        location: "Espanha + Portugal",
+        body: "Expansão do território de distribuição para a Península.",
+      },
+      {
+        year: "2006/09",
+        label: "Logística",
+        title: "Centros próprios",
+        location: "Valência · Alicante",
+        body: "Consolidação logística com armazéns próprios na costa mediterrânea.",
+      },
+      {
+        year: "2010/14",
+        label: "Europa + NAF",
+        title: "Hubs europeus",
+        location: "UK · FR · NL · LU · BE",
+        body: "Exportação para o Brasil e o restante da América do Sul, além do Norte de África.",
+      },
+      {
+        year: "2019",
+        label: "OEA",
+        title: "Operador Econômico Autorizado",
+        location: "",
+        body: "Obtenção do certificado oficial.",
+      },
+      {
+        year: "2024",
+        label: "Rede",
+        title: "Rede de logística personalizada",
+        location: "Europa",
+        body: "Expansão da rede de distribuição em toda a Europa.",
+      },
+      {
+        year: "2026",
+        label: "Centros",
+        title: "Novos centros logísticos",
+        location: "",
+        body: "Projeto e construção de centros de apoio.",
+      },
+    ],
   },
-  {
-    year: "2019",
-    label: "OEA",
-    title: "Operador Económico Autorizado",
-    location: "",
-    body: "Obtención del certificado oficial.",
-  },
-  {
-    year: "2024",
-    label: "Red personal",
-    title: "Logística personal europea",
-    location: "Europa",
-    body: "Ampliación de la red de distribución a nivel europeo.",
-  },
-  {
-    year: "2026",
-    label: "Centros",
-    title: "Nuevos centros logísticos",
-    location: "",
-    body: "Diseño y construcción de centros de apoyo.",
-  },
-];
+};
 
 function renderMultiline(text: string) {
   return text.split("\n").map((line, i) => (
@@ -95,18 +292,30 @@ function renderMultiline(text: string) {
 }
 
 export function HomeLogistics({
-  indexLabel = "N° 03 — RUTAS / DEPÓSITOS",
-  counter = "03 / 05",
-  title = FALLBACK_TITLE,
-  body = FALLBACK_BODY,
-  ctaLabel = "Ver depósitos",
+  locale = FALLBACK_LOCALE,
+  indexLabel,
+  counter,
+  title,
+  body,
+  ctaLabel,
   ctaHref,
-  timelineLabel = "Evolución Atalant",
-  milestones = FALLBACK_MILESTONES,
+  timelineLabel,
+  milestones,
   videoSrc,
   videoPoster,
   background,
 }: Props = {}) {
+  const safeLocale = locale ?? FALLBACK_LOCALE;
+  const fallback = FALLBACK_BY_LOCALE[safeLocale];
+  const resolvedIndexLabel = indexLabel ?? fallback.indexLabel;
+  const resolvedCounter = counter ?? fallback.counter;
+  const resolvedTitle = title ?? fallback.title;
+  const resolvedBody = body ?? fallback.body;
+  const resolvedCtaLabel = ctaLabel ?? fallback.ctaLabel;
+  const resolvedCtaHref = ctaHref ?? buildLogisticsPath(safeLocale);
+  const resolvedTimelineLabel = timelineLabel ?? fallback.timelineLabel;
+  const resolvedMilestones = milestones?.length ? milestones : fallback.milestones;
+
   const bgNode =
     background ??
     (videoSrc ? (
@@ -160,10 +369,10 @@ export function HomeLogistics({
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <p className="font-mono text-[11px] uppercase tracking-[2px] text-primary-dark">
-              {indexLabel}
+              {resolvedIndexLabel}
             </p>
             <p className="font-mono text-[10px] uppercase tracking-[2px] text-muted-strong">
-              {counter}
+              {resolvedCounter}
             </p>
           </div>
 
@@ -175,23 +384,23 @@ export function HomeLogistics({
             id="home-logistics-title"
             className="mt-10 font-sans text-[clamp(2.5rem,7vw,5.5rem)] font-light leading-[1] tracking-[-2px] text-foreground lg:tracking-[-3px]"
           >
-            {renderMultiline(title)}
+            {renderMultiline(resolvedTitle)}
           </h2>
 
           {/* Body */}
           <p className="mt-8 max-w-[680px] font-sans text-[17px] font-light leading-[1.55] tracking-[-0.15px] text-foreground sm:text-lg lg:text-[18px] lg:leading-[28px]">
-            {body}
+            {resolvedBody}
           </p>
 
           {/* CTA */}
-          {ctaHref ? (
+          {resolvedCtaHref ? (
             <div className="mt-8">
               <Link
-                href={ctaHref}
+                href={resolvedCtaHref}
                 className="inline-flex h-11 items-center rounded bg-primary text-white transition-opacity hover:opacity-90"
               >
                 <span className="border-r border-white/10 px-5 font-mono text-[10px] uppercase tracking-[2px] sm:text-[11px] sm:tracking-[2.2px]">
-                  {ctaLabel}
+                  {resolvedCtaLabel}
                 </span>
                 <span className="flex items-center justify-center px-3.5">
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -205,7 +414,7 @@ export function HomeLogistics({
         <div className="grow" />
 
         {/* Timeline */}
-        <MilestoneCarousel milestones={milestones} label={timelineLabel} />
+        <MilestoneCarousel milestones={resolvedMilestones} label={resolvedTimelineLabel} />
       </div>
     </section>
   );

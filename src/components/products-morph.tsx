@@ -9,6 +9,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import type { AppLocale } from "@/lib/locales";
 import { ParticleMorph, type ParticleMorphHandle } from "./particle-morph";
+import { buildFamilyPath } from "@/lib/routes";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -33,70 +34,271 @@ export type ProductsMorphHero = {
   body: string;
 };
 
-const FALLBACK_PRODUCTS: ProductsMorphItem[] = [
-  {
-    code: "PE",
-    name: "Polietileno",
-    description:
-      "Resistencia química y procesabilidad para envase, tubería y film. Grados específicos para soplado, inyección y extrusión.",
-    variants: ["HDPE", "LDPE", "LLDPE"],
-    href: "/es/productos/pe",
-    image: "/imgsrc/products/3d-product-PE.webp",
-  },
-  {
-    code: "PP",
-    name: "Polipropileno",
-    description:
-      "Alta rigidez, estabilidad térmica y reciclabilidad para automoción, electrodomésticos y envase rígido.",
-    variants: ["Homopolímero", "Random", "Impacto"],
-    href: "/es/productos/pp",
-    image: "/imgsrc/products/3d-product-PP.webp",
-  },
-  {
-    code: "PVC",
-    name: "Policloruro de vinilo",
-    description:
-      "Versatilidad rígida y flexible. Perfilería, conducciones, recubrimientos y construcción con aditivación a medida.",
-    variants: ["Rígido", "Flexible", "Emulsión"],
-    href: "/es/productos/pvc",
-    image: "/imgsrc/products/3d-product-PVC.webp",
-  },
-  {
-    code: "EVA",
-    name: "Etileno acetato de vinilo",
-    description:
-      "Grados con diferentes MFI y contenido de acetato de vinilo para plantillas, láminas, films, calzado, adhesivos, automoción y construcción.",
-    variants: ["Diferentes MFI", "Acetato de vinilo"],
-    href: "/es/productos/eva",
-    image: "/imgsrc/products/3d-product-EVA.webp",
-  },
-  {
-    code: "PS",
-    name: "Poliestireno",
-    description:
-      "Transparencia y facilidad de termoconformado. Envase alimentario, electrodomésticos y aislamiento térmico.",
-    variants: ["GPPS", "HIPS", "EPS"],
-    href: "/es/productos/ps",
-    image: "/imgsrc/products/3d-product-PS.webp",
-  },
-  {
-    code: "PET",
-    name: "Polietilen tereftalato",
-    description:
-      "Barrera, transparencia y aptitud alimentaria. Grados soplado, inyección y fibra, incluyendo rPET certificado.",
-    variants: ["Soplado", "Inyección", "Fibra", "rPET"],
-    href: "/es/productos/pet",
-    image: "/imgsrc/products/3d-product-PET.webp",
-  },
-  {
-    code: "PA",
-    name: "Poliamida",
-    description:
-      "Poliamidas para aplicaciones técnicas de alta exigencia mecánica y térmica.",
-    variants: ["PA6", "PA66", "Reforzada"],
-    href: "/es/productos/pa",
-  },
-];
+type FallbackProduct = Omit<ProductsMorphItem, "href"> & { slug: string };
+const FALLBACK_LOCALE: AppLocale = "es";
+
+const FALLBACK_PRODUCTS: Record<AppLocale, FallbackProduct[]> = {
+  es: [
+    {
+      code: "PE",
+      slug: "pe",
+      name: "Polietileno",
+      description:
+        "Resistencia química y procesabilidad para envase, tubería y film. Grados específicos para soplado, inyección y extrusión.",
+      variants: ["HDPE", "LDPE", "LLDPE"],
+      image: "/imgsrc/products/3d-product-PE.webp",
+    },
+    {
+      code: "PP",
+      slug: "pp",
+      name: "Polipropileno",
+      description:
+        "Alta rigidez, estabilidad térmica y reciclabilidad para automoción, electrodomésticos y envase rígido.",
+      variants: ["Homopolímero", "Random", "Impacto"],
+      image: "/imgsrc/products/3d-product-PP.webp",
+    },
+    {
+      code: "PVC",
+      slug: "pvc",
+      name: "Policloruro de vinilo",
+      description:
+        "Versatilidad rígida y flexible. Perfilería, conducciones, recubrimientos y construcción con aditivación a medida.",
+      variants: ["Rígido", "Flexible", "Emulsión"],
+      image: "/imgsrc/products/3d-product-PVC.webp",
+    },
+    {
+      code: "EVA",
+      slug: "eva",
+      name: "Etileno acetato de vinilo",
+      description:
+        "Grados con diferentes MFI y contenido de acetato de vinilo para plantillas, láminas, films, calzado, adhesivos, automoción y construcción.",
+      variants: ["Diferentes MFI", "Acetato de vinilo"],
+      image: "/imgsrc/products/3d-product-EVA.webp",
+    },
+    {
+      code: "PS",
+      slug: "ps",
+      name: "Poliestireno",
+      description:
+        "Transparencia y facilidad de termoconformado. Envase alimentario, electrodomésticos y aislamiento térmico.",
+      variants: ["GPPS", "HIPS", "EPS"],
+      image: "/imgsrc/products/3d-product-PS.webp",
+    },
+    {
+      code: "PET",
+      slug: "pet",
+      name: "Polietilen tereftalato",
+      description:
+        "Barrera, transparencia y aptitud alimentaria. Grados soplado, inyección y fibra, incluyendo rPET certificado.",
+      variants: ["Soplado", "Inyección", "Fibra", "rPET"],
+      image: "/imgsrc/products/3d-product-PET.webp",
+    },
+    {
+      code: "PA",
+      slug: "pa",
+      name: "Poliamida",
+      description:
+        "Poliamidas para aplicaciones técnicas de alta exigencia mecánica y térmica.",
+      variants: ["PA6", "PA66", "Reforzada"],
+      image: "/imgsrc/products/3d-product-PA.webp",
+    },
+  ],
+  en: [
+    {
+      code: "PE",
+      slug: "pe",
+      name: "Polyethylene",
+      description:
+        "Chemical resistance and processability for packaging, piping and film. Specific grades for blow molding, injection and extrusion.",
+      variants: ["HDPE", "LDPE", "LLDPE"],
+      image: "/imgsrc/products/3d-product-PE.webp",
+    },
+    {
+      code: "PP",
+      slug: "pp",
+      name: "Polypropylene",
+      description:
+        "High stiffness, thermal stability and recyclability for automotive, home appliances and rigid packaging.",
+      variants: ["Homopolymer", "Random", "Impact"],
+      image: "/imgsrc/products/3d-product-PP.webp",
+    },
+    {
+      code: "PVC",
+      slug: "pvc",
+      name: "Polyvinyl chloride",
+      description:
+        "Rigid and flexible versatility. Profiles, piping, coatings and construction with custom additives.",
+      variants: ["Rigid", "Flexible", "Emulsion"],
+      image: "/imgsrc/products/3d-product-PVC.webp",
+    },
+    {
+      code: "EVA",
+      slug: "eva",
+      name: "Ethylene vinyl acetate",
+      description:
+        "Grades with different MFI and vinyl acetate content for templates, films, sheets, footwear, adhesives, automotive and construction.",
+      variants: ["Different MFI", "Vinyl acetate"],
+      image: "/imgsrc/products/3d-product-EVA.webp",
+    },
+    {
+      code: "PS",
+      slug: "ps",
+      name: "Polystyrene",
+      description:
+        "Transparency and easy thermoforming. Food packaging, home appliances and thermal insulation.",
+      variants: ["GPPS", "HIPS", "EPS"],
+      image: "/imgsrc/products/3d-product-PS.webp",
+    },
+    {
+      code: "PET",
+      slug: "pet",
+      name: "Polyethylene terephthalate",
+      description:
+        "Barrier, transparency and food-grade suitability. Blow, injection and fiber grades, including certified rPET.",
+      variants: ["Blow", "Injection", "Fiber", "rPET"],
+      image: "/imgsrc/products/3d-product-PET.webp",
+    },
+    {
+      code: "PA",
+      slug: "pa",
+      name: "Polyamide",
+      description:
+        "Polyamides for high-performance technical applications with high mechanical and thermal demands.",
+      variants: ["PA6", "PA66", "Reinforced"],
+      image: "/imgsrc/products/3d-product-PA.webp",
+    },
+  ],
+  fr: [
+    {
+      code: "PE",
+      slug: "pe",
+      name: "Polyéthylène",
+      description:
+        "Résistance chimique et mise en œuvre pour l'emballage, la tuyauterie et les films. Grades dédiés au soufflage, injection et extrusion.",
+      variants: ["HDPE", "LDPE", "LLDPE"],
+      image: "/imgsrc/products/3d-product-PE.webp",
+    },
+    {
+      code: "PP",
+      slug: "pp",
+      name: "Polypropylène",
+      description:
+        "Grande rigidité, stabilité thermique et recyclabilité pour l'automobile, les appareils ménagers et les emballages rigides.",
+      variants: ["Homopolymère", "Random", "Impact"],
+      image: "/imgsrc/products/3d-product-PP.webp",
+    },
+    {
+      code: "PVC",
+      slug: "pvc",
+      name: "Polychlorure de vinyle",
+      description:
+        "Polyvalence rigide et flexible. Profilés, conduits, revêtements et construction avec aditifs sur mesure.",
+      variants: ["Rigide", "Flexible", "Émulsion"],
+      image: "/imgsrc/products/3d-product-PVC.webp",
+    },
+    {
+      code: "EVA",
+      slug: "eva",
+      name: "Éthylène-acétate de vinyle",
+      description:
+        "Grades avec MFI différents et teneur en acétate de vinyle pour moules, films, semelles, adhésifs, automobile et construction.",
+      variants: ["MFI différent", "Acétate de vinyle"],
+      image: "/imgsrc/products/3d-product-EVA.webp",
+    },
+    {
+      code: "PS",
+      slug: "ps",
+      name: "Polystyrène",
+      description:
+        "Transparence et thermoformage faciles. Emballages alimentaires, électroménager et isolation thermique.",
+      variants: ["GPPS", "HIPS", "EPS"],
+      image: "/imgsrc/products/3d-product-PS.webp",
+    },
+    {
+      code: "PET",
+      slug: "pet",
+      name: "Polyéthylène téréphtalate",
+      description:
+        "Barrière, transparence et aptitude alimentaire. Grades de soufflage, d'injection et de fibre, y compris rPET certifié.",
+      variants: ["Soufflage", "Injection", "Fibre", "rPET"],
+      image: "/imgsrc/products/3d-product-PET.webp",
+    },
+    {
+      code: "PA",
+      slug: "pa",
+      name: "Polyamide",
+      description:
+        "Polyamides pour applications techniques exigeantes sur le plan mécanique et thermique.",
+      variants: ["PA6", "PA66", "Renforcé"],
+      image: "/imgsrc/products/3d-product-PA.webp",
+    },
+  ],
+  pt: [
+    {
+      code: "PE",
+      slug: "pe",
+      name: "Polietileno",
+      description:
+        "Resistência química e processabilidade para embalagem, tubagem e filme. Grades específicas para sopro, injeção e extrusão.",
+      variants: ["HDPE", "LDPE", "LLDPE"],
+      image: "/imgsrc/products/3d-product-PE.webp",
+    },
+    {
+      code: "PP",
+      slug: "pp",
+      name: "Polipropileno",
+      description:
+        "Alta rigidez, estabilidade térmica e reciclabilidade para automóvel, eletrodomésticos e embalagens rígidas.",
+      variants: ["Homopolímero", "Random", "Impacto"],
+      image: "/imgsrc/products/3d-product-PP.webp",
+    },
+    {
+      code: "PVC",
+      slug: "pvc",
+      name: "Cloreto de polivinilo",
+      description:
+        "Versatilidade rígida e flexível. Perfis, tubagens, revestimentos e construção com aditivação sob medida.",
+      variants: ["Rígido", "Flexível", "Emulsão"],
+      image: "/imgsrc/products/3d-product-PVC.webp",
+    },
+    {
+      code: "EVA",
+      slug: "eva",
+      name: "Etileno acetato de vinilo",
+      description:
+        "Grades com diferentes MFI e teor de acetato de vinilo para moldes, folhas, filmes, calçado, adesivos, automóvel e construção.",
+      variants: ["Diferentes MFI", "Acetato de vinilo"],
+      image: "/imgsrc/products/3d-product-EVA.webp",
+    },
+    {
+      code: "PS",
+      slug: "ps",
+      name: "Poliestireno",
+      description:
+        "Transparência e facilidade de termoconformação. Embalagens alimentares, eletrodomésticos e isolamento térmico.",
+      variants: ["GPPS", "HIPS", "EPS"],
+      image: "/imgsrc/products/3d-product-PS.webp",
+    },
+    {
+      code: "PET",
+      slug: "pet",
+      name: "Polietileno tereftalato",
+      description:
+        "Barreira, transparência e aptidão alimentar. Grades de sopro, injeção e fibra, incluindo rPET certificado.",
+      variants: ["Sopro", "Injeção", "Fibra", "rPET"],
+      image: "/imgsrc/products/3d-product-PET.webp",
+    },
+    {
+      code: "PA",
+      slug: "pa",
+      name: "Poliamida",
+      description:
+        "Poliamidas para aplicações técnicas de alta exigência mecânica e térmica.",
+      variants: ["PA6", "PA66", "Reforçada"],
+      image: "/imgsrc/products/3d-product-PA.webp",
+    },
+  ],
+};
 
 const FALLBACK_HERO: ProductsMorphHero = {
   eyebrow: "Catálogo de producto",
@@ -315,17 +517,22 @@ function ProductImageReveal({
   );
 }
 
-export function ProductsMorph({ products, hero, locale = "es" }: Props = {}) {
-  const resolvedHero = hero ?? HERO_BY_LOCALE[locale];
-  const copy = PRODUCT_MORPH_COPY[locale];
+export function ProductsMorph({ products, hero, locale = FALLBACK_LOCALE }: Props = {}) {
+  const safeLocale = locale ?? FALLBACK_LOCALE;
+  const resolvedHero = hero ?? HERO_BY_LOCALE[safeLocale];
+  const copy = PRODUCT_MORPH_COPY[safeLocale];
+  const fallbackProducts = FALLBACK_PRODUCTS[safeLocale].map(({ slug, ...product }) => ({
+    ...product,
+    href: buildFamilyPath(safeLocale, slug),
+  }));
   // Si el CMS devuelve items sin imagen/video, caemos al media del fallback
   // con el mismo `code` para que cada producto tenga su cover sin tener que
   // tocar Payload. Cuando el cliente suba su propio heroMedia, pisa al fallback.
   // Indexamos por `displayCode` para cubrir slugs en minúsculas y códigos display.
   const fallbackMediaByCode = new Map(
-    FALLBACK_PRODUCTS.map((p) => [displayCode(p.code), { image: p.image, video: p.video }]),
+    fallbackProducts.map((p) => [displayCode(p.code), { image: p.image, video: p.video }]),
   );
-  const items = (products?.length ? products.slice(0, 7) : FALLBACK_PRODUCTS).map(
+  const items = (products?.length ? products.slice(0, 7) : fallbackProducts).map(
     (item) => {
       if (item.image || item.video) return item;
       const fb = fallbackMediaByCode.get(displayCode(item.code));
