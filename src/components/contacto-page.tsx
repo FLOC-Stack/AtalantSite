@@ -1,12 +1,155 @@
 import Link from "next/link";
 import type { AppLocale } from "@/lib/locales";
-import type { ContactoCopy } from "@/lib/content-types";
+import type { ContactFormCopy, ContactFormTopicCopy, ContactoCopy } from "@/lib/content-types";
 import { NosotrosGrid } from "@/components/nosotros-grid";
 import { ContactoForm } from "@/components/contacto-form";
 
 type Props = {
   copy?: ContactoCopy;
   locale: AppLocale;
+};
+
+const FORM_COPY_ES: ContactFormCopy = {
+  name: "Nombre completo",
+  role: "Rol o cargo",
+  phone: "Teléfono",
+  email: "Email",
+  company: "Empresa",
+  topic: "¿Cómo te podemos ayudar?",
+  topicPlaceholder: "Selecciona un asunto",
+  message: "Cuéntanos un poco más",
+  messagePlaceholder:
+    "Volúmenes, tipo de polímero, plazos, certificaciones… cuanta más información, mejor.",
+  submit: "Enviar mensaje",
+  sending: "Enviando…",
+  successTitle: "Mensaje enviado",
+  successBody:
+    "Gracias. Nuestro equipo te responderá lo antes posible al email indicado.",
+  errorGeneric: "No hemos podido enviar tu mensaje. Inténtalo de nuevo en unos minutos.",
+  errorValidation: "Revisa los campos marcados antes de enviar.",
+  errorRate: "Has hecho demasiados envíos seguidos. Espera un minuto y vuelve a intentarlo.",
+  fieldRequired: "Campo obligatorio.",
+  emailInvalid: "Introduce un email válido.",
+  privacyPrefix: "Al enviar este formulario aceptas nuestra",
+  privacyLink: "política de privacidad",
+  privacySuffix: "y el tratamiento de tus datos para responder a tu consulta.",
+};
+
+const FORM_COPY_EN: ContactFormCopy = {
+  name: "Full name",
+  role: "Role or position",
+  phone: "Phone number",
+  email: "Email",
+  company: "Company name",
+  topic: "How can we help?",
+  topicPlaceholder: "Select a topic",
+  message: "Tell us a bit more",
+  messagePlaceholder:
+    "Volumes, polymer types, deadlines, certifications — the more detail, the better.",
+  submit: "Send message",
+  sending: "Sending…",
+  successTitle: "Message sent",
+  successBody:
+    "Thank you. Our team will get back to you as soon as possible at the email provided.",
+  errorGeneric: "We couldn't send your message. Please try again in a few minutes.",
+  errorValidation: "Please review the highlighted fields before submitting.",
+  errorRate: "Too many submissions in a row. Please wait a minute and try again.",
+  fieldRequired: "Required field.",
+  emailInvalid: "Enter a valid email.",
+  privacyPrefix: "By submitting this form you accept our",
+  privacyLink: "privacy policy",
+  privacySuffix: "and the processing of your data to respond to your enquiry.",
+};
+
+const FORM_COPY_FR: ContactFormCopy = {
+  name: "Nom complet",
+  role: "Poste ou fonction",
+  phone: "Téléphone",
+  email: "Email",
+  company: "Entreprise",
+  topic: "Comment pouvons-nous vous aider ?",
+  topicPlaceholder: "Sélectionnez un sujet",
+  message: "Dites-nous en plus",
+  messagePlaceholder:
+    "Volumes, types de polymères, délais, certifications… plus c'est précis, mieux c'est.",
+  submit: "Envoyer le message",
+  sending: "Envoi…",
+  successTitle: "Message envoyé",
+  successBody:
+    "Merci. Notre équipe vous répondra dès que possible à l'email indiqué.",
+  errorGeneric: "Nous n'avons pas pu envoyer votre message. Réessayez dans quelques minutes.",
+  errorValidation: "Veuillez vérifier les champs marqués avant l'envoi.",
+  errorRate: "Trop d'envois successifs. Attendez une minute puis réessayez.",
+  fieldRequired: "Champ obligatoire.",
+  emailInvalid: "Saisissez un email valide.",
+  privacyPrefix: "En soumettant ce formulaire, vous acceptez notre",
+  privacyLink: "politique de confidentialité",
+  privacySuffix: "et le traitement de vos données pour répondre à votre demande.",
+};
+
+const FORM_COPY_PT: ContactFormCopy = {
+  name: "Nome completo",
+  role: "Função ou cargo",
+  phone: "Telefone",
+  email: "Email",
+  company: "Empresa",
+  topic: "Como podemos ajudar?",
+  topicPlaceholder: "Selecione um assunto",
+  message: "Conte-nos um pouco mais",
+  messagePlaceholder:
+    "Volumes, tipo de polímero, prazos, certificações… quanto mais detalhe, melhor.",
+  submit: "Enviar mensagem",
+  sending: "A enviar…",
+  successTitle: "Mensagem enviada",
+  successBody:
+    "Obrigado. A nossa equipa responderá assim que possível para o email indicado.",
+  errorGeneric: "Não foi possível enviar a sua mensagem. Tente novamente em alguns minutos.",
+  errorValidation: "Reveja os campos marcados antes de enviar.",
+  errorRate: "Demasiados envios seguidos. Aguarde um minuto e tente novamente.",
+  fieldRequired: "Campo obrigatório.",
+  emailInvalid: "Introduza um email válido.",
+  privacyPrefix: "Ao enviar este formulário aceita a nossa",
+  privacyLink: "política de privacidade",
+  privacySuffix: "e o tratamento dos seus dados para responder à sua consulta.",
+};
+
+const CONTACT_FORM_TOPICS: Record<AppLocale, ContactFormTopicCopy[]> = {
+  es: [
+    { value: "sales", label: "Comercial — presupuesto o cotización" },
+    { value: "products", label: "Información de productos" },
+    { value: "logistics", label: "Logística y transporte" },
+    { value: "financing", label: "Financiación" },
+    { value: "sustainability", label: "Sostenibilidad y reciclados" },
+    { value: "press", label: "Prensa y comunicación" },
+    { value: "other", label: "Otra consulta" },
+  ],
+  en: [
+    { value: "sales", label: "Sales — quote or pricing" },
+    { value: "products", label: "Product information" },
+    { value: "logistics", label: "Logistics and transport" },
+    { value: "financing", label: "Financing" },
+    { value: "sustainability", label: "Sustainability and recycled materials" },
+    { value: "press", label: "Press and communication" },
+    { value: "other", label: "Other enquiry" },
+  ],
+  fr: [
+    { value: "sales", label: "Commercial — devis ou tarif" },
+    { value: "products", label: "Information produits" },
+    { value: "logistics", label: "Logistique et transport" },
+    { value: "financing", label: "Financement" },
+    { value: "sustainability", label: "Durabilité et recyclés" },
+    { value: "press", label: "Presse et communication" },
+    { value: "other", label: "Autre demande" },
+  ],
+  pt: [
+    { value: "sales", label: "Comercial — orçamento ou cotação" },
+    { value: "products", label: "Informação de produtos" },
+    { value: "logistics", label: "Logística e transporte" },
+    { value: "financing", label: "Financiamento" },
+    { value: "sustainability", label: "Sustentabilidade e reciclados" },
+    { value: "press", label: "Imprensa e comunicação" },
+    { value: "other", label: "Outra consulta" },
+  ],
 };
 
 const COPY_ES: ContactoCopy = {
@@ -35,6 +178,8 @@ const COPY_ES: ContactoCopy = {
   ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
   phone: "+34 965 66 18 28",
+  form: FORM_COPY_ES,
+  topics: CONTACT_FORM_TOPICS.es,
 };
 
 const COPY_EN: ContactoCopy = {
@@ -63,6 +208,8 @@ const COPY_EN: ContactoCopy = {
   ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
   phone: "+34 965 66 18 28",
+  form: FORM_COPY_EN,
+  topics: CONTACT_FORM_TOPICS.en,
 };
 
 const COPY_FR: ContactoCopy = {
@@ -91,6 +238,8 @@ const COPY_FR: ContactoCopy = {
   ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
   phone: "+34 965 66 18 28",
+  form: FORM_COPY_FR,
+  topics: CONTACT_FORM_TOPICS.fr,
 };
 
 const COPY_PT: ContactoCopy = {
@@ -119,6 +268,8 @@ const COPY_PT: ContactoCopy = {
   ctaAction: "logistics@atalant.com  →",
   ctaFootnote: "© MMXXVI ATALANT  /  CT",
   phone: "+34 965 66 18 28",
+  form: FORM_COPY_PT,
+  topics: CONTACT_FORM_TOPICS.pt,
 };
 
 export const CONTACTO_COPY: Record<AppLocale, ContactoCopy> = {
@@ -229,7 +380,7 @@ export function ContactoPage({ copy: providedCopy, locale }: Props) {
           </div>
 
           <div>
-            <ContactoForm locale={locale} />
+            <ContactoForm copy={copy.form} locale={locale} topics={copy.topics} />
           </div>
         </div>
       </section>

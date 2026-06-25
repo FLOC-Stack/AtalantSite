@@ -621,9 +621,24 @@ function mergeContactoCopy(
 ): ContactoCopy {
   if (!pageData) return fallback;
 
+  const topics = Array.isArray(pageData.topics)
+    ? pageData.topics
+        .map((topic) => {
+          const record = asRecord(topic);
+          return typeof record?.value === "string" && typeof record.label === "string"
+            ? { label: record.label, value: record.value }
+            : null;
+        })
+        .filter(Boolean)
+    : fallback.topics;
+
   return {
     ...fallback,
     ...pageData,
+    form: {
+      ...fallback.form,
+      ...asRecord(pageData.form),
+    },
     metaLabels: {
       ...fallback.metaLabels,
       ...asRecord(pageData.metaLabels),
@@ -632,6 +647,7 @@ function mergeContactoCopy(
       ...fallback.metaValues,
       ...asRecord(pageData.metaValues),
     },
+    topics: topics.length ? (topics as ContactoCopy["topics"]) : fallback.topics,
   } as ContactoCopy;
 }
 

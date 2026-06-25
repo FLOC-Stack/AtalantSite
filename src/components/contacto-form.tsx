@@ -5,33 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { AppLocale } from "@/lib/locales";
 import { buildContactoPath } from "@/lib/routes";
-import { CONTACT_TOPICS, type ContactTopic } from "@/lib/contact-topics";
+import type { ContactFormCopy, ContactFormTopicCopy } from "@/lib/content-types";
+import { CONTACT_TOPICS, isContactTopic, type ContactTopic } from "@/lib/contact-topics";
 
-type Strings = {
-  name: string;
-  role: string;
-  phone: string;
-  email: string;
-  company: string;
-  topic: string;
-  topicPlaceholder: string;
-  message: string;
-  messagePlaceholder: string;
-  submit: string;
-  sending: string;
-  successTitle: string;
-  successBody: string;
-  errorGeneric: string;
-  errorValidation: string;
-  errorRate: string;
-  fieldRequired: string;
-  emailInvalid: string;
-  privacyPrefix: string;
-  privacyLink: string;
-  privacySuffix: string;
-};
-
-const COPY: Record<AppLocale, Strings> = {
+const COPY: Record<AppLocale, ContactFormCopy> = {
   es: {
     name: "Nombre completo",
     role: "Rol o cargo",
@@ -134,14 +111,18 @@ const COPY: Record<AppLocale, Strings> = {
   },
 };
 
-type Props = { locale: AppLocale };
+type Props = {
+  copy?: ContactFormCopy;
+  locale: AppLocale;
+  topics?: ContactFormTopicCopy[];
+};
 
 type FieldErrors = Partial<Record<"name" | "email" | "topic" | "message", true>>;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function ContactoForm({ locale }: Props) {
-  const copy = COPY[locale];
+export function ContactoForm({ copy: providedCopy, locale, topics }: Props) {
+  const copy = providedCopy ?? COPY[locale];
   const pathname = usePathname();
   const mountedAt = useRef<number>(Date.now());
 
@@ -152,8 +133,20 @@ export function ContactoForm({ locale }: Props) {
   // Las opciones del select se localizan en cliente — el value que viaja
   // al servidor es siempre estable (sales, products, …).
   const topicOptions = useMemo(
-    () => CONTACT_TOPICS.map((t) => ({ value: t.value, label: t.label[locale] })),
-    [locale],
+    () => {
+      const cmsTopics = topics
+        ?.map((topic) =>
+          isContactTopic(topic.value) && typeof topic.label === "string"
+            ? { value: topic.value, label: topic.label }
+            : null,
+        )
+        .filter(Boolean) as Array<{ value: ContactTopic; label: string }> | undefined;
+
+      return cmsTopics?.length
+        ? cmsTopics
+        : CONTACT_TOPICS.map((t) => ({ value: t.value, label: t.label[locale] }));
+    },
+    [locale, topics],
   );
 
   useEffect(() => {

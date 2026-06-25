@@ -188,6 +188,37 @@ export type ContactoCopy = {
   ctaAction: string;
   ctaFootnote: string;
   phone: string;
+  form: ContactFormCopy;
+  topics: ContactFormTopicCopy[];
+};
+
+export type ContactFormCopy = {
+  name: string;
+  role: string;
+  phone: string;
+  email: string;
+  company: string;
+  topic: string;
+  topicPlaceholder: string;
+  message: string;
+  messagePlaceholder: string;
+  submit: string;
+  sending: string;
+  successTitle: string;
+  successBody: string;
+  errorGeneric: string;
+  errorValidation: string;
+  errorRate: string;
+  fieldRequired: string;
+  emailInvalid: string;
+  privacyPrefix: string;
+  privacyLink: string;
+  privacySuffix: string;
+};
+
+export type ContactFormTopicCopy = {
+  value: string;
+  label: string;
 };
 
 export type LegalPageKind = "privacy" | "cookies" | "legal";
