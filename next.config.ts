@@ -9,6 +9,30 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
   reactCompiler: process.env.NODE_ENV === "production",
+  async redirects() {
+    return [
+      {
+        destination: "/es",
+        permanent: true,
+        source: "/es/inicio",
+      },
+      {
+        destination: "/en",
+        permanent: true,
+        source: "/en/home",
+      },
+      {
+        destination: "/fr",
+        permanent: true,
+        source: "/fr/accueil",
+      },
+      {
+        destination: "/pt",
+        permanent: true,
+        source: "/pt/inicio",
+      },
+    ];
+  },
   turbopack: {
     root: projectRoot,
   },
