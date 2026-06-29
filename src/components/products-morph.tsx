@@ -8,6 +8,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import type { AppLocale } from "@/lib/locales";
+import { getProductParticleShapeIndex } from "@/lib/product-particle-shapes";
 import { ParticleMorph, type ParticleMorphHandle } from "./particle-morph";
 import { buildFamilyPath } from "@/lib/routes";
 
@@ -590,6 +591,7 @@ export function ProductsMorph({ copy: providedCopy, products, hero, locale = FAL
         {items.map((product, index) => {
           const isLeft = index % 2 === 0;
           const href = product.href ?? `#${product.code.toLowerCase()}`;
+          const particleShapeIndex = getProductParticleShapeIndex(product.code);
           const number = String(index + 1).padStart(2, "0");
           const total = String(items.length).padStart(2, "0");
           const variants = product.variants ?? [];
@@ -687,7 +689,7 @@ export function ProductsMorph({ copy: providedCopy, products, hero, locale = FAL
               ref={(el) => {
                 sectionRefs.current[index + 1] = el;
               }}
-              data-shape-index={index + 1}
+              data-shape-index={particleShapeIndex}
               className="pointer-events-none relative flex min-h-screen items-center px-5 py-24 sm:px-8 md:px-16 lg:px-[10%] xl:px-[14%] 2xl:px-[18%]"
             >
               <div

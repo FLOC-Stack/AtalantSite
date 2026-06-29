@@ -6,6 +6,8 @@ const PRODUCT_PARTICLE_SHAPE_BY_CODE: Record<string, number> = {
   eva: 4,
   ps: 5,
   pet: 6,
+  rec: 1,
+  recycled: 1,
   pa: 7,
   polyamide: 7,
   poliamida: 7,
