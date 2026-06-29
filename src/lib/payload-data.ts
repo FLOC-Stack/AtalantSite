@@ -100,6 +100,7 @@ function isProductionBuild() {
 }
 
 const warnedPayloadFallbacks = new Set<string>();
+const disabledProductFamilySlugs = new Set(["pa"]);
 
 function warnPayloadFallback(key: string, reason: unknown) {
   if (warnedPayloadFallbacks.has(key)) return;
@@ -1031,6 +1032,7 @@ export const getProductFamilies = cache(async function getProductFamilies(
 
     const docs = result.docs
       .map((doc) => mapFamily(locale, doc as unknown as Record<string, unknown>))
+      .filter((family) => family && !disabledProductFamilySlugs.has(family.slug))
       .filter(Boolean) as ProductFamilyData[];
 
     if (!docs.length) {
@@ -1057,6 +1059,10 @@ export const getProductFamilyBySlug = cache(async function getProductFamilyBySlu
   locale: AppLocale,
   slug: string,
 ): Promise<ProductFamilyData | null> {
+  if (disabledProductFamilySlugs.has(slug)) {
+    return null;
+  }
+
   if (!hasPayloadDatabase()) {
     warnPayloadFallback(`productFamily:${locale}:${slug}`, "DATABASE_URL unavailable or production build");
     return fallbackFamilies[locale].find((family) => family.slug === slug) ?? null;
@@ -1128,6 +1134,7 @@ export const getPublishedFamilySitemapEntries = cache(async function getPublishe
           updatedAt,
         };
       })
+      .filter((entry) => entry && !disabledProductFamilySlugs.has(entry.slug))
       .filter(Boolean) as ProductFamilySitemapEntry[];
   } catch (error) {
     warnPayloadFallback(`sitemapFamilies:${locale}`, error);

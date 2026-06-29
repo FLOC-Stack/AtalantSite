@@ -15,7 +15,6 @@ const related = [
   { code: "EVA", name: "Etileno acetato de vinilo", grades: "MFI · Acetato de vinilo", slug: "eva" },
   { code: "PS", name: "Poliestireno", grades: "GPPS · HIPS", slug: "ps" },
   { code: "PET", name: "PET", grades: "Botella · Lámina · Fibra", slug: "pet" },
-  { code: "PA", name: "Poliamida", grades: "PA6 · PA66 · Reforzada", slug: "pa" },
 ];
 
 function relatedFor(slug: string) {
@@ -31,7 +30,6 @@ const relatedByLocale: Record<AppLocale, typeof related> = {
     { code: "EVA", name: "Ethylene vinyl acetate", grades: "MFI · Vinyl acetate", slug: "eva" },
     { code: "PS", name: "Polystyrene", grades: "GPPS · HIPS", slug: "ps" },
     { code: "PET", name: "PET", grades: "Bottle · Sheet · Fiber", slug: "pet" },
-    { code: "PA", name: "Polyamide", grades: "PA6 · PA66 · Reinforced", slug: "pa" },
   ],
   fr: [
     { code: "PE", name: "Polyéthylène", grades: "HDPE · MDPE · LDPE · LLDPE", slug: "pe" },
@@ -40,7 +38,6 @@ const relatedByLocale: Record<AppLocale, typeof related> = {
     { code: "EVA", name: "Éthylène-acétate de vinyle", grades: "MFI · Acétate de vinyle", slug: "eva" },
     { code: "PS", name: "Polystyrène", grades: "GPPS · HIPS", slug: "ps" },
     { code: "PET", name: "PET", grades: "Bouteille · Feuille · Fibre", slug: "pet" },
-    { code: "PA", name: "Polyamide", grades: "PA6 · PA66 · Renforcée", slug: "pa" },
   ],
   pt: [
     { code: "PE", name: "Polietileno", grades: "HDPE · MDPE · LDPE · LLDPE", slug: "pe" },
@@ -49,7 +46,6 @@ const relatedByLocale: Record<AppLocale, typeof related> = {
     { code: "EVA", name: "Etileno acetato de vinila", grades: "MFI · Acetato de vinila", slug: "eva" },
     { code: "PS", name: "Poliestireno", grades: "GPPS · HIPS", slug: "ps" },
     { code: "PET", name: "PET", grades: "Garrafa · Lâmina · Fibra", slug: "pet" },
-    { code: "PA", name: "Poliamida", grades: "PA6 · PA66 · Reforçada", slug: "pa" },
   ],
 };
 

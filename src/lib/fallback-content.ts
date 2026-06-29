@@ -574,19 +574,6 @@ const baseFamilies = {
     title: { en: "PET", es: "PET", fr: "PET", pt: "PET" },
     variants: ["Botella", "Lámina", "Fibra"],
   },
-  pa: {
-    applications: ["Automoción", "Colectores de admisión", "Piezas técnicas"],
-    excerpt:
-      "Poliamida para aplicaciones técnicas de alta exigencia mecánica y térmica.",
-    seoTitle: "PA | Atalant",
-    title: {
-      en: "Polyamide",
-      es: "Poliamida",
-      fr: "Polyamide",
-      pt: "Poliamida",
-    },
-    variants: ["PA6", "PA66", "Reforzada"],
-  },
   recycled: {
     applications: ["Compra circular", "Blends", "Integración pragmática de reciclado"],
     excerpt:
@@ -632,32 +619,6 @@ const familyLocaleText: Record<
       excerpt:
         "Etileno acetato de vinila com diferentes MFI e conteúdo de acetato de vinila.",
       variants: ["Diferentes MFI", "Conteúdo de acetato de vinila"],
-    },
-  },
-  pa: {
-    en: {
-      applications: ["Automotive", "Intake manifolds", "Technical parts"],
-      body:
-        "Structured grades for industrial buyers who need continuity, repeatability, and fast commercial response. The page is ready to grow later into specific grades.",
-      excerpt:
-        "Polyamide for technical applications with high mechanical and thermal requirements.",
-      variants: ["PA6", "PA66", "Reinforced"],
-    },
-    fr: {
-      applications: ["Automobile", "Collecteurs d'admission", "Pièces techniques"],
-      body:
-        "Familles structurées pour des acheteurs industriels qui exigent continuité, répétabilité et réponse commerciale agile. La page pourra évoluer vers des grades concrets.",
-      excerpt:
-        "Polyamide pour applications techniques à fortes exigences mécaniques et thermiques.",
-      variants: ["PA6", "PA66", "Renforcée"],
-    },
-    pt: {
-      applications: ["Automóvel", "Coletores de admissão", "Peças técnicas"],
-      body:
-        "Famílias estruturadas para compradores industriais que precisam de continuidade, repetibilidade e resposta comercial ágil. A página fica preparada para evoluir depois para graus concretos.",
-      excerpt:
-        "Poliamida para aplicações técnicas de elevada exigência mecânica e térmica.",
-      variants: ["PA6", "PA66", "Reforçada"],
     },
   },
   pe: {

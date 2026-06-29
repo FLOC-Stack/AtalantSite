@@ -93,15 +93,6 @@ const FALLBACK_PRODUCTS: Record<AppLocale, FallbackProduct[]> = {
       variants: ["Soplado", "Inyección", "Fibra", "rPET"],
       image: "/imgsrc/products/3d-product-PET.webp",
     },
-    {
-      code: "PA",
-      slug: "pa",
-      name: "Poliamida",
-      description:
-        "Poliamidas para aplicaciones técnicas de alta exigencia mecánica y térmica.",
-      variants: ["PA6", "PA66", "Reforzada"],
-      image: "/imgsrc/products/3d-product-PA.webp",
-    },
   ],
   en: [
     {
@@ -157,15 +148,6 @@ const FALLBACK_PRODUCTS: Record<AppLocale, FallbackProduct[]> = {
         "Barrier, transparency and food-grade suitability. Blow, injection and fiber grades, including certified rPET.",
       variants: ["Blow", "Injection", "Fiber", "rPET"],
       image: "/imgsrc/products/3d-product-PET.webp",
-    },
-    {
-      code: "PA",
-      slug: "pa",
-      name: "Polyamide",
-      description:
-        "Polyamides for high-performance technical applications with high mechanical and thermal demands.",
-      variants: ["PA6", "PA66", "Reinforced"],
-      image: "/imgsrc/products/3d-product-PA.webp",
     },
   ],
   fr: [
@@ -223,15 +205,6 @@ const FALLBACK_PRODUCTS: Record<AppLocale, FallbackProduct[]> = {
       variants: ["Soufflage", "Injection", "Fibre", "rPET"],
       image: "/imgsrc/products/3d-product-PET.webp",
     },
-    {
-      code: "PA",
-      slug: "pa",
-      name: "Polyamide",
-      description:
-        "Polyamides pour applications techniques exigeantes sur le plan mécanique et thermique.",
-      variants: ["PA6", "PA66", "Renforcé"],
-      image: "/imgsrc/products/3d-product-PA.webp",
-    },
   ],
   pt: [
     {
@@ -287,15 +260,6 @@ const FALLBACK_PRODUCTS: Record<AppLocale, FallbackProduct[]> = {
         "Barreira, transparência e aptidão alimentar. Grades de sopro, injeção e fibra, incluindo rPET certificado.",
       variants: ["Sopro", "Injeção", "Fibra", "rPET"],
       image: "/imgsrc/products/3d-product-PET.webp",
-    },
-    {
-      code: "PA",
-      slug: "pa",
-      name: "Poliamida",
-      description:
-        "Poliamidas para aplicações técnicas de alta exigência mecânica e térmica.",
-      variants: ["PA6", "PA66", "Reforçada"],
-      image: "/imgsrc/products/3d-product-PA.webp",
     },
   ],
 };
