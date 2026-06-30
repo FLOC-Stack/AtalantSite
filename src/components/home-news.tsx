@@ -186,129 +186,6 @@ const FALLBACK_NEWS_BY_LOCALE: Record<AppLocale, NewsCopy> = {
   },
 };
 
-const LEGACY_NEWS_INDICATORS: Partial<Record<AppLocale, {
-  title: string;
-  body: string;
-  sectionLabel: string;
-  indexLabel: string;
-  ctaLabel: string;
-  itemTitles: readonly string[];
-}>> = {
-  en: {
-    title: "Latest\nupdates.",
-    body: "Latest posts from Atalant with company news and editorial updates.",
-    sectionLabel: "RECENT POSTS",
-    indexLabel: "NO. 05 — NEWS / UPDATES",
-    ctaLabel: "Open publication",
-    itemTitles: [
-      "New logistics routes across Europe",
-      "Recycled materials sustainability update",
-      "New technical resins supply agreement",
-    ],
-  },
-  es: {
-    title: "Últimas\npublicaciones.",
-    body: "Publicaciones recientes de Atalant. Contenido editorial y novedades de compañía gestionadas desde CMS.",
-    sectionLabel: "PUBLICACIONES RECIENTES",
-    indexLabel: "N° 05 — COMUNICACIÓN / NOVEDADES",
-    ctaLabel: "Ver publicación",
-    itemTitles: [
-      "Nuevo hub logístico en Países Bajos",
-      "Greenlant alcanza certificación EuCertPlast",
-      "Acuerdo con productor europeo de PP técnico",
-    ],
-  },
-  fr: {
-    title: "Dernières\npublications.",
-    body: "Publications récentes Atalant : actualités d'entreprise et contenus éditoriaux.",
-    sectionLabel: "PUBLICATIONS RÉCENTES",
-    indexLabel: "N° 05 — COMMUNICATION / ACTUALITÉS",
-    ctaLabel: "Voir la publication",
-    itemTitles: [
-      "Nouvelles routes logistiques en Europe",
-      "Avancée durable sur les matériaux recyclés",
-      "Nouveau partenariat avec fournisseurs techniques",
-    ],
-  },
-  pt: {
-    title: "Últimas\npublicações.",
-    body: "Publicações recentes da Atalant: novidades e conteúdos editoriais.",
-    sectionLabel: "PUBLICAÇÕES RECENTES",
-    indexLabel: "N° 05 — COMUNICAÇÃO / NOVAS",
-    ctaLabel: "Ver publicação",
-    itemTitles: [
-      "Novas rotas logísticas na Europa",
-      "Avanço sustentável em reciclados",
-      "Acordo com novos fornecedores técnicos",
-    ],
-  },
-};
-
-function normalizeText(text?: string) {
-  return (text ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
-function isLegacyNewsCopy(
-  locale: AppLocale,
-  props: {
-    indexLabel?: string;
-    title?: string;
-    body?: string;
-    sectionLabel?: string;
-    ctaLabel?: string;
-    items?: NewsItem[];
-  },
-) {
-  const localeLegacy = LEGACY_NEWS_INDICATORS[locale];
-  if (!localeLegacy) return false;
-
-  const title = normalizeText(props.title);
-  const body = normalizeText(props.body);
-  const sectionLabel = normalizeText(props.sectionLabel);
-  const ctaLabel = normalizeText(props.ctaLabel);
-  const indexLabel = normalizeText(props.indexLabel);
-
-  if (body.includes("gestionadas desde cms")) return true;
-  if (sectionLabel.includes("publicaciones recientes") && body.includes("contenido editorial")) {
-    return true;
-  }
-
-  const legacyTitleHits = (props.items ?? []).filter((item) => {
-    const titleNormalized = normalizeText(item.title);
-    return localeLegacy.itemTitles.some((legacyTitle) => {
-      const legacyTitleNormalized = normalizeText(legacyTitle);
-      return titleNormalized.includes(legacyTitleNormalized) ||
-        legacyTitleNormalized.includes(titleNormalized) ||
-        titleNormalized.includes(legacyTitleNormalized.replace(/[^a-z ]/g, ""));
-    });
-  });
-
-  return (
-    title === normalizeText(localeLegacy.title) ||
-    body === normalizeText(localeLegacy.body) ||
-    sectionLabel === normalizeText(localeLegacy.sectionLabel) ||
-    indexLabel === normalizeText(localeLegacy.indexLabel) ||
-    ctaLabel === normalizeText(localeLegacy.ctaLabel) ||
-    legacyTitleHits.length >= 2
-  );
-}
-
-function isLocaleNewsCopySwapped(
-  locale: AppLocale,
-  props: {
-    indexLabel?: string;
-    title?: string;
-    body?: string;
-    sectionLabel?: string;
-    ctaLabel?: string;
-    items?: NewsItem[];
-  },
-) {
-  return Object.entries(LEGACY_NEWS_INDICATORS).some(([otherLocale]) => {
-    return otherLocale !== locale && isLegacyNewsCopy(otherLocale as AppLocale, props);
-  });
-}
-
 function renderMultiline(text: string) {
   return text.split("\n").map((line, i) => (
     <span key={i} className="block">
@@ -328,36 +205,13 @@ export function HomeNews({
   items,
 }: Props = {}) {
   const fallback = FALLBACK_NEWS_BY_LOCALE[locale];
-  const useFallback =
-    isLegacyNewsCopy(locale, {
-      indexLabel,
-      title,
-      body,
-      sectionLabel,
-      ctaLabel,
-      items,
-    }) ||
-    isLocaleNewsCopySwapped(locale, {
-      indexLabel,
-      title,
-      body,
-      sectionLabel,
-      ctaLabel,
-      items,
-    });
-  const resolvedItems = useFallback
-    ? fallback.items
-    : items?.length
-      ? items
-      : fallback.items;
+  const resolvedItems = items?.length ? items : fallback.items;
   const resolvedCounter = counter ?? fallback.counter;
-  const displayIndexLabel = useFallback ? fallback.indexLabel : indexLabel ?? fallback.indexLabel;
-  const displayTitle = useFallback ? fallback.title : title ?? fallback.title;
-  const displayBody = useFallback ? fallback.body : body ?? fallback.body;
-  const displaySectionLabel = useFallback
-    ? fallback.sectionLabel
-    : sectionLabel ?? fallback.sectionLabel;
-  const displayCtaLabel = useFallback ? fallback.ctaLabel : ctaLabel ?? fallback.ctaLabel;
+  const displayIndexLabel = indexLabel ?? fallback.indexLabel;
+  const displayTitle = title ?? fallback.title;
+  const displayBody = body ?? fallback.body;
+  const displaySectionLabel = sectionLabel ?? fallback.sectionLabel;
+  const displayCtaLabel = ctaLabel ?? fallback.ctaLabel;
 
   return (
     <section
@@ -393,7 +247,7 @@ export function HomeNews({
             {displaySectionLabel}
           </p>
 
-            <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3 lg:gap-x-10">
+          <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3 lg:gap-x-10">
             {resolvedItems.map((item) => {
               const hasValidHref = item.href && item.href !== "#";
 

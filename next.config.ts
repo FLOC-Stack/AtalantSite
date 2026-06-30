@@ -47,6 +47,11 @@ const nextConfig: NextConfig = {
         hostname: serverURLParts.hostname,
         protocol: serverURLParts.protocol.replace(":", "") as "http" | "https",
       },
+      {
+        hostname: "*.public.blob.vercel-storage.com",
+        pathname: "/**",
+        protocol: "https",
+      },
     ],
   },
 };

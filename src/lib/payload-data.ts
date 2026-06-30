@@ -116,16 +116,20 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 
 function mapMediaUrl(value: unknown): string | undefined {
   const record = asRecord(value);
+  const url = typeof record?.url === "string" ? record.url : undefined;
   const filename =
     typeof record?.filename === "string"
       ? record.filename
-      : typeof record?.url === "string"
-        ? record.url.split("/").pop()
+      : url
+        ? url.split("/").pop()
         : undefined;
+  if (url && !url.startsWith("/api/media/file/")) {
+    return url;
+  }
   if (filename && filename in localMediaFallbacks) {
     return localMediaFallbacks[filename];
   }
-  return typeof record?.url === "string" ? record.url : undefined;
+  return url;
 }
 
 function mapMediaAlt(value: unknown): string | undefined {

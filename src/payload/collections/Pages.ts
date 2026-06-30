@@ -30,11 +30,20 @@ const textarea = (name: string, label: string, required = false) => ({
   label,
 });
 
-const mediaRelationship = (name: string, label: string) => ({
+const mediaUpload = (name: string, label: string) => ({
   name,
   label,
   relationTo: "media" as const,
-  type: "relationship" as const,
+  type: "upload" as const,
+});
+
+const imageUpload = (name: string, label: string) => ({
+  ...mediaUpload(name, label),
+  filterOptions: {
+    mimeType: {
+      contains: "image",
+    },
+  },
 });
 
 export const Pages: CollectionConfig = {
@@ -86,14 +95,14 @@ export const Pages: CollectionConfig = {
     },
     {
       fields: [
-        mediaRelationship("homeProductsVideo", "Home products video"),
-        mediaRelationship("logisticaHeroVideo", "Logistica hero video"),
-        mediaRelationship("sustainabilitySystemsVideo", "Sustainability systems video"),
-        mediaRelationship("nosotrosHeroImage", "Nosotros hero image"),
-        mediaRelationship("nosotrosChapter1Image", "Nosotros chapter 1 image"),
-        mediaRelationship("nosotrosChapter2Image", "Nosotros chapter 2 image"),
-        mediaRelationship("nosotrosChapter3Image", "Nosotros chapter 3 image"),
-        mediaRelationship("financiacionHeroImage", "Financiacion hero image"),
+        mediaUpload("homeProductsVideo", "Home products video"),
+        mediaUpload("logisticaHeroVideo", "Logistica hero video"),
+        mediaUpload("sustainabilitySystemsVideo", "Sustainability systems video"),
+        imageUpload("nosotrosHeroImage", "Nosotros hero image"),
+        imageUpload("nosotrosChapter1Image", "Nosotros chapter 1 image"),
+        imageUpload("nosotrosChapter2Image", "Nosotros chapter 2 image"),
+        imageUpload("nosotrosChapter3Image", "Nosotros chapter 3 image"),
+        imageUpload("financiacionHeroImage", "Financiacion hero image"),
       ],
       name: "media",
       type: "group",
@@ -156,7 +165,7 @@ export const Pages: CollectionConfig = {
                 text("title", "Title", true),
                 textarea("excerpt", "Excerpt", true),
                 text("href", "URL", true),
-                mediaRelationship("image", "Image"),
+                imageUpload("image", "Image"),
                 text("imageAlt", "Image alt"),
               ],
               minRows: 1,
