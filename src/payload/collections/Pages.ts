@@ -46,6 +46,15 @@ const imageUpload = (name: string, label: string) => ({
   },
 });
 
+const legacyLocalizedImageUpload = (name: string, label: string) => ({
+  ...imageUpload(name, label),
+  admin: {
+    description:
+      "Deprecated. Use the News Posts collection so each post has one global image and localized text.",
+    hidden: true,
+  },
+});
+
 export const Pages: CollectionConfig = {
   slug: "pages",
   access: {
@@ -165,7 +174,7 @@ export const Pages: CollectionConfig = {
                 text("title", "Title", true),
                 textarea("excerpt", "Excerpt", true),
                 text("href", "URL", true),
-                imageUpload("image", "Image"),
+                legacyLocalizedImageUpload("image", "Legacy localized image"),
                 text("imageAlt", "Image alt"),
               ],
               minRows: 1,

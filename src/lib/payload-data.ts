@@ -50,6 +50,15 @@ type PageDoc = {
   };
 };
 
+type NewsPostDoc = {
+  excerpt?: string | null;
+  href?: string | null;
+  image?: unknown;
+  imageAlt?: string | null;
+  publishedAt?: string | null;
+  title?: string | null;
+};
+
 export type StaticPageSlug =
   | "financiacion"
   | "logistica"
@@ -213,6 +222,43 @@ function normalizeSimpleLinks(items: unknown): NonNullable<SiteSettingsData["soc
     .filter(Boolean) as NonNullable<SiteSettingsData["socialLinks"]>;
 }
 
+function formatNewsDate(value: string | null | undefined, locale: AppLocale): string {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  if (locale === "es") {
+    return new Intl.DateTimeFormat("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }).format(date);
+  }
+
+  return new Intl.DateTimeFormat(locale, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(date).replace(".", "").toUpperCase();
+}
+
+function mapNewsPost(doc: NewsPostDoc, locale: AppLocale): NewsBlock["items"][number] | null {
+  if (typeof doc.title !== "string" || typeof doc.excerpt !== "string") return null;
+
+  const image = mapMediaUrl(doc.image);
+  return {
+    date: formatNewsDate(doc.publishedAt, locale),
+    excerpt: doc.excerpt,
+    href: typeof doc.href === "string" && doc.href ? doc.href : "#",
+    image,
+    imageAlt:
+      typeof doc.imageAlt === "string"
+        ? doc.imageAlt
+        : mapMediaAlt(doc.image),
+    title: doc.title,
+  };
+}
+
 function mapBlocks(blocks: unknown): HomeBlock[] {
   if (!Array.isArray(blocks)) return [];
 
@@ -354,6 +400,7 @@ function mapBlocks(blocks: unknown): HomeBlock[] {
 
 function applyHomeMedia(blocks: HomeBlock[], media: Record<string, unknown> | null): HomeBlock[] {
   const homeProductsVideo = mapMediaUrl(media?.homeProductsVideo);
+
   if (!homeProductsVideo) return blocks;
 
   return blocks.map((block) => {
@@ -365,9 +412,52 @@ function applyHomeMedia(blocks: HomeBlock[], media: Record<string, unknown> | nu
   });
 }
 
+function applyHomeNewsItems(blocks: HomeBlock[], items: NewsBlock["items"]): HomeBlock[] {
+  if (!items.length) return blocks;
+
+  return blocks.map((block) =>
+    block.type === "news"
+      ? ({
+          ...block,
+          items,
+        } satisfies NewsBlock)
+      : block,
+  );
+}
+
 const getPayloadClient = cache(async function getPayloadClient() {
   return getPayload({ config: configPromise });
 });
+
+async function getPublishedNewsItems(
+  payload: Awaited<ReturnType<typeof getPayloadClient>>,
+  locale: AppLocale,
+): Promise<NewsBlock["items"]> {
+  try {
+    const result = await payload.find({
+      collection: "newsPosts",
+      depth: 1,
+      draft: false,
+      fallbackLocale: "es",
+      limit: 3,
+      locale,
+      pagination: false,
+      sort: "sortOrder",
+      where: {
+        status: {
+          equals: "published",
+        },
+      },
+    });
+
+    return result.docs
+      .map((doc) => mapNewsPost(doc as NewsPostDoc, locale))
+      .filter((item): item is NewsBlock["items"][number] => item !== null);
+  } catch (error) {
+    warnPayloadFallback(`newsPosts:${locale}`, error);
+    return [];
+  }
+}
 
 export const getSiteSettings = cache(async function getSiteSettings(
   locale: AppLocale,
@@ -478,9 +568,11 @@ export const getHomePage = cache(async function getHomePage(
     }
 
     const mappedBlocks = mapBlocks(page.layoutBlocks);
-    const blocks = mappedBlocks.length
+    const blocksFromPage = mappedBlocks.length
       ? applyHomeMedia(mappedBlocks, asRecord(page.media))
       : fallbackHomePages[locale].blocks;
+    const newsItems = await getPublishedNewsItems(payload, locale);
+    const blocks = applyHomeNewsItems(blocksFromPage, newsItems);
 
     return {
       blocks,

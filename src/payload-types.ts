@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    newsPosts: NewsPost;
     pages: Page;
     productFamilies: ProductFamily;
     leadSubmissions: LeadSubmission;
@@ -81,6 +82,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    newsPosts: NewsPostsSelect<false> | NewsPostsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     productFamilies: ProductFamiliesSelect<false> | ProductFamiliesSelect<true>;
     leadSubmissions: LeadSubmissionsSelect<false> | LeadSubmissionsSelect<true>;
@@ -204,6 +206,25 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsPosts".
+ */
+export interface NewsPost {
+  id: number;
+  slug: string;
+  status: 'draft' | 'published';
+  publishedAt: string;
+  sortOrder?: number | null;
+  href?: string | null;
+  image: number | Media;
+  title: string;
+  excerpt: string;
+  imageAlt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
@@ -294,6 +315,9 @@ export interface Page {
                   title: string;
                   excerpt: string;
                   href: string;
+                  /**
+                   * Deprecated. Use the News Posts collection so each post has one global image and localized text.
+                   */
                   image?: (number | null) | Media;
                   imageAlt?: string | null;
                   id?: string | null;
@@ -475,6 +499,10 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'newsPosts';
+        value: number | NewsPost;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: number | Page;
       } | null)
@@ -601,6 +629,24 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsPosts_select".
+ */
+export interface NewsPostsSelect<T extends boolean = true> {
+  slug?: T;
+  status?: T;
+  publishedAt?: T;
+  sortOrder?: T;
+  href?: T;
+  image?: T;
+  title?: T;
+  excerpt?: T;
+  imageAlt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

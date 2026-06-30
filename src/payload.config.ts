@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import { locales } from "./lib/locales";
 import { LeadSubmissions } from "./payload/collections/LeadSubmissions";
 import { Media } from "./payload/collections/Media";
+import { NewsPosts } from "./payload/collections/NewsPosts";
 import { Pages } from "./payload/collections/Pages";
 import { ProductFamilies } from "./payload/collections/ProductFamilies";
 import { Users } from "./payload/collections/Users";
@@ -25,7 +26,7 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-  collections: [Users, Media, Pages, ProductFamilies, LeadSubmissions],
+  collections: [Users, Media, NewsPosts, Pages, ProductFamilies, LeadSubmissions],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL,

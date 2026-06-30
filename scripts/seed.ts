@@ -238,6 +238,18 @@ const homeNewsImageFilenames = [
   "atalant-post-3.webp",
 ];
 
+const homeNewsPostSlugs = [
+  "new-atalant-website",
+  "alicante-employment-marathon",
+  "greener-transport-update",
+];
+
+const homeNewsPublishedDates = [
+  "2026-06-25T00:00:00.000Z",
+  "2026-03-25T00:00:00.000Z",
+  "2026-02-12T00:00:00.000Z",
+];
+
 const criticalMediaAssets = [
   ...productHeroMediaFilenames.map((filename) => ({
     alt: filename.replace(/\.webp$/i, "").replace(/-/g, " "),
@@ -359,7 +371,7 @@ function getStaticPageMedia(slug: string, mediaByFilename: Map<string | null | u
   );
 }
 
-function serializeNewsBlock(mediaByFilename: Map<string | null | undefined, number>, locale: AppLocale) {
+function serializeNewsBlock(locale: AppLocale) {
   const homeNewsBlockLocale = homeNewsBlock[locale];
   return {
     anchorId: homeNewsBlockLocale.anchorId,
@@ -367,11 +379,10 @@ function serializeNewsBlock(mediaByFilename: Map<string | null | undefined, numb
     body: homeNewsBlockLocale.body,
     ctaLabel: homeNewsBlockLocale.ctaLabel,
     eyebrow: homeNewsBlockLocale.eyebrow,
-    items: homeNewsBlockLocale.items.map((item, index) => ({
+    items: homeNewsBlockLocale.items.map((item) => ({
       date: item.date,
       excerpt: item.excerpt,
       href: item.href,
-      image: mediaByFilename.get(homeNewsImageFilenames[index]),
       imageAlt: item.imageAlt,
       title: item.title,
     })),
@@ -516,6 +527,62 @@ async function seedSiteSettings(locale: AppLocale) {
   });
 }
 
+async function seedNewsPosts(locale: AppLocale) {
+  const payload = await getSeedPayload();
+  const mediaByFilename = await getMediaByFilename(payload);
+  const posts = homeNewsBlock[locale].items;
+
+  for (const [index, item] of posts.entries()) {
+    const slug = homeNewsPostSlugs[index];
+    const image = mediaByFilename.get(homeNewsImageFilenames[index]);
+
+    if (!slug || !image) continue;
+
+    const existing = await payload.find({
+      collection: "newsPosts",
+      limit: 1,
+      locale,
+      pagination: false,
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+    });
+
+    const data = {
+      _status: "published" as const,
+      excerpt: item.excerpt,
+      href: item.href,
+      image,
+      imageAlt: item.imageAlt,
+      publishedAt: homeNewsPublishedDates[index],
+      slug,
+      sortOrder: index + 1,
+      status: "published" as const,
+      title: item.title,
+    };
+
+    if (existing.docs[0]) {
+      await payload.update({
+        collection: "newsPosts",
+        data,
+        draft: false,
+        id: existing.docs[0].id,
+        locale,
+      });
+      continue;
+    }
+
+    await payload.create({
+      collection: "newsPosts",
+      data,
+      draft: false,
+      locale,
+    });
+  }
+}
+
 async function seedHomePage(locale: AppLocale) {
   const payload = await getSeedPayload();
   const data = fallbackHomePages[locale];
@@ -542,7 +609,7 @@ async function seedHomePage(locale: AppLocale) {
     },
     layoutBlocks: [
       ...serializeBlocks(data.blocks, locale),
-      serializeNewsBlock(mediaByFilename, locale),
+      serializeNewsBlock(locale),
     ],
     media: compactMediaFields({
       homeProductsVideo: mediaByFilename.get("video-morp-atalant.mp4"),
@@ -990,6 +1057,7 @@ async function run() {
 
   for (const locale of locales) {
     await seedSiteSettings(locale);
+    await seedNewsPosts(locale);
     await seedHomePage(locale);
     await seedStaticPages(locale);
     await seedFamilies(locale);
