@@ -611,19 +611,19 @@ export function ProductsMorph({ copy: providedCopy, products, hero, locale = FAL
           const card = (
             <Link
               href={href}
-              className="glass group relative flex w-[min(86vw,300px)] flex-col overflow-hidden rounded-3xl p-0 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(30,75,182,0.15)] sm:w-[360px] lg:p-7"
+              className="glass group relative flex w-[320px] flex-col overflow-hidden rounded-3xl p-0 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(30,75,182,0.15)] sm:w-[360px] lg:p-7"
               aria-label={`${symbol} — ${product.name}`}
             >
               <ProductImageReveal
                 src={product.image}
                 videoSrc={product.video}
                 alt={product.name}
-                className="relative h-[190px] w-full overflow-hidden rounded-t-3xl opacity-100 sm:aspect-square sm:h-auto lg:hidden"
+                className="relative aspect-square w-full overflow-hidden rounded-t-3xl opacity-100 lg:hidden"
                 mediaClassName="object-contain"
                 animate={false}
               />
 
-              <div className="flex flex-col p-5 sm:p-7 lg:p-0">
+              <div className="flex flex-col p-6 sm:p-7 lg:p-0">
                 {/* Top row: number/total + indicator */}
                 <div className="flex items-start justify-between">
                   <span className="font-mono text-[11px] uppercase tracking-[2px] text-muted-strong">
@@ -637,7 +637,7 @@ export function ProductsMorph({ copy: providedCopy, products, hero, locale = FAL
                 </div>
 
                 {/* Atomic symbol */}
-                <div className="my-4 flex items-center justify-center sm:my-6">
+                <div className="my-6 flex items-center justify-center">
                   <span
                     className={`font-sans font-normal leading-none tracking-tight text-primary ${symbolSize}`}
                   >
