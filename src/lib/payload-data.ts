@@ -126,12 +126,16 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 function mapMediaUrl(value: unknown): string | undefined {
   const record = asRecord(value);
   const url = typeof record?.url === "string" ? record.url : undefined;
+  const mimeType = typeof record?.mimeType === "string" ? record.mimeType : undefined;
   const filename =
     typeof record?.filename === "string"
       ? record.filename
       : url
         ? url.split("/").pop()
         : undefined;
+  if (filename && mimeType?.startsWith("video/") && filename in localMediaFallbacks) {
+    return localMediaFallbacks[filename];
+  }
   if (url && !url.startsWith("/api/media/file/")) {
     return url;
   }
@@ -159,6 +163,11 @@ function normalizeContactHref(href: string | undefined, locale: AppLocale) {
 }
 
 const localMediaFallbacks: Record<string, string> = {
+  "Morphing Figures Animation.mp4": "/Morphing%20Figures%20Animation.mp4",
+  "Tanker Truck Aesthetic.mp4": "/Tanker%20Truck%20Aesthetic.mp4",
+  "Truck Coastal Cinematic.mp4": "/Truck%20Coastal%20Cinematic.mp4",
+  "v1.mp4": "/imgsrc/v1.mp4",
+  "video-morp-atalant.mp4": "/video-morp-atalant.mp4",
   "3d-product-EVA.webp": "/imgsrc/products/3d-product-EVA.webp",
   "3d-product-PE.webp": "/imgsrc/products/3d-product-PE.webp",
   "3d-product-PET.webp": "/imgsrc/products/3d-product-PET.webp",

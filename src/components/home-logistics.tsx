@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { MilestoneCarousel } from "./milestone-carousel";
+import { ResilientVideo } from "@/components/resilient-video";
 import { buildLogisticsPath } from "@/lib/routes";
 
 export type LogisticsMilestone = {
@@ -319,7 +320,7 @@ export function HomeLogistics({
   const bgNode =
     background ??
     (videoSrc ? (
-      <video
+      <ResilientVideo
         className="absolute inset-0 h-full w-full object-cover"
         src={videoSrc}
         poster={videoPoster}
@@ -328,6 +329,8 @@ export function HomeLogistics({
         loop
         playsInline
         preload="metadata"
+        fallbackClassName="absolute inset-0 flex items-center justify-center bg-[#eceef2] font-mono text-[11px] uppercase tracking-[2px] text-muted-strong"
+        fallbackLabel="video/animación"
         aria-hidden="true"
       />
     ) : (

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { AppLocale } from "@/lib/locales";
+import { ResilientVideo } from "@/components/resilient-video";
 import { SustainabilityParticles } from "@/components/sustainability-particles";
 
 type Props = {
@@ -499,15 +500,18 @@ export function SustainabilityPage({ locale, copy: pageCopy }: Props) {
             </p>
           </div>
           <div className="relative min-h-[360px] overflow-hidden bg-background">
-            <video
+            <ResilientVideo
               className="h-full w-full object-cover"
               src={copy.systemsVideoSrc ?? "/Truck%20Coastal%20Cinematic.mp4"}
+              fallbackSrc="/Truck%20Coastal%20Cinematic.mp4"
               poster={copy.systemsVideoPoster}
               autoPlay
               muted
               loop
               playsInline
               preload="metadata"
+              fallbackClassName="flex h-full w-full items-center justify-center bg-background font-mono text-[11px] uppercase tracking-[2px] text-muted-strong"
+              fallbackLabel="video/imagen"
               aria-hidden="true"
             />
           </div>

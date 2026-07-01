@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { AppLocale } from "@/lib/locales";
+import { ResilientVideo } from "@/components/resilient-video";
 import { NetworkTimeline, type NetworkHub } from "@/components/network-timeline";
 
 type Props = {
@@ -368,15 +369,18 @@ export function LogisticaPage({ locale, copy: pageCopy }: Props) {
 
         {/* ======= Bloque visual (video del DA) ======= */}
         <div className="mt-14 aspect-[16/9] w-full overflow-hidden bg-primary sm:aspect-[21/9] lg:mt-16 lg:aspect-[1760/693]">
-          <video
+          <ResilientVideo
             className="h-full w-full object-cover"
             src={copy.heroVideoSrc ?? "/Tanker%20Truck%20Aesthetic.mp4"}
+            fallbackSrc="/Tanker%20Truck%20Aesthetic.mp4"
             poster={copy.heroVideoPoster}
             autoPlay
             muted
             loop
             playsInline
             preload="metadata"
+            fallbackClassName="flex h-full w-full items-center justify-center bg-primary font-mono text-[11px] uppercase tracking-[2px] text-white/70"
+            fallbackLabel="video/imagen"
             aria-hidden="true"
           />
         </div>

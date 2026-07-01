@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { ResilientVideo } from "@/components/resilient-video";
 import type { AppLocale } from "@/lib/locales";
 
 export type HomeProductsIntroStat = {
@@ -106,14 +107,19 @@ function MediaLayer({
     <>
       {videoSrc ? (
         <div className="absolute inset-y-0 left-1/2 aspect-square h-full max-w-none -translate-x-1/2">
-          <video
+          <ResilientVideo
             src={videoSrc}
+            fallbackSrc="/video-morp-atalant.mp4"
             poster={videoPoster}
             autoPlay
             muted
             loop
             playsInline
+            preload="metadata"
             className="absolute inset-0 h-full w-full object-contain opacity-95 contrast-[1.08] saturate-[0.9]"
+            fallbackClassName="absolute inset-0 flex items-center justify-center bg-[#d9d9d9] font-mono text-[11px] uppercase tracking-[2px] text-muted-strong"
+            fallbackLabel="video/imagen"
+            aria-hidden="true"
           />
           <div
             className="pointer-events-none absolute inset-0 bg-background mix-blend-multiply"

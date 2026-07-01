@@ -7,6 +7,7 @@ import { ArrowUpRight, Recycle } from "lucide-react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { ResilientVideo } from "@/components/resilient-video";
 import type { AppLocale } from "@/lib/locales";
 import { getProductParticleShapeIndex } from "@/lib/product-particle-shapes";
 import { ParticleMorph, type ParticleMorphHandle } from "./particle-morph";
@@ -436,7 +437,7 @@ function ProductImageReveal({
       }
     >
       {isVideo ? (
-        <video
+        <ResilientVideo
           className={`absolute inset-0 h-full w-full ${mediaClassName}`}
           src={videoSrc}
           autoPlay
@@ -444,6 +445,8 @@ function ProductImageReveal({
           loop
           playsInline
           preload="metadata"
+          fallbackClassName="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_50%_45%,rgba(30,75,182,0.08),rgba(30,75,182,0)_62%)] font-mono text-[10px] uppercase tracking-[2px] text-muted-strong"
+          fallbackLabel="video/imagen"
           aria-label={alt}
         />
       ) : !hasMedia ? (
