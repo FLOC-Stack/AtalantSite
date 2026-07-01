@@ -521,9 +521,16 @@ export const ParticleMorph = forwardRef<ParticleMorphHandle, ParticleMorphProps>
         }
 
         const projected: { x: number; y: number; z: number; scale: number; color: number; size: number }[] = [];
+        const shapeScale = cssWidth < 640 ? 0.62 : cssWidth < 1024 ? 0.82 : 1;
 
         for (let i = 0; i < PARTICLE_COUNT; i++) {
-          const rotated = rotate3D(px[i], py[i], pz[i], globalAngleX, globalAngleY);
+          const rotated = rotate3D(
+            px[i] * shapeScale,
+            py[i] * shapeScale,
+            pz[i] * shapeScale,
+            globalAngleX,
+            globalAngleY,
+          );
           const p = project3D(rotated.x, rotated.y, rotated.z, camZ);
           if (p) {
             projected.push({
