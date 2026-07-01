@@ -123,6 +123,14 @@ function asRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : null;
 }
 
+function isVercelBlobUrl(url: string) {
+  return /^https:\/\/[^/]+\.public\.blob\.vercel-storage\.com\//.test(url);
+}
+
+function isVercelBlobMediaDisabled() {
+  return process.env.VERCEL_BLOB_MEDIA_DISABLED === "true";
+}
+
 function mapMediaUrl(value: unknown): string | undefined {
   const record = asRecord(value);
   const url = typeof record?.url === "string" ? record.url : undefined;
@@ -136,10 +144,10 @@ function mapMediaUrl(value: unknown): string | undefined {
     return localMediaFallbacks[filename];
   }
   if (url && !url.startsWith("/api/media/file/")) {
+    if (isVercelBlobMediaDisabled() && isVercelBlobUrl(url)) {
+      return undefined;
+    }
     return url;
-  }
-  if (filename && filename in localMediaFallbacks) {
-    return localMediaFallbacks[filename];
   }
   return url;
 }

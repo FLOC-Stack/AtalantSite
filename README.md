@@ -34,6 +34,7 @@ PAYLOAD_SECRET=replace-me
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 PAYLOAD_AUTO_PUSH=true
 BLOB_READ_WRITE_TOKEN=vercel_blob_rw_token
+VERCEL_BLOB_MEDIA_DISABLED=false
 SEED_SECRET=optional-local-seed-secret
 ```
 
@@ -44,6 +45,7 @@ Notes:
 - `PAYLOAD_AUTO_PUSH=true` is the simplest local bootstrap path and lets Payload create or update the schema automatically.
 - For stricter environments, turn `PAYLOAD_AUTO_PUSH` off and manage schema changes deliberately.
 - `BLOB_READ_WRITE_TOKEN` is required in production and preview so Payload Media persists through Vercel Blob.
+- Set `VERCEL_BLOB_MEDIA_DISABLED=true` only while the Vercel Blob store is suspended or unavailable; frontend media reads will ignore remote Blob URLs unless a local fallback exists.
 
 ### Contact form email (Resend)
 
@@ -196,5 +198,8 @@ to the client.
   variables relevant to the environment.
 - Payload Media uses Vercel Blob in deployed environments. Broken
   `/api/media/file/*` URLs mean Blob/media records need to be re-synced.
+- If Vercel reports the Blob store as suspended, fix the store or replace the
+  token first. `VERCEL_BLOB_MEDIA_DISABLED=true` is a temporary frontend safety
+  switch, not a replacement for persistent CMS uploads.
 - The public routes are locale-prefixed by design and `/` redirects to `/es`.
 - SEO support includes localized metadata, `robots.txt`, and `sitemap.xml`.
