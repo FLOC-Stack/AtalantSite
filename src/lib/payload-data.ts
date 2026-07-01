@@ -126,14 +126,13 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 function mapMediaUrl(value: unknown): string | undefined {
   const record = asRecord(value);
   const url = typeof record?.url === "string" ? record.url : undefined;
-  const mimeType = typeof record?.mimeType === "string" ? record.mimeType : undefined;
   const filename =
     typeof record?.filename === "string"
       ? record.filename
       : url
         ? url.split("/").pop()
         : undefined;
-  if (filename && mimeType?.startsWith("video/") && filename in localMediaFallbacks) {
+  if (filename && filename in localMediaFallbacks) {
     return localMediaFallbacks[filename];
   }
   if (url && !url.startsWith("/api/media/file/")) {
@@ -169,6 +168,7 @@ const localMediaFallbacks: Record<string, string> = {
   "v1.mp4": "/imgsrc/v1.mp4",
   "video-morp-atalant.mp4": "/video-morp-atalant.mp4",
   "3d-product-EVA.webp": "/imgsrc/products/3d-product-EVA.webp",
+  "3d-product-PA.webp": "/imgsrc/products/3d-product-PA.webp",
   "3d-product-PE.webp": "/imgsrc/products/3d-product-PE.webp",
   "3d-product-PET.webp": "/imgsrc/products/3d-product-PET.webp",
   "3d-product-PP.webp": "/imgsrc/products/3d-product-PP.webp",
@@ -181,6 +181,9 @@ const localMediaFallbacks: Record<string, string> = {
   "atalant-industrial-logistics.webp": "/imgsrc/about/atalant-industrial-logistics.webp",
   "atalant-about-hero.webp": "/imgsrc/about/atalant-about-hero.webp",
   "atalant-bg-financiacion.webp": "/imgsrc/financing/atalant-bg-financiacion.webp",
+  "atalant-sostenibilidad.jpg": "/imgsrc/atalant-post-3.webp",
+  "atalant-students.jpeg": "/imgsrc/atalant-post-2.webp",
+  "atalant-website-new.jpg": "/imgsrc/atalant-post-1.webp",
   "atalant-post-1.webp": "/imgsrc/atalant-post-1.webp",
   "atalant-post-2.webp": "/imgsrc/atalant-post-2.webp",
   "atalant-post-3.webp": "/imgsrc/atalant-post-3.webp",
