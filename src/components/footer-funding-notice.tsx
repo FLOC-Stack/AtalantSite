@@ -16,19 +16,19 @@ export function FooterFundingNotice() {
       </p>
 
       <div className="mt-5 grid gap-8 border-t border-white/20 pt-8 sm:pt-10 lg:grid-cols-12 lg:gap-12">
-        <div className="w-fit max-w-full lg:col-span-4">
+        <div className="w-fit max-w-full lg:col-span-5">
           <Image
             src={FUNDING_IMAGE}
             alt={FUNDING_IMAGE_ALT}
             width={1265}
             height={87}
-            sizes="(min-width: 1024px) 24rem, 18rem"
+            sizes="(min-width: 1024px) 28rem, 20rem"
             unoptimized
-            className="h-auto w-full max-w-72 lg:max-w-sm"
+            className="h-auto w-full max-w-80 lg:max-w-md"
           />
         </div>
 
-        <div className="grid gap-8 lg:col-span-8 lg:grid-cols-8 lg:gap-10">
+        <div className="grid gap-8 lg:col-span-7 lg:grid-cols-7 lg:gap-10">
           <h3
             id="footer-funding-title"
             className="text-balance font-sans text-lg font-light leading-[1.4] text-white/90 sm:text-xl lg:col-span-3"
@@ -38,7 +38,7 @@ export function FooterFundingNotice() {
             sus instalaciones de San Vicente del Raspeig.
           </h3>
 
-          <div className="lg:col-span-5 lg:border-l lg:border-white/20 lg:pl-10">
+          <div className="lg:col-span-4 lg:border-l lg:border-white/20 lg:pl-10">
             <p className="text-pretty font-sans text-[13px] leading-relaxed text-white/70 sm:text-sm">
               Este proyecto ha recibido una ayuda de 4.743,00 € por parte de
               IVACE-IDAE, dentro del Programa de incentivos ligados al
