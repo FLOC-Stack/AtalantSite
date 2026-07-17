@@ -16,6 +16,7 @@ import {
 } from "@/lib/routes";
 import { fallbackSiteSettings } from "@/lib/fallback-content";
 import { FooterEmailCopy } from "@/components/footer-email-copy";
+import { FooterFundingNotice } from "@/components/footer-funding-notice";
 
 const CONTACT_EMAIL = "info@atalant.com";
 const CONTACT_PHONE = "+34 965 66 18 28";
@@ -281,6 +282,8 @@ export function SiteFooter({ locale, settings: cmsSettings }: Props) {
             </div>
           </div>
         </div>
+
+        <FooterFundingNotice />
 
         <div className="mt-12 h-px w-full bg-white/20 sm:mt-16 lg:mt-20" aria-hidden="true" />
 
